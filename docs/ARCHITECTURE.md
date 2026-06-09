@@ -53,7 +53,9 @@ them as plain, immutable Dart, derived from the upstream `@carbon/*` packages in
 `documentation/carbon/packages`:
 
 - **Color** — the full Carbon swatch palette (`@carbon/colors`): each hue with
-  its 10–100 steps, as `Color` constants.
+  its 10–100 steps, as `Color` constants. Generated from the pinned source by
+  `tool/generate_carbon_colors.py` and locked by an exhaustive value test, so a
+  Carbon version bump is a regenerate-and-review-the-diff operation.
 - **Themes** — the four Carbon themes **White, Gray 10, Gray 90, Gray 100**
   (`@carbon/themes`): the semantic tokens (`background`, `layer`, `text*`,
   `field*`, `border*`, `support*`, `focus`, `icon*`, …) mapped onto color

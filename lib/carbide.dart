@@ -21,5 +21,6 @@
 /// from M4 onward.
 library;
 
-// Exports are added here as foundations, theming, and components are
-// implemented. Intentionally empty until the first M1 token group merges.
+// Foundations — design tokens.
+export 'src/foundations/colors.dart';
+export 'src/foundations/fonts.dart';
