@@ -20,7 +20,7 @@ jobs:
       # Documentation submodules are large and not needed to build or test the
       # package, so they are intentionally not checked out here.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
