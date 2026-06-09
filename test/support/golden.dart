@@ -7,32 +7,39 @@ import 'package:carbide/carbide.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The four Carbon themes, used to snapshot a widget on each theme background.
+/// The four Carbon themes, used to snapshot a widget on each one.
 ///
-/// The [background] is each theme's base background token (`$background`),
-/// which is a fixed Carbon value independent of the rest of the semantic token
-/// set. Once the full theme tokens land, the golden host will additionally
-/// provide them to descendants; the variant set stays the same.
+/// Each variant exposes its full [theme] token set, so goldens render against
+/// the real semantic tokens. [background] is a convenience for the host
+/// backdrop.
 enum CarbonThemeVariant {
   /// The White theme.
-  white('white', CarbonColors.white),
+  white('white'),
 
   /// The Gray 10 theme.
-  gray10('g10', CarbonColors.gray10),
+  gray10('g10'),
 
   /// The Gray 90 theme.
-  gray90('g90', CarbonColors.gray90),
+  gray90('g90'),
 
   /// The Gray 100 theme.
-  gray100('g100', CarbonColors.gray100);
+  gray100('g100');
 
-  const CarbonThemeVariant(this.label, this.background);
+  const CarbonThemeVariant(this.label);
 
   /// Short, file-safe identifier used in golden file names.
   final String label;
 
-  /// The theme's base background color.
-  final Color background;
+  /// The full semantic token set for this theme.
+  CarbonThemeData get theme => switch (this) {
+    CarbonThemeVariant.white => CarbonThemeData.white,
+    CarbonThemeVariant.gray10 => CarbonThemeData.gray10,
+    CarbonThemeVariant.gray90 => CarbonThemeData.gray90,
+    CarbonThemeVariant.gray100 => CarbonThemeData.gray100,
+  };
+
+  /// The theme's base background color, used as the golden backdrop.
+  Color get background => theme.background;
 }
 
 /// Pumps [child] in a deterministic host and snapshots it on every
