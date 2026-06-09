@@ -1,0 +1,9 @@
+[submodule "documentation/carbon-icons"]
+	path = documentation/carbon-icons
+	url = https://github.com/carbon-design-system/carbon-icons.git
+[submodule "documentation/carbon-design-kit"]
+	path = documentation/carbon-design-kit
+	url = https://github.com/carbon-design-system/carbon-design-kit.git
+[submodule "documentation/carbon"]
+	path = documentation/carbon
+	url = https://github.com/carbon-design-system/carbon.git
