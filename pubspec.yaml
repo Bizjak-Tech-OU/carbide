@@ -1,0 +1,17 @@
+name: ibm_carbon_ui
+description: "Port of the IBM Carbon Design System to Flutter, built on top of base components"
+version: 0.0.1
+homepage: "https://github.com/Bizjak-Tech-OU/ibm-carbon-ui-flutter"
+
+environment:
+  sdk: ">=3.12.1 <4.0.0"
+  flutter: ">=3.44.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
