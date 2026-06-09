@@ -24,6 +24,7 @@ library;
 // Foundations — design tokens.
 export 'src/foundations/colors.dart';
 export 'src/foundations/fonts.dart';
+export 'src/foundations/typography.dart';
 
 // Theme — semantic token sets per Carbon theme.
 export 'src/theme/carbon_theme_data.dart';
