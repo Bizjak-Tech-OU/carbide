@@ -40,8 +40,20 @@ flutter analyze
 flutter test
 ```
 
-For golden tests, generate with `flutter test --update-goldens` only on the
-pinned CI platform/image to keep them deterministic, and review the images.
+### Golden tests
+
+The bundled IBM Plex fonts are loaded automatically for every test by
+`test/flutter_test_config.dart`, so golden output uses real glyphs. Snapshot a
+widget on all four themes at once with `expectThemeGoldens` from
+`test/support/golden.dart`; baselines are written next to the test under
+`goldens/<name>.<variant>.png`.
+
+Generate or update baselines with `flutter test --update-goldens` and review the
+images. A small tolerance (0.5%) absorbs sub-pixel anti-aliasing differences
+between machines. Solid-geometry goldens are pixel-stable across platforms;
+goldens that include **text or curved edges** can differ between macOS and
+Linux, so generate those on the **CI platform (Linux)** to keep `master`
+authoritative.
 
 ## Definition of done
 
