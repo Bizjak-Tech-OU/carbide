@@ -1,0 +1,150 @@
+# Architecture
+
+Carbide is a token-driven UI library built **only** on
+`package:flutter/widgets.dart`. This document describes the layering, the
+no-Material theming model, and the conventions every contribution follows.
+
+## Hard constraints
+
+- **No Material, no Cupertino in `lib/`.** `package:flutter/material.dart` and
+  `package:flutter/cupertino.dart` must never be imported by library code.
+  `flutter_test` may use them in tests only where unavoidable (it generally is
+  not). The theming, state model, focus rings, and styling are all built from
+  the widgets layer.
+- **Strict analyzer.** `analysis_options.yaml` promotes a large set of lints to
+  errors plus `strict-casts`, `strict-inference`, and `strict-raw-types`. Code
+  must pass `dart analyze` with zero issues.
+- **Definition of done includes tests.** No token group or component is "done"
+  without the tests described under [Testing](#testing).
+
+## Layers
+
+Dependencies flow strictly downward; a layer may only depend on layers above it.
+
+```
+foundations  (design tokens: color, type, layout, motion)
+     │
+   theme      (CarbonTheme InheritedWidget, CarbideThemeData, Layer model)
+     │
+   utils      (focus ring, interaction-state helpers, shared painters)
+     │
+ components    (widgets, organised by Carbon component, in tiers A–D)
+```
+
+Source layout:
+
+```
+lib/
+  carbide.dart            # public barrel — exports the supported API
+  src/
+    foundations/          # color, type, layout, motion token sets
+    theme/                # CarbonTheme, CarbideThemeData, themes, Layer
+    utils/                # focus ring, WidgetState helpers, painters
+    components/           # one folder per component
+```
+
+Everything under `lib/src/` is private to the package; only symbols re-exported
+from `lib/carbide.dart` are public API.
+
+## Foundations (design tokens)
+
+Carbon is fundamentally a set of tokens that components consume. Carbide ports
+them as plain, immutable Dart, derived from the upstream `@carbon/*` packages in
+`documentation/carbon/packages`:
+
+- **Color** — the full Carbon swatch palette (`@carbon/colors`): each hue with
+  its 10–100 steps, as `Color` constants.
+- **Themes** — the four Carbon themes **White, Gray 10, Gray 90, Gray 100**
+  (`@carbon/themes`): the semantic tokens (`background`, `layer`, `text*`,
+  `field*`, `border*`, `support*`, `focus`, `icon*`, …) mapped onto color
+  constants per theme.
+- **Type** — IBM Plex font families, the 23-step type scale, font weights, and
+  the named type styles (`body-01`, `heading-03`, `code-02`, …) as `TextStyle`
+  builders, including productive vs. expressive and fluid type (`@carbon/type`).
+- **Layout** — the spacing scale (`spacing-01`..`spacing-13`), size/height
+  tokens, container and icon sizes, fluid spacing, and breakpoints
+  (`@carbon/layout`, `@carbon/grid`).
+- **Motion** — durations (`fast-01`..`slow-02`) as `Duration`, and the
+  standard/entrance/exit × productive/expressive easing curves as `Curve`
+  (cubic-bézier → `Cubic`) (`@carbon/motion`).
+
+Token values are copied faithfully from the Apache-2.0 source; files that are
+direct translations carry an attribution header pointing to `NOTICE`.
+
+## Theme infrastructure (no Material)
+
+Material's `ThemeData`/`ThemeExtension` are unavailable to us by rule, so we roll
+our own:
+
+- **App shell:** consumers use `WidgetsApp` (or their own), not `MaterialApp`.
+- **`CarbideThemeData`:** an immutable aggregate of the resolved token sets
+  (color/semantic, type, layout, motion) for one theme.
+- **`CarbonTheme`:** an `InheritedWidget` exposing `CarbonTheme.of(context)`,
+  with the four built-in themes and support for custom ones. Provides `lerp`
+  for animated theme transitions.
+- **`Layer`:** Carbon's contextual layering model (background elevation), as its
+  own inherited widget that shifts the active layer tokens for descendants.
+
+## Interaction & styling primitives (`utils`)
+
+Reused across components so behaviour stays consistent:
+
+- **Focus ring** — Carbon's 2px focus indicator, drawn with a `CustomPainter`
+  and the `focus` / `focus-inset` tokens.
+- **Interaction state** — hover/focus/pressed/disabled tracked with
+  `WidgetStatesController` and `FocusableActionDetector`; token resolution per
+  `WidgetState`.
+- **`CarbonText`** — typography widget that applies a named type style from the
+  active theme.
+
+## Components
+
+Implemented in dependency/complexity tiers (see the GitHub milestones):
+
+- **Tier A — foundational:** Button family, IconButton, Link, Tag, Tile,
+  Loading/InlineLoading, Skeletons, ProgressBar, Stack, lists, Text/Heading.
+- **Tier B — form controls:** TextInput, TextArea, PasswordInput, Checkbox,
+  Radio, Toggle, Select, NumberInput, Search, Slider, form primitives.
+- **Tier C — composite:** Dropdown, ComboBox, MultiSelect, Tooltip/Toggletip,
+  Popover, OverflowMenu, Menu, ContentSwitcher, Tabs, Accordion, Modal,
+  Notifications, ProgressIndicator, Pagination, Breadcrumb, list variants,
+  Switch.
+- **Tier D — complex/data:** DataTable, DatePicker, TimePicker, FileUploader,
+  TreeView, UIShell, PageHeader.
+
+### Per-component conventions
+
+- One folder under `src/components/`; the public widget(s) re-exported from the
+  barrel.
+- Cover all variants, sizes, and interaction states (enabled, hover, focus,
+  active, disabled, read-only, error, warning) where Carbon defines them.
+- Correct under all four themes.
+- Accessibility wired up: `Semantics`, focus traversal, and keyboard handling.
+- Public API documented with `///` doc comments and at least one usage example.
+
+## Testing
+
+Each token group and component lands with:
+
+1. **State-matrix widget tests** — rendering and interaction across every
+   variant, size, and state.
+2. **Golden tests** — visual fidelity against the Carbon spec. IBM Plex is
+   loaded via `FontLoader` in the test harness so goldens render real glyphs;
+   goldens are generated and verified on a single pinned CI platform to stay
+   deterministic.
+3. **Semantics tests** — accessibility tree, labels, and focus order.
+
+Unit tests cover token math (type scale, fluid type, color/curve conversions).
+
+## Reference material
+
+The upstream sources used to port from live as submodules under
+`documentation/`:
+
+- `documentation/carbon` — the Carbon monorepo (token packages + the React
+  reference implementation under `packages/react`).
+- `documentation/carbon-website` — design guidance (anatomy, behaviour, states,
+  accessibility) per component.
+- `documentation/plex` — the IBM Plex font sources.
+- `documentation/carbon-icons`, `documentation/carbon-design-kit` — legacy
+  icons and the Figma kit.

@@ -7,3 +7,9 @@
 [submodule "documentation/carbon"]
 	path = documentation/carbon
 	url = https://github.com/carbon-design-system/carbon.git
+[submodule "documentation/plex"]
+	path = documentation/plex
+	url = https://github.com/IBM/plex.git
+[submodule "documentation/carbon-website"]
+	path = documentation/carbon-website
+	url = https://github.com/carbon-design-system/carbon-website.git
