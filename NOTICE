@@ -1,0 +1,52 @@
+Carbide
+Copyright 2026 Bizjak Tech OÜ
+
+This product is licensed under the GNU Affero General Public License v3.0 or
+later (see the LICENSE file). A separate commercial license is also available;
+see COMMERCIAL.md.
+
+================================================================================
+Third-party notices and attributions
+================================================================================
+
+Carbide is an unofficial, independent port of the IBM Carbon Design System to
+Flutter. It is not affiliated with, endorsed by, or sponsored by IBM.
+
+"IBM", "Carbon", and "IBM Plex" are trademarks of International Business
+Machines Corporation. These names are used here only to identify the upstream
+design system that Carbide reproduces, in a nominative, descriptive sense. No
+trademark license is granted by the AGPL or by this project.
+
+--------------------------------------------------------------------------------
+IBM Carbon Design System
+--------------------------------------------------------------------------------
+
+Portions of this software — including design tokens, color values, the type
+scale, spacing and layout scales, motion durations and easing curves, and
+component specifications — are derived from the Carbon Design System.
+
+    Copyright IBM Corp. 2014, 2026
+    Licensed under the Apache License, Version 2.0.
+    https://github.com/carbon-design-system/carbon
+    https://www.apache.org/licenses/LICENSE-2.0
+
+The Apache-2.0 license is compatible with redistribution under the AGPL-3.0.
+Files that are direct translations of Carbon source carry an attribution header
+pointing back to this notice. A copy of the Apache-2.0 license text is retained
+at documentation/carbon/LICENSE.
+
+--------------------------------------------------------------------------------
+IBM Plex typeface
+--------------------------------------------------------------------------------
+
+Carbide bundles and/or references the IBM Plex font family (Sans, Mono, Serif,
+and Condensed variants).
+
+    Copyright IBM Corp. with Reserved Font Name "Plex".
+    Licensed under the SIL Open Font License, Version 1.1.
+    https://github.com/IBM/plex
+    https://openfontlicense.org
+
+The SIL OFL is a free/libre license compatible with distribution under the
+AGPL; the fonts remain governed by the OFL, not the AGPL. The full OFL text is
+retained alongside the bundled font files.

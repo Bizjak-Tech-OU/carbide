@@ -1,7 +1,17 @@
-name: ibm_carbon_ui
-description: "Port of the IBM Carbon Design System to Flutter, built on top of base components"
+name: carbide
+description: >-
+  An unofficial Flutter port of the IBM Carbon Design System, built strictly on
+  Flutter's base widgets (no Material, no Cupertino).
 version: 0.0.1
-homepage: "https://github.com/Bizjak-Tech-OU/ibm-carbon-ui-flutter"
+homepage: "https://github.com/Bizjak-Tech-OU/carbide"
+repository: "https://github.com/Bizjak-Tech-OU/carbide"
+issue_tracker: "https://github.com/Bizjak-Tech-OU/carbide/issues"
+
+topics:
+  - ui
+  - design-system
+  - widgets
+  - carbon
 
 environment:
   sdk: ">=3.12.1 <4.0.0"
