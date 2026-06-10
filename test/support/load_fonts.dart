@@ -21,6 +21,10 @@ const Map<String, List<String>> carbidePlexFontAssets = <String, List<String>>{
     'fonts/IBMPlexMono-Regular.ttf',
     'fonts/IBMPlexMono-SemiBold.ttf',
   ],
+  CarbonFontFamily.serif: <String>[
+    'fonts/IBMPlexSerif-Light.ttf',
+    'fonts/IBMPlexSerif-Regular.ttf',
+  ],
 };
 
 /// Loads the bundled IBM Plex fonts into the test font registry.
