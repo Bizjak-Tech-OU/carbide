@@ -30,5 +30,6 @@ export 'src/foundations/layout.dart';
 export 'src/foundations/motion.dart';
 export 'src/foundations/typography.dart';
 
-// Theme — semantic token sets per Carbon theme.
+// Theme — semantic token sets and propagation.
+export 'src/theme/carbon_theme.dart';
 export 'src/theme/carbon_theme_data.dart';

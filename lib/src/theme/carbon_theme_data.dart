@@ -881,6 +881,703 @@ class CarbonThemeData {
     toggleOff: CarbonColors.gray60,
     shadow: _alpha(CarbonColors.black, 0.8),
   );
+
+  /// A copy of this theme with the given tokens replaced.
+  CarbonThemeData copyWith({
+    Brightness? brightness,
+    Color? background,
+    Color? backgroundInverse,
+    Color? backgroundBrand,
+    Color? backgroundActive,
+    Color? backgroundHover,
+    Color? backgroundInverseHover,
+    Color? backgroundSelected,
+    Color? backgroundSelectedHover,
+    Color? layer01,
+    Color? layerActive01,
+    Color? layerBackground01,
+    Color? layerHover01,
+    Color? layerSelected01,
+    Color? layerSelectedHover01,
+    Color? layer02,
+    Color? layerActive02,
+    Color? layerBackground02,
+    Color? layerHover02,
+    Color? layerSelected02,
+    Color? layerSelectedHover02,
+    Color? layer03,
+    Color? layerActive03,
+    Color? layerBackground03,
+    Color? layerHover03,
+    Color? layerSelected03,
+    Color? layerSelectedHover03,
+    Color? layerSelectedInverse,
+    Color? layerSelectedDisabled,
+    Color? layerAccent01,
+    Color? layerAccentActive01,
+    Color? layerAccentHover01,
+    Color? layerAccent02,
+    Color? layerAccentActive02,
+    Color? layerAccentHover02,
+    Color? layerAccent03,
+    Color? layerAccentActive03,
+    Color? layerAccentHover03,
+    Color? field01,
+    Color? fieldHover01,
+    Color? field02,
+    Color? fieldHover02,
+    Color? field03,
+    Color? fieldHover03,
+    Color? borderSubtle00,
+    Color? borderSubtle01,
+    Color? borderSubtleSelected01,
+    Color? borderSubtle02,
+    Color? borderSubtleSelected02,
+    Color? borderSubtle03,
+    Color? borderSubtleSelected03,
+    Color? borderStrong01,
+    Color? borderStrong02,
+    Color? borderStrong03,
+    Color? borderTile01,
+    Color? borderTile02,
+    Color? borderTile03,
+    Color? borderInverse,
+    Color? borderInteractive,
+    Color? borderDisabled,
+    Color? textPrimary,
+    Color? textSecondary,
+    Color? textPlaceholder,
+    Color? textHelper,
+    Color? textError,
+    Color? textInverse,
+    Color? textOnColor,
+    Color? textOnColorDisabled,
+    Color? textDisabled,
+    Color? linkPrimary,
+    Color? linkPrimaryHover,
+    Color? linkSecondary,
+    Color? linkInverse,
+    Color? linkVisited,
+    Color? linkInverseVisited,
+    Color? linkInverseActive,
+    Color? linkInverseHover,
+    Color? iconPrimary,
+    Color? iconSecondary,
+    Color? iconInverse,
+    Color? iconOnColor,
+    Color? iconOnColorDisabled,
+    Color? iconDisabled,
+    Color? iconInteractive,
+    Color? supportError,
+    Color? supportSuccess,
+    Color? supportWarning,
+    Color? supportInfo,
+    Color? supportErrorInverse,
+    Color? supportSuccessInverse,
+    Color? supportWarningInverse,
+    Color? supportInfoInverse,
+    Color? supportCautionMinor,
+    Color? supportCautionMajor,
+    Color? supportCautionUndefined,
+    Color? focus,
+    Color? focusInset,
+    Color? focusInverse,
+    Color? skeletonBackground,
+    Color? skeletonElement,
+    Color? interactive,
+    Color? highlight,
+    Color? overlay,
+    Color? toggleOff,
+    Color? shadow,
+  }) {
+    return CarbonThemeData(
+      brightness: brightness ?? this.brightness,
+      background: background ?? this.background,
+      backgroundInverse: backgroundInverse ?? this.backgroundInverse,
+      backgroundBrand: backgroundBrand ?? this.backgroundBrand,
+      backgroundActive: backgroundActive ?? this.backgroundActive,
+      backgroundHover: backgroundHover ?? this.backgroundHover,
+      backgroundInverseHover:
+          backgroundInverseHover ?? this.backgroundInverseHover,
+      backgroundSelected: backgroundSelected ?? this.backgroundSelected,
+      backgroundSelectedHover:
+          backgroundSelectedHover ?? this.backgroundSelectedHover,
+      layer01: layer01 ?? this.layer01,
+      layerActive01: layerActive01 ?? this.layerActive01,
+      layerBackground01: layerBackground01 ?? this.layerBackground01,
+      layerHover01: layerHover01 ?? this.layerHover01,
+      layerSelected01: layerSelected01 ?? this.layerSelected01,
+      layerSelectedHover01: layerSelectedHover01 ?? this.layerSelectedHover01,
+      layer02: layer02 ?? this.layer02,
+      layerActive02: layerActive02 ?? this.layerActive02,
+      layerBackground02: layerBackground02 ?? this.layerBackground02,
+      layerHover02: layerHover02 ?? this.layerHover02,
+      layerSelected02: layerSelected02 ?? this.layerSelected02,
+      layerSelectedHover02: layerSelectedHover02 ?? this.layerSelectedHover02,
+      layer03: layer03 ?? this.layer03,
+      layerActive03: layerActive03 ?? this.layerActive03,
+      layerBackground03: layerBackground03 ?? this.layerBackground03,
+      layerHover03: layerHover03 ?? this.layerHover03,
+      layerSelected03: layerSelected03 ?? this.layerSelected03,
+      layerSelectedHover03: layerSelectedHover03 ?? this.layerSelectedHover03,
+      layerSelectedInverse: layerSelectedInverse ?? this.layerSelectedInverse,
+      layerSelectedDisabled:
+          layerSelectedDisabled ?? this.layerSelectedDisabled,
+      layerAccent01: layerAccent01 ?? this.layerAccent01,
+      layerAccentActive01: layerAccentActive01 ?? this.layerAccentActive01,
+      layerAccentHover01: layerAccentHover01 ?? this.layerAccentHover01,
+      layerAccent02: layerAccent02 ?? this.layerAccent02,
+      layerAccentActive02: layerAccentActive02 ?? this.layerAccentActive02,
+      layerAccentHover02: layerAccentHover02 ?? this.layerAccentHover02,
+      layerAccent03: layerAccent03 ?? this.layerAccent03,
+      layerAccentActive03: layerAccentActive03 ?? this.layerAccentActive03,
+      layerAccentHover03: layerAccentHover03 ?? this.layerAccentHover03,
+      field01: field01 ?? this.field01,
+      fieldHover01: fieldHover01 ?? this.fieldHover01,
+      field02: field02 ?? this.field02,
+      fieldHover02: fieldHover02 ?? this.fieldHover02,
+      field03: field03 ?? this.field03,
+      fieldHover03: fieldHover03 ?? this.fieldHover03,
+      borderSubtle00: borderSubtle00 ?? this.borderSubtle00,
+      borderSubtle01: borderSubtle01 ?? this.borderSubtle01,
+      borderSubtleSelected01:
+          borderSubtleSelected01 ?? this.borderSubtleSelected01,
+      borderSubtle02: borderSubtle02 ?? this.borderSubtle02,
+      borderSubtleSelected02:
+          borderSubtleSelected02 ?? this.borderSubtleSelected02,
+      borderSubtle03: borderSubtle03 ?? this.borderSubtle03,
+      borderSubtleSelected03:
+          borderSubtleSelected03 ?? this.borderSubtleSelected03,
+      borderStrong01: borderStrong01 ?? this.borderStrong01,
+      borderStrong02: borderStrong02 ?? this.borderStrong02,
+      borderStrong03: borderStrong03 ?? this.borderStrong03,
+      borderTile01: borderTile01 ?? this.borderTile01,
+      borderTile02: borderTile02 ?? this.borderTile02,
+      borderTile03: borderTile03 ?? this.borderTile03,
+      borderInverse: borderInverse ?? this.borderInverse,
+      borderInteractive: borderInteractive ?? this.borderInteractive,
+      borderDisabled: borderDisabled ?? this.borderDisabled,
+      textPrimary: textPrimary ?? this.textPrimary,
+      textSecondary: textSecondary ?? this.textSecondary,
+      textPlaceholder: textPlaceholder ?? this.textPlaceholder,
+      textHelper: textHelper ?? this.textHelper,
+      textError: textError ?? this.textError,
+      textInverse: textInverse ?? this.textInverse,
+      textOnColor: textOnColor ?? this.textOnColor,
+      textOnColorDisabled: textOnColorDisabled ?? this.textOnColorDisabled,
+      textDisabled: textDisabled ?? this.textDisabled,
+      linkPrimary: linkPrimary ?? this.linkPrimary,
+      linkPrimaryHover: linkPrimaryHover ?? this.linkPrimaryHover,
+      linkSecondary: linkSecondary ?? this.linkSecondary,
+      linkInverse: linkInverse ?? this.linkInverse,
+      linkVisited: linkVisited ?? this.linkVisited,
+      linkInverseVisited: linkInverseVisited ?? this.linkInverseVisited,
+      linkInverseActive: linkInverseActive ?? this.linkInverseActive,
+      linkInverseHover: linkInverseHover ?? this.linkInverseHover,
+      iconPrimary: iconPrimary ?? this.iconPrimary,
+      iconSecondary: iconSecondary ?? this.iconSecondary,
+      iconInverse: iconInverse ?? this.iconInverse,
+      iconOnColor: iconOnColor ?? this.iconOnColor,
+      iconOnColorDisabled: iconOnColorDisabled ?? this.iconOnColorDisabled,
+      iconDisabled: iconDisabled ?? this.iconDisabled,
+      iconInteractive: iconInteractive ?? this.iconInteractive,
+      supportError: supportError ?? this.supportError,
+      supportSuccess: supportSuccess ?? this.supportSuccess,
+      supportWarning: supportWarning ?? this.supportWarning,
+      supportInfo: supportInfo ?? this.supportInfo,
+      supportErrorInverse: supportErrorInverse ?? this.supportErrorInverse,
+      supportSuccessInverse:
+          supportSuccessInverse ?? this.supportSuccessInverse,
+      supportWarningInverse:
+          supportWarningInverse ?? this.supportWarningInverse,
+      supportInfoInverse: supportInfoInverse ?? this.supportInfoInverse,
+      supportCautionMinor: supportCautionMinor ?? this.supportCautionMinor,
+      supportCautionMajor: supportCautionMajor ?? this.supportCautionMajor,
+      supportCautionUndefined:
+          supportCautionUndefined ?? this.supportCautionUndefined,
+      focus: focus ?? this.focus,
+      focusInset: focusInset ?? this.focusInset,
+      focusInverse: focusInverse ?? this.focusInverse,
+      skeletonBackground: skeletonBackground ?? this.skeletonBackground,
+      skeletonElement: skeletonElement ?? this.skeletonElement,
+      interactive: interactive ?? this.interactive,
+      highlight: highlight ?? this.highlight,
+      overlay: overlay ?? this.overlay,
+      toggleOff: toggleOff ?? this.toggleOff,
+      shadow: shadow ?? this.shadow,
+    );
+  }
+
+  /// Linearly interpolates between themes [a] and [b].
+  ///
+  /// [brightness] snaps to [b] from the midpoint.
+  static CarbonThemeData lerp(CarbonThemeData a, CarbonThemeData b, double t) {
+    return CarbonThemeData(
+      brightness: t < 0.5 ? a.brightness : b.brightness,
+      background: Color.lerp(a.background, b.background, t)!,
+      backgroundInverse: Color.lerp(
+        a.backgroundInverse,
+        b.backgroundInverse,
+        t,
+      )!,
+      backgroundBrand: Color.lerp(a.backgroundBrand, b.backgroundBrand, t)!,
+      backgroundActive: Color.lerp(a.backgroundActive, b.backgroundActive, t)!,
+      backgroundHover: Color.lerp(a.backgroundHover, b.backgroundHover, t)!,
+      backgroundInverseHover: Color.lerp(
+        a.backgroundInverseHover,
+        b.backgroundInverseHover,
+        t,
+      )!,
+      backgroundSelected: Color.lerp(
+        a.backgroundSelected,
+        b.backgroundSelected,
+        t,
+      )!,
+      backgroundSelectedHover: Color.lerp(
+        a.backgroundSelectedHover,
+        b.backgroundSelectedHover,
+        t,
+      )!,
+      layer01: Color.lerp(a.layer01, b.layer01, t)!,
+      layerActive01: Color.lerp(a.layerActive01, b.layerActive01, t)!,
+      layerBackground01: Color.lerp(
+        a.layerBackground01,
+        b.layerBackground01,
+        t,
+      )!,
+      layerHover01: Color.lerp(a.layerHover01, b.layerHover01, t)!,
+      layerSelected01: Color.lerp(a.layerSelected01, b.layerSelected01, t)!,
+      layerSelectedHover01: Color.lerp(
+        a.layerSelectedHover01,
+        b.layerSelectedHover01,
+        t,
+      )!,
+      layer02: Color.lerp(a.layer02, b.layer02, t)!,
+      layerActive02: Color.lerp(a.layerActive02, b.layerActive02, t)!,
+      layerBackground02: Color.lerp(
+        a.layerBackground02,
+        b.layerBackground02,
+        t,
+      )!,
+      layerHover02: Color.lerp(a.layerHover02, b.layerHover02, t)!,
+      layerSelected02: Color.lerp(a.layerSelected02, b.layerSelected02, t)!,
+      layerSelectedHover02: Color.lerp(
+        a.layerSelectedHover02,
+        b.layerSelectedHover02,
+        t,
+      )!,
+      layer03: Color.lerp(a.layer03, b.layer03, t)!,
+      layerActive03: Color.lerp(a.layerActive03, b.layerActive03, t)!,
+      layerBackground03: Color.lerp(
+        a.layerBackground03,
+        b.layerBackground03,
+        t,
+      )!,
+      layerHover03: Color.lerp(a.layerHover03, b.layerHover03, t)!,
+      layerSelected03: Color.lerp(a.layerSelected03, b.layerSelected03, t)!,
+      layerSelectedHover03: Color.lerp(
+        a.layerSelectedHover03,
+        b.layerSelectedHover03,
+        t,
+      )!,
+      layerSelectedInverse: Color.lerp(
+        a.layerSelectedInverse,
+        b.layerSelectedInverse,
+        t,
+      )!,
+      layerSelectedDisabled: Color.lerp(
+        a.layerSelectedDisabled,
+        b.layerSelectedDisabled,
+        t,
+      )!,
+      layerAccent01: Color.lerp(a.layerAccent01, b.layerAccent01, t)!,
+      layerAccentActive01: Color.lerp(
+        a.layerAccentActive01,
+        b.layerAccentActive01,
+        t,
+      )!,
+      layerAccentHover01: Color.lerp(
+        a.layerAccentHover01,
+        b.layerAccentHover01,
+        t,
+      )!,
+      layerAccent02: Color.lerp(a.layerAccent02, b.layerAccent02, t)!,
+      layerAccentActive02: Color.lerp(
+        a.layerAccentActive02,
+        b.layerAccentActive02,
+        t,
+      )!,
+      layerAccentHover02: Color.lerp(
+        a.layerAccentHover02,
+        b.layerAccentHover02,
+        t,
+      )!,
+      layerAccent03: Color.lerp(a.layerAccent03, b.layerAccent03, t)!,
+      layerAccentActive03: Color.lerp(
+        a.layerAccentActive03,
+        b.layerAccentActive03,
+        t,
+      )!,
+      layerAccentHover03: Color.lerp(
+        a.layerAccentHover03,
+        b.layerAccentHover03,
+        t,
+      )!,
+      field01: Color.lerp(a.field01, b.field01, t)!,
+      fieldHover01: Color.lerp(a.fieldHover01, b.fieldHover01, t)!,
+      field02: Color.lerp(a.field02, b.field02, t)!,
+      fieldHover02: Color.lerp(a.fieldHover02, b.fieldHover02, t)!,
+      field03: Color.lerp(a.field03, b.field03, t)!,
+      fieldHover03: Color.lerp(a.fieldHover03, b.fieldHover03, t)!,
+      borderSubtle00: Color.lerp(a.borderSubtle00, b.borderSubtle00, t)!,
+      borderSubtle01: Color.lerp(a.borderSubtle01, b.borderSubtle01, t)!,
+      borderSubtleSelected01: Color.lerp(
+        a.borderSubtleSelected01,
+        b.borderSubtleSelected01,
+        t,
+      )!,
+      borderSubtle02: Color.lerp(a.borderSubtle02, b.borderSubtle02, t)!,
+      borderSubtleSelected02: Color.lerp(
+        a.borderSubtleSelected02,
+        b.borderSubtleSelected02,
+        t,
+      )!,
+      borderSubtle03: Color.lerp(a.borderSubtle03, b.borderSubtle03, t)!,
+      borderSubtleSelected03: Color.lerp(
+        a.borderSubtleSelected03,
+        b.borderSubtleSelected03,
+        t,
+      )!,
+      borderStrong01: Color.lerp(a.borderStrong01, b.borderStrong01, t)!,
+      borderStrong02: Color.lerp(a.borderStrong02, b.borderStrong02, t)!,
+      borderStrong03: Color.lerp(a.borderStrong03, b.borderStrong03, t)!,
+      borderTile01: Color.lerp(a.borderTile01, b.borderTile01, t)!,
+      borderTile02: Color.lerp(a.borderTile02, b.borderTile02, t)!,
+      borderTile03: Color.lerp(a.borderTile03, b.borderTile03, t)!,
+      borderInverse: Color.lerp(a.borderInverse, b.borderInverse, t)!,
+      borderInteractive: Color.lerp(
+        a.borderInteractive,
+        b.borderInteractive,
+        t,
+      )!,
+      borderDisabled: Color.lerp(a.borderDisabled, b.borderDisabled, t)!,
+      textPrimary: Color.lerp(a.textPrimary, b.textPrimary, t)!,
+      textSecondary: Color.lerp(a.textSecondary, b.textSecondary, t)!,
+      textPlaceholder: Color.lerp(a.textPlaceholder, b.textPlaceholder, t)!,
+      textHelper: Color.lerp(a.textHelper, b.textHelper, t)!,
+      textError: Color.lerp(a.textError, b.textError, t)!,
+      textInverse: Color.lerp(a.textInverse, b.textInverse, t)!,
+      textOnColor: Color.lerp(a.textOnColor, b.textOnColor, t)!,
+      textOnColorDisabled: Color.lerp(
+        a.textOnColorDisabled,
+        b.textOnColorDisabled,
+        t,
+      )!,
+      textDisabled: Color.lerp(a.textDisabled, b.textDisabled, t)!,
+      linkPrimary: Color.lerp(a.linkPrimary, b.linkPrimary, t)!,
+      linkPrimaryHover: Color.lerp(a.linkPrimaryHover, b.linkPrimaryHover, t)!,
+      linkSecondary: Color.lerp(a.linkSecondary, b.linkSecondary, t)!,
+      linkInverse: Color.lerp(a.linkInverse, b.linkInverse, t)!,
+      linkVisited: Color.lerp(a.linkVisited, b.linkVisited, t)!,
+      linkInverseVisited: Color.lerp(
+        a.linkInverseVisited,
+        b.linkInverseVisited,
+        t,
+      )!,
+      linkInverseActive: Color.lerp(
+        a.linkInverseActive,
+        b.linkInverseActive,
+        t,
+      )!,
+      linkInverseHover: Color.lerp(a.linkInverseHover, b.linkInverseHover, t)!,
+      iconPrimary: Color.lerp(a.iconPrimary, b.iconPrimary, t)!,
+      iconSecondary: Color.lerp(a.iconSecondary, b.iconSecondary, t)!,
+      iconInverse: Color.lerp(a.iconInverse, b.iconInverse, t)!,
+      iconOnColor: Color.lerp(a.iconOnColor, b.iconOnColor, t)!,
+      iconOnColorDisabled: Color.lerp(
+        a.iconOnColorDisabled,
+        b.iconOnColorDisabled,
+        t,
+      )!,
+      iconDisabled: Color.lerp(a.iconDisabled, b.iconDisabled, t)!,
+      iconInteractive: Color.lerp(a.iconInteractive, b.iconInteractive, t)!,
+      supportError: Color.lerp(a.supportError, b.supportError, t)!,
+      supportSuccess: Color.lerp(a.supportSuccess, b.supportSuccess, t)!,
+      supportWarning: Color.lerp(a.supportWarning, b.supportWarning, t)!,
+      supportInfo: Color.lerp(a.supportInfo, b.supportInfo, t)!,
+      supportErrorInverse: Color.lerp(
+        a.supportErrorInverse,
+        b.supportErrorInverse,
+        t,
+      )!,
+      supportSuccessInverse: Color.lerp(
+        a.supportSuccessInverse,
+        b.supportSuccessInverse,
+        t,
+      )!,
+      supportWarningInverse: Color.lerp(
+        a.supportWarningInverse,
+        b.supportWarningInverse,
+        t,
+      )!,
+      supportInfoInverse: Color.lerp(
+        a.supportInfoInverse,
+        b.supportInfoInverse,
+        t,
+      )!,
+      supportCautionMinor: Color.lerp(
+        a.supportCautionMinor,
+        b.supportCautionMinor,
+        t,
+      )!,
+      supportCautionMajor: Color.lerp(
+        a.supportCautionMajor,
+        b.supportCautionMajor,
+        t,
+      )!,
+      supportCautionUndefined: Color.lerp(
+        a.supportCautionUndefined,
+        b.supportCautionUndefined,
+        t,
+      )!,
+      focus: Color.lerp(a.focus, b.focus, t)!,
+      focusInset: Color.lerp(a.focusInset, b.focusInset, t)!,
+      focusInverse: Color.lerp(a.focusInverse, b.focusInverse, t)!,
+      skeletonBackground: Color.lerp(
+        a.skeletonBackground,
+        b.skeletonBackground,
+        t,
+      )!,
+      skeletonElement: Color.lerp(a.skeletonElement, b.skeletonElement, t)!,
+      interactive: Color.lerp(a.interactive, b.interactive, t)!,
+      highlight: Color.lerp(a.highlight, b.highlight, t)!,
+      overlay: Color.lerp(a.overlay, b.overlay, t)!,
+      toggleOff: Color.lerp(a.toggleOff, b.toggleOff, t)!,
+      shadow: Color.lerp(a.shadow, b.shadow, t)!,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is CarbonThemeData &&
+        other.brightness == brightness &&
+        other.background == background &&
+        other.backgroundInverse == backgroundInverse &&
+        other.backgroundBrand == backgroundBrand &&
+        other.backgroundActive == backgroundActive &&
+        other.backgroundHover == backgroundHover &&
+        other.backgroundInverseHover == backgroundInverseHover &&
+        other.backgroundSelected == backgroundSelected &&
+        other.backgroundSelectedHover == backgroundSelectedHover &&
+        other.layer01 == layer01 &&
+        other.layerActive01 == layerActive01 &&
+        other.layerBackground01 == layerBackground01 &&
+        other.layerHover01 == layerHover01 &&
+        other.layerSelected01 == layerSelected01 &&
+        other.layerSelectedHover01 == layerSelectedHover01 &&
+        other.layer02 == layer02 &&
+        other.layerActive02 == layerActive02 &&
+        other.layerBackground02 == layerBackground02 &&
+        other.layerHover02 == layerHover02 &&
+        other.layerSelected02 == layerSelected02 &&
+        other.layerSelectedHover02 == layerSelectedHover02 &&
+        other.layer03 == layer03 &&
+        other.layerActive03 == layerActive03 &&
+        other.layerBackground03 == layerBackground03 &&
+        other.layerHover03 == layerHover03 &&
+        other.layerSelected03 == layerSelected03 &&
+        other.layerSelectedHover03 == layerSelectedHover03 &&
+        other.layerSelectedInverse == layerSelectedInverse &&
+        other.layerSelectedDisabled == layerSelectedDisabled &&
+        other.layerAccent01 == layerAccent01 &&
+        other.layerAccentActive01 == layerAccentActive01 &&
+        other.layerAccentHover01 == layerAccentHover01 &&
+        other.layerAccent02 == layerAccent02 &&
+        other.layerAccentActive02 == layerAccentActive02 &&
+        other.layerAccentHover02 == layerAccentHover02 &&
+        other.layerAccent03 == layerAccent03 &&
+        other.layerAccentActive03 == layerAccentActive03 &&
+        other.layerAccentHover03 == layerAccentHover03 &&
+        other.field01 == field01 &&
+        other.fieldHover01 == fieldHover01 &&
+        other.field02 == field02 &&
+        other.fieldHover02 == fieldHover02 &&
+        other.field03 == field03 &&
+        other.fieldHover03 == fieldHover03 &&
+        other.borderSubtle00 == borderSubtle00 &&
+        other.borderSubtle01 == borderSubtle01 &&
+        other.borderSubtleSelected01 == borderSubtleSelected01 &&
+        other.borderSubtle02 == borderSubtle02 &&
+        other.borderSubtleSelected02 == borderSubtleSelected02 &&
+        other.borderSubtle03 == borderSubtle03 &&
+        other.borderSubtleSelected03 == borderSubtleSelected03 &&
+        other.borderStrong01 == borderStrong01 &&
+        other.borderStrong02 == borderStrong02 &&
+        other.borderStrong03 == borderStrong03 &&
+        other.borderTile01 == borderTile01 &&
+        other.borderTile02 == borderTile02 &&
+        other.borderTile03 == borderTile03 &&
+        other.borderInverse == borderInverse &&
+        other.borderInteractive == borderInteractive &&
+        other.borderDisabled == borderDisabled &&
+        other.textPrimary == textPrimary &&
+        other.textSecondary == textSecondary &&
+        other.textPlaceholder == textPlaceholder &&
+        other.textHelper == textHelper &&
+        other.textError == textError &&
+        other.textInverse == textInverse &&
+        other.textOnColor == textOnColor &&
+        other.textOnColorDisabled == textOnColorDisabled &&
+        other.textDisabled == textDisabled &&
+        other.linkPrimary == linkPrimary &&
+        other.linkPrimaryHover == linkPrimaryHover &&
+        other.linkSecondary == linkSecondary &&
+        other.linkInverse == linkInverse &&
+        other.linkVisited == linkVisited &&
+        other.linkInverseVisited == linkInverseVisited &&
+        other.linkInverseActive == linkInverseActive &&
+        other.linkInverseHover == linkInverseHover &&
+        other.iconPrimary == iconPrimary &&
+        other.iconSecondary == iconSecondary &&
+        other.iconInverse == iconInverse &&
+        other.iconOnColor == iconOnColor &&
+        other.iconOnColorDisabled == iconOnColorDisabled &&
+        other.iconDisabled == iconDisabled &&
+        other.iconInteractive == iconInteractive &&
+        other.supportError == supportError &&
+        other.supportSuccess == supportSuccess &&
+        other.supportWarning == supportWarning &&
+        other.supportInfo == supportInfo &&
+        other.supportErrorInverse == supportErrorInverse &&
+        other.supportSuccessInverse == supportSuccessInverse &&
+        other.supportWarningInverse == supportWarningInverse &&
+        other.supportInfoInverse == supportInfoInverse &&
+        other.supportCautionMinor == supportCautionMinor &&
+        other.supportCautionMajor == supportCautionMajor &&
+        other.supportCautionUndefined == supportCautionUndefined &&
+        other.focus == focus &&
+        other.focusInset == focusInset &&
+        other.focusInverse == focusInverse &&
+        other.skeletonBackground == skeletonBackground &&
+        other.skeletonElement == skeletonElement &&
+        other.interactive == interactive &&
+        other.highlight == highlight &&
+        other.overlay == overlay &&
+        other.toggleOff == toggleOff &&
+        other.shadow == shadow;
+  }
+
+  @override
+  int get hashCode => Object.hashAll(<Object?>[
+    brightness,
+    background,
+    backgroundInverse,
+    backgroundBrand,
+    backgroundActive,
+    backgroundHover,
+    backgroundInverseHover,
+    backgroundSelected,
+    backgroundSelectedHover,
+    layer01,
+    layerActive01,
+    layerBackground01,
+    layerHover01,
+    layerSelected01,
+    layerSelectedHover01,
+    layer02,
+    layerActive02,
+    layerBackground02,
+    layerHover02,
+    layerSelected02,
+    layerSelectedHover02,
+    layer03,
+    layerActive03,
+    layerBackground03,
+    layerHover03,
+    layerSelected03,
+    layerSelectedHover03,
+    layerSelectedInverse,
+    layerSelectedDisabled,
+    layerAccent01,
+    layerAccentActive01,
+    layerAccentHover01,
+    layerAccent02,
+    layerAccentActive02,
+    layerAccentHover02,
+    layerAccent03,
+    layerAccentActive03,
+    layerAccentHover03,
+    field01,
+    fieldHover01,
+    field02,
+    fieldHover02,
+    field03,
+    fieldHover03,
+    borderSubtle00,
+    borderSubtle01,
+    borderSubtleSelected01,
+    borderSubtle02,
+    borderSubtleSelected02,
+    borderSubtle03,
+    borderSubtleSelected03,
+    borderStrong01,
+    borderStrong02,
+    borderStrong03,
+    borderTile01,
+    borderTile02,
+    borderTile03,
+    borderInverse,
+    borderInteractive,
+    borderDisabled,
+    textPrimary,
+    textSecondary,
+    textPlaceholder,
+    textHelper,
+    textError,
+    textInverse,
+    textOnColor,
+    textOnColorDisabled,
+    textDisabled,
+    linkPrimary,
+    linkPrimaryHover,
+    linkSecondary,
+    linkInverse,
+    linkVisited,
+    linkInverseVisited,
+    linkInverseActive,
+    linkInverseHover,
+    iconPrimary,
+    iconSecondary,
+    iconInverse,
+    iconOnColor,
+    iconOnColorDisabled,
+    iconDisabled,
+    iconInteractive,
+    supportError,
+    supportSuccess,
+    supportWarning,
+    supportInfo,
+    supportErrorInverse,
+    supportSuccessInverse,
+    supportWarningInverse,
+    supportInfoInverse,
+    supportCautionMinor,
+    supportCautionMajor,
+    supportCautionUndefined,
+    focus,
+    focusInset,
+    focusInverse,
+    skeletonBackground,
+    skeletonElement,
+    interactive,
+    highlight,
+    overlay,
+    toggleOff,
+    shadow,
+  ]);
 }
 
 Color _alpha(Color color, double opacity) => color.withValues(alpha: opacity);

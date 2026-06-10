@@ -215,6 +215,55 @@ def emit_lib(order, brightness, resolved) -> str:
         lines += [f"    {n}: {resolved[field][n]}," for n in order]
         lines.append("  );")
         lines.append("")
+
+    # copyWith
+    lines.append("  /// A copy of this theme with the given tokens replaced.")
+    lines.append("  CarbonThemeData copyWith({")
+    lines.append("    Brightness? brightness,")
+    lines += [f"    Color? {n}," for n in order]
+    lines.append("  }) {")
+    lines.append("    return CarbonThemeData(")
+    lines.append("      brightness: brightness ?? this.brightness,")
+    lines += [f"      {n}: {n} ?? this.{n}," for n in order]
+    lines.append("    );")
+    lines.append("  }")
+    lines.append("")
+
+    # lerp
+    lines.append("  /// Linearly interpolates between themes [a] and [b].")
+    lines.append("  ///")
+    lines.append("  /// [brightness] snaps to [b] from the midpoint.")
+    lines.append(
+        "  static CarbonThemeData lerp("
+        "CarbonThemeData a, CarbonThemeData b, double t) {"
+    )
+    lines.append("    return CarbonThemeData(")
+    lines.append("      brightness: t < 0.5 ? a.brightness : b.brightness,")
+    lines += [f"      {n}: Color.lerp(a.{n}, b.{n}, t)!," for n in order]
+    lines.append("    );")
+    lines.append("  }")
+    lines.append("")
+
+    # equality
+    conds = ["other.brightness == brightness"]
+    conds += [f"other.{n} == {n}" for n in order]
+    lines.append("  @override")
+    lines.append("  bool operator ==(Object other) {")
+    lines.append("    if (identical(this, other)) {")
+    lines.append("      return true;")
+    lines.append("    }")
+    lines.append("    return other is CarbonThemeData &&")
+    lines.append("        " + " &&\n        ".join(conds) + ";")
+    lines.append("  }")
+    lines.append("")
+
+    # hashCode
+    lines.append("  @override")
+    lines.append("  int get hashCode => Object.hashAll(<Object?>[")
+    lines.append("    brightness,")
+    lines += [f"    {n}," for n in order]
+    lines.append("  ]);")
+
     lines.append("}")
     lines.append("")
     lines.append("Color _alpha(Color color, double opacity) =>")
