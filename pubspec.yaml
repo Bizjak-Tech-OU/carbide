@@ -42,3 +42,9 @@ flutter:
           weight: 400
         - asset: fonts/IBMPlexMono-SemiBold.ttf
           weight: 600
+    - family: IBM Plex Serif
+      fonts:
+        - asset: fonts/IBMPlexSerif-Light.ttf
+          weight: 300
+        - asset: fonts/IBMPlexSerif-Regular.ttf
+          weight: 400

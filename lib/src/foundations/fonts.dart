@@ -18,4 +18,7 @@ abstract final class CarbonFontFamily {
 
   /// IBM Plex Mono — the family used for code and other monospaced text.
   static const String mono = 'IBM Plex Mono';
+
+  /// IBM Plex Serif — used by the editorial `quotation` type styles.
+  static const String serif = 'IBM Plex Serif';
 }
