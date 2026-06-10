@@ -67,11 +67,14 @@ Future<void> expectThemeGoldens(
           key: key,
           child: MediaQuery(
             data: const MediaQueryData(),
-            child: SizedBox.fromSize(
-              size: size,
-              child: ColoredBox(
-                color: variant.background,
-                child: Builder(builder: builder),
+            child: CarbonTheme(
+              data: variant.theme,
+              child: SizedBox.fromSize(
+                size: size,
+                child: ColoredBox(
+                  color: variant.background,
+                  child: Builder(builder: builder),
+                ),
               ),
             ),
           ),

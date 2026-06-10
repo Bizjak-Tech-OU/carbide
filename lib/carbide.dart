@@ -33,3 +33,6 @@ export 'src/foundations/typography.dart';
 // Theme — semantic token sets and propagation.
 export 'src/theme/carbon_theme.dart';
 export 'src/theme/carbon_theme_data.dart';
+
+// Utilities — interaction & styling primitives.
+export 'src/utils/focus_ring.dart';
