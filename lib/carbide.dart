@@ -36,3 +36,4 @@ export 'src/theme/carbon_theme_data.dart';
 
 // Utilities — interaction & styling primitives.
 export 'src/utils/focus_ring.dart';
+export 'src/utils/interaction.dart';
