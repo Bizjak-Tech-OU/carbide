@@ -76,6 +76,21 @@ them as plain, immutable Dart, derived from the upstream `@carbon/*` packages in
 Token values are copied faithfully from the Apache-2.0 source; files that are
 direct translations carry an attribution header pointing to `NOTICE`.
 
+## Icons
+
+All 2,673 Carbon icons are generated as const Dart data by
+`tool/generate_carbon_icons.py` (decision and empirical fidelity validation in
+ADR 0001): each icon is SVG path data plus fill rule and optional transform,
+parsed at runtime by `lib/src/icons/svg_path_parser.dart` and painted with a
+`CustomPainter`. The generator validates two-way against upstream's
+`icons.yml` registry, preserves hand-tuned per-size artwork (16/20/24/32 and
+bespoke glyphs), and carries upstream deprecations as `@Deprecated`. Heavy
+shape data lives in per-letter libraries under `lib/src/icons/generated/`;
+the `CarbonIcons` index references them one const per icon, so unused icons
+tree-shake to zero bytes. A Carbon submodule bump is a
+regenerate-and-review-the-diff operation, verified per PR against
+upstream-derived rasters (see the fidelity sweep).
+
 ## Theme infrastructure (no Material)
 
 Material's `ThemeData`/`ThemeExtension` are unavailable to us by rule, so we roll

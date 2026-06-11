@@ -10,6 +10,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:carbide/src/icons/svg_path_parser.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_test/flutter_test.dart';
 
