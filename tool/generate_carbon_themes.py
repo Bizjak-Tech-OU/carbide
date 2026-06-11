@@ -5,10 +5,16 @@ Reads the four Carbon theme files (Apache-2.0) and emits:
   - lib/src/theme/carbon_theme_data.dart   (`CarbonThemeData` + 4 built-ins)
   - test/theme/carbon_theme_data_test.dart (an exhaustive value lock)
 
-Only the core semantic color tokens are ported: the region from `colorScheme`
-up to (but not including) the syntax-highlighting section. Syntax-highlighting,
-AI-experimental, and chat tokens, plus the type/layout re-exports, are out of
-scope here (tracked by their own issues/milestones).
+Ported token groups:
+- the core semantic color tokens: the region from `colorScheme` up to (but
+  not including) the syntax-highlighting section;
+- the button and tag component tokens (themes/src/component-tokens/{button,
+  tag}/tokens.ts), folded into CarbonThemeData exactly as Carbon v11 folds
+  component tokens into the theme zone.
+
+Syntax-highlighting, AI-experimental, and chat tokens, the remaining
+component-token groups (notification, status, content-switcher — ported with
+their components), and the type/layout re-exports are out of scope here.
 
 Run from the repository root:  python3 tool/generate_carbon_themes.py
 Re-run when bumping the Carbon submodule; review the diff.
@@ -31,6 +37,21 @@ EXPORT = re.compile(r"^export const (\w+) = (.+);$", re.M)
 ALPHA_CALL = re.compile(r"^(?:adjustAlpha|rgba)\(\s*(\w+)\s*,\s*([\d.]+)\s*\)$")
 LIGHTNESS = re.compile(r"^adjustLightness\(\s*(\w+)\s*,\s*(-?[\d.]+)\s*\)$")
 RGBA_STR = re.compile(r"^'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)'$")
+
+# Component-token sources folded into the theme (Carbon v11 semantics).
+COMPONENT_TOKEN_FILES = (
+    THEME_DIR / "component-tokens/button/tokens.ts",
+    THEME_DIR / "component-tokens/tag/tokens.ts",
+)
+COMPONENT_THEME_KEYS = {
+    "white": "whiteTheme",
+    "gray10": "g10",
+    "gray90": "g90",
+    "gray100": "g100",
+}
+CONST_BLOCK = re.compile(r"^(?:export )?const (\w+) = \{([^}]*)\};", re.M)
+BLOCK_ENTRY = re.compile(r"(\w+):\s*([^,\n]+)")
+RGB_SLASH = re.compile(r"^rgb\((\d+)\s+(\d+)\s+(\d+)\s*/\s*(\d+)%\)$")
 
 HEADER = """// Copyright 2026 Bizjak Tech OÜ
 //
@@ -107,6 +128,47 @@ def adjust_lightness(hexv: str, shift: float) -> str:
     return "".join(f"{round(c * 255):02X}" for c in channels)
 
 
+def hex_to_name(values: dict[str, str]) -> dict[str, str]:
+    """Reverse palette map preferring canonical (non-Hover) names."""
+    reverse: dict[str, str] = {}
+    for name, hexv in values.items():
+        if "Hover" not in name:
+            reverse.setdefault(hexv, name)
+    return reverse
+
+
+def component_token_expr(raw: str, colors: set, reverse: dict) -> str:
+    raw = raw.strip().rstrip(",").strip()
+    if raw.startswith("'") and raw.endswith("'"):
+        inner = raw.strip("'")
+        m = RGB_SLASH.match(inner)
+        if m:
+            r, g, b, pct = m.groups()
+            return f"const Color.fromRGBO({r}, {g}, {b}, {int(pct) / 100})"
+        assert inner.startswith("#"), f"unexpected literal: {inner}"
+        hexv = inner.lstrip("#").upper()
+        name = reverse.get(hexv)
+        return f"CarbonColors.{name}" if name else f"const Color(0xFF{hexv})"
+    assert re.fullmatch(r"\w+", raw) and raw in colors, f"unknown: {raw}"
+    return f"CarbonColors.{raw}"
+
+
+def parse_component_tokens(colors: set, reverse: dict):
+    """Returns (order, {field: {token: dart_expr}}) for the component files."""
+    order: list[str] = []
+    resolved: dict[str, dict[str, str]] = {f: {} for f in THEMES}
+    for path in COMPONENT_TOKEN_FILES:
+        for m in CONST_BLOCK.finditer(path.read_text()):
+            name, body = m.group(1), m.group(2)
+            entries = dict(BLOCK_ENTRY.findall(body))
+            order.append(name)
+            for field, key in COMPONENT_THEME_KEYS.items():
+                resolved[field][name] = component_token_expr(
+                    entries[key], colors, reverse
+                )
+    return order, resolved
+
+
 def core_region(theme_file: Path) -> dict[str, str]:
     text = theme_file.read_text()
     region = text[: text.index("// Syntax highlighting")]
@@ -171,6 +233,13 @@ def build():
         field: {n: resolve(region[n], region, colors, values) for n in order}
         for field, region in raw.items()
     }
+
+    component_order, component_resolved = parse_component_tokens(
+        colors, hex_to_name(values)
+    )
+    order += component_order
+    for field in resolved:
+        resolved[field].update(component_resolved[field])
     return order, brightness, resolved
 
 

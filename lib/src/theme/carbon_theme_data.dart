@@ -129,6 +129,61 @@ class CarbonThemeData {
     required this.overlay,
     required this.toggleOff,
     required this.shadow,
+    required this.buttonSeparator,
+    required this.buttonPrimary,
+    required this.buttonSecondary,
+    required this.buttonTertiary,
+    required this.buttonDangerPrimary,
+    required this.buttonDangerSecondary,
+    required this.buttonDangerActive,
+    required this.buttonPrimaryActive,
+    required this.buttonSecondaryActive,
+    required this.buttonTertiaryActive,
+    required this.buttonDangerHover,
+    required this.buttonPrimaryHover,
+    required this.buttonSecondaryHover,
+    required this.buttonTertiaryHover,
+    required this.buttonDisabled,
+    required this.tagBackgroundRed,
+    required this.tagColorRed,
+    required this.tagHoverRed,
+    required this.tagBackgroundMagenta,
+    required this.tagColorMagenta,
+    required this.tagHoverMagenta,
+    required this.tagBackgroundPurple,
+    required this.tagColorPurple,
+    required this.tagHoverPurple,
+    required this.tagBackgroundBlue,
+    required this.tagColorBlue,
+    required this.tagHoverBlue,
+    required this.tagBackgroundCyan,
+    required this.tagColorCyan,
+    required this.tagHoverCyan,
+    required this.tagBackgroundTeal,
+    required this.tagColorTeal,
+    required this.tagHoverTeal,
+    required this.tagBackgroundGreen,
+    required this.tagColorGreen,
+    required this.tagHoverGreen,
+    required this.tagBackgroundGray,
+    required this.tagColorGray,
+    required this.tagHoverGray,
+    required this.tagBackgroundCoolGray,
+    required this.tagColorCoolGray,
+    required this.tagHoverCoolGray,
+    required this.tagBackgroundWarmGray,
+    required this.tagColorWarmGray,
+    required this.tagHoverWarmGray,
+    required this.tagBorderRed,
+    required this.tagBorderBlue,
+    required this.tagBorderCyan,
+    required this.tagBorderTeal,
+    required this.tagBorderGreen,
+    required this.tagBorderMagenta,
+    required this.tagBorderPurple,
+    required this.tagBorderGray,
+    required this.tagBorderCoolGray,
+    required this.tagBorderWarmGray,
   });
 
   /// Whether this is a light or dark theme.
@@ -446,6 +501,171 @@ class CarbonThemeData {
   /// The `shadow` token.
   final Color shadow;
 
+  /// The `buttonSeparator` token.
+  final Color buttonSeparator;
+
+  /// The `buttonPrimary` token.
+  final Color buttonPrimary;
+
+  /// The `buttonSecondary` token.
+  final Color buttonSecondary;
+
+  /// The `buttonTertiary` token.
+  final Color buttonTertiary;
+
+  /// The `buttonDangerPrimary` token.
+  final Color buttonDangerPrimary;
+
+  /// The `buttonDangerSecondary` token.
+  final Color buttonDangerSecondary;
+
+  /// The `buttonDangerActive` token.
+  final Color buttonDangerActive;
+
+  /// The `buttonPrimaryActive` token.
+  final Color buttonPrimaryActive;
+
+  /// The `buttonSecondaryActive` token.
+  final Color buttonSecondaryActive;
+
+  /// The `buttonTertiaryActive` token.
+  final Color buttonTertiaryActive;
+
+  /// The `buttonDangerHover` token.
+  final Color buttonDangerHover;
+
+  /// The `buttonPrimaryHover` token.
+  final Color buttonPrimaryHover;
+
+  /// The `buttonSecondaryHover` token.
+  final Color buttonSecondaryHover;
+
+  /// The `buttonTertiaryHover` token.
+  final Color buttonTertiaryHover;
+
+  /// The `buttonDisabled` token.
+  final Color buttonDisabled;
+
+  /// The `tagBackgroundRed` token.
+  final Color tagBackgroundRed;
+
+  /// The `tagColorRed` token.
+  final Color tagColorRed;
+
+  /// The `tagHoverRed` token.
+  final Color tagHoverRed;
+
+  /// The `tagBackgroundMagenta` token.
+  final Color tagBackgroundMagenta;
+
+  /// The `tagColorMagenta` token.
+  final Color tagColorMagenta;
+
+  /// The `tagHoverMagenta` token.
+  final Color tagHoverMagenta;
+
+  /// The `tagBackgroundPurple` token.
+  final Color tagBackgroundPurple;
+
+  /// The `tagColorPurple` token.
+  final Color tagColorPurple;
+
+  /// The `tagHoverPurple` token.
+  final Color tagHoverPurple;
+
+  /// The `tagBackgroundBlue` token.
+  final Color tagBackgroundBlue;
+
+  /// The `tagColorBlue` token.
+  final Color tagColorBlue;
+
+  /// The `tagHoverBlue` token.
+  final Color tagHoverBlue;
+
+  /// The `tagBackgroundCyan` token.
+  final Color tagBackgroundCyan;
+
+  /// The `tagColorCyan` token.
+  final Color tagColorCyan;
+
+  /// The `tagHoverCyan` token.
+  final Color tagHoverCyan;
+
+  /// The `tagBackgroundTeal` token.
+  final Color tagBackgroundTeal;
+
+  /// The `tagColorTeal` token.
+  final Color tagColorTeal;
+
+  /// The `tagHoverTeal` token.
+  final Color tagHoverTeal;
+
+  /// The `tagBackgroundGreen` token.
+  final Color tagBackgroundGreen;
+
+  /// The `tagColorGreen` token.
+  final Color tagColorGreen;
+
+  /// The `tagHoverGreen` token.
+  final Color tagHoverGreen;
+
+  /// The `tagBackgroundGray` token.
+  final Color tagBackgroundGray;
+
+  /// The `tagColorGray` token.
+  final Color tagColorGray;
+
+  /// The `tagHoverGray` token.
+  final Color tagHoverGray;
+
+  /// The `tagBackgroundCoolGray` token.
+  final Color tagBackgroundCoolGray;
+
+  /// The `tagColorCoolGray` token.
+  final Color tagColorCoolGray;
+
+  /// The `tagHoverCoolGray` token.
+  final Color tagHoverCoolGray;
+
+  /// The `tagBackgroundWarmGray` token.
+  final Color tagBackgroundWarmGray;
+
+  /// The `tagColorWarmGray` token.
+  final Color tagColorWarmGray;
+
+  /// The `tagHoverWarmGray` token.
+  final Color tagHoverWarmGray;
+
+  /// The `tagBorderRed` token.
+  final Color tagBorderRed;
+
+  /// The `tagBorderBlue` token.
+  final Color tagBorderBlue;
+
+  /// The `tagBorderCyan` token.
+  final Color tagBorderCyan;
+
+  /// The `tagBorderTeal` token.
+  final Color tagBorderTeal;
+
+  /// The `tagBorderGreen` token.
+  final Color tagBorderGreen;
+
+  /// The `tagBorderMagenta` token.
+  final Color tagBorderMagenta;
+
+  /// The `tagBorderPurple` token.
+  final Color tagBorderPurple;
+
+  /// The `tagBorderGray` token.
+  final Color tagBorderGray;
+
+  /// The `tagBorderCoolGray` token.
+  final Color tagBorderCoolGray;
+
+  /// The `tagBorderWarmGray` token.
+  final Color tagBorderWarmGray;
+
   /// The White theme.
   static final CarbonThemeData white = CarbonThemeData(
     brightness: Brightness.light,
@@ -553,6 +773,61 @@ class CarbonThemeData {
     overlay: _alpha(CarbonColors.black, 0.6),
     toggleOff: CarbonColors.gray50,
     shadow: const Color.fromRGBO(0, 0, 0, 0.3),
+    buttonSeparator: CarbonColors.gray20,
+    buttonPrimary: CarbonColors.blue60,
+    buttonSecondary: CarbonColors.gray80,
+    buttonTertiary: CarbonColors.blue60,
+    buttonDangerPrimary: CarbonColors.red60,
+    buttonDangerSecondary: CarbonColors.red60,
+    buttonDangerActive: CarbonColors.red80,
+    buttonPrimaryActive: CarbonColors.blue80,
+    buttonSecondaryActive: CarbonColors.gray60,
+    buttonTertiaryActive: CarbonColors.blue80,
+    buttonDangerHover: const Color(0xFFB81921),
+    buttonPrimaryHover: const Color(0xFF0050E6),
+    buttonSecondaryHover: const Color(0xFF474747),
+    buttonTertiaryHover: const Color(0xFF0050E6),
+    buttonDisabled: CarbonColors.gray30,
+    tagBackgroundRed: CarbonColors.red20,
+    tagColorRed: CarbonColors.red70,
+    tagHoverRed: CarbonColors.red20Hover,
+    tagBackgroundMagenta: CarbonColors.magenta20,
+    tagColorMagenta: CarbonColors.magenta70,
+    tagHoverMagenta: CarbonColors.magenta20Hover,
+    tagBackgroundPurple: CarbonColors.purple20,
+    tagColorPurple: CarbonColors.purple70,
+    tagHoverPurple: CarbonColors.purple20Hover,
+    tagBackgroundBlue: CarbonColors.blue20,
+    tagColorBlue: CarbonColors.blue70,
+    tagHoverBlue: CarbonColors.blue20Hover,
+    tagBackgroundCyan: CarbonColors.cyan20,
+    tagColorCyan: CarbonColors.cyan70,
+    tagHoverCyan: CarbonColors.cyan20Hover,
+    tagBackgroundTeal: CarbonColors.teal20,
+    tagColorTeal: CarbonColors.teal70,
+    tagHoverTeal: CarbonColors.teal20Hover,
+    tagBackgroundGreen: CarbonColors.green20,
+    tagColorGreen: CarbonColors.green70,
+    tagHoverGreen: CarbonColors.green20Hover,
+    tagBackgroundGray: CarbonColors.gray20,
+    tagColorGray: CarbonColors.gray100,
+    tagHoverGray: CarbonColors.gray20Hover,
+    tagBackgroundCoolGray: CarbonColors.coolGray20,
+    tagColorCoolGray: CarbonColors.coolGray100,
+    tagHoverCoolGray: CarbonColors.coolGray20Hover,
+    tagBackgroundWarmGray: CarbonColors.warmGray20,
+    tagColorWarmGray: CarbonColors.warmGray100,
+    tagHoverWarmGray: CarbonColors.warmGray20Hover,
+    tagBorderRed: CarbonColors.red40,
+    tagBorderBlue: CarbonColors.blue40,
+    tagBorderCyan: CarbonColors.cyan40,
+    tagBorderTeal: CarbonColors.teal40,
+    tagBorderGreen: CarbonColors.green40,
+    tagBorderMagenta: CarbonColors.magenta40,
+    tagBorderPurple: CarbonColors.purple40,
+    tagBorderGray: CarbonColors.gray40,
+    tagBorderCoolGray: CarbonColors.coolGray40,
+    tagBorderWarmGray: CarbonColors.warmGray40,
   );
 
   /// The Gray 10 theme.
@@ -662,6 +937,61 @@ class CarbonThemeData {
     overlay: _alpha(CarbonColors.black, 0.6),
     toggleOff: CarbonColors.gray50,
     shadow: const Color.fromRGBO(0, 0, 0, 0.3),
+    buttonSeparator: CarbonColors.gray20,
+    buttonPrimary: CarbonColors.blue60,
+    buttonSecondary: CarbonColors.gray80,
+    buttonTertiary: CarbonColors.blue60,
+    buttonDangerPrimary: CarbonColors.red60,
+    buttonDangerSecondary: CarbonColors.red60,
+    buttonDangerActive: CarbonColors.red80,
+    buttonPrimaryActive: CarbonColors.blue80,
+    buttonSecondaryActive: CarbonColors.gray60,
+    buttonTertiaryActive: CarbonColors.blue80,
+    buttonDangerHover: const Color(0xFFB81921),
+    buttonPrimaryHover: const Color(0xFF0050E6),
+    buttonSecondaryHover: const Color(0xFF474747),
+    buttonTertiaryHover: const Color(0xFF0050E6),
+    buttonDisabled: CarbonColors.gray30,
+    tagBackgroundRed: CarbonColors.red20,
+    tagColorRed: CarbonColors.red70,
+    tagHoverRed: CarbonColors.red20Hover,
+    tagBackgroundMagenta: CarbonColors.magenta20,
+    tagColorMagenta: CarbonColors.magenta70,
+    tagHoverMagenta: CarbonColors.magenta20Hover,
+    tagBackgroundPurple: CarbonColors.purple20,
+    tagColorPurple: CarbonColors.purple70,
+    tagHoverPurple: CarbonColors.purple20Hover,
+    tagBackgroundBlue: CarbonColors.blue20,
+    tagColorBlue: CarbonColors.blue70,
+    tagHoverBlue: CarbonColors.blue20Hover,
+    tagBackgroundCyan: CarbonColors.cyan20,
+    tagColorCyan: CarbonColors.cyan70,
+    tagHoverCyan: CarbonColors.cyan20Hover,
+    tagBackgroundTeal: CarbonColors.teal20,
+    tagColorTeal: CarbonColors.teal70,
+    tagHoverTeal: CarbonColors.teal20Hover,
+    tagBackgroundGreen: CarbonColors.green20,
+    tagColorGreen: CarbonColors.green70,
+    tagHoverGreen: CarbonColors.green20Hover,
+    tagBackgroundGray: CarbonColors.gray20,
+    tagColorGray: CarbonColors.gray100,
+    tagHoverGray: CarbonColors.gray20Hover,
+    tagBackgroundCoolGray: CarbonColors.coolGray20,
+    tagColorCoolGray: CarbonColors.coolGray100,
+    tagHoverCoolGray: CarbonColors.coolGray20Hover,
+    tagBackgroundWarmGray: CarbonColors.warmGray20,
+    tagColorWarmGray: CarbonColors.warmGray100,
+    tagHoverWarmGray: CarbonColors.warmGray20Hover,
+    tagBorderRed: CarbonColors.red40,
+    tagBorderBlue: CarbonColors.blue40,
+    tagBorderCyan: CarbonColors.cyan40,
+    tagBorderTeal: CarbonColors.teal40,
+    tagBorderGreen: CarbonColors.green40,
+    tagBorderMagenta: CarbonColors.magenta40,
+    tagBorderPurple: CarbonColors.purple40,
+    tagBorderGray: CarbonColors.gray40,
+    tagBorderCoolGray: CarbonColors.coolGray40,
+    tagBorderWarmGray: CarbonColors.warmGray40,
   );
 
   /// The Gray 90 theme.
@@ -771,6 +1101,61 @@ class CarbonThemeData {
     overlay: _alpha(CarbonColors.black, 0.6),
     toggleOff: CarbonColors.gray50,
     shadow: _alpha(CarbonColors.black, 0.8),
+    buttonSeparator: CarbonColors.gray100,
+    buttonPrimary: CarbonColors.blue60,
+    buttonSecondary: CarbonColors.gray60,
+    buttonTertiary: CarbonColors.white,
+    buttonDangerPrimary: CarbonColors.red60,
+    buttonDangerSecondary: CarbonColors.red40,
+    buttonDangerActive: CarbonColors.red80,
+    buttonPrimaryActive: CarbonColors.blue80,
+    buttonSecondaryActive: CarbonColors.gray80,
+    buttonTertiaryActive: CarbonColors.gray30,
+    buttonDangerHover: const Color(0xFFB81921),
+    buttonPrimaryHover: const Color(0xFF0050E6),
+    buttonSecondaryHover: const Color(0xFF5E5E5E),
+    buttonTertiaryHover: CarbonColors.gray10,
+    buttonDisabled: const Color.fromRGBO(141, 141, 141, 0.3),
+    tagBackgroundRed: CarbonColors.red70,
+    tagColorRed: CarbonColors.red20,
+    tagHoverRed: CarbonColors.red70Hover,
+    tagBackgroundMagenta: CarbonColors.magenta70,
+    tagColorMagenta: CarbonColors.magenta20,
+    tagHoverMagenta: CarbonColors.magenta70Hover,
+    tagBackgroundPurple: CarbonColors.purple70,
+    tagColorPurple: CarbonColors.purple20,
+    tagHoverPurple: CarbonColors.purple70Hover,
+    tagBackgroundBlue: CarbonColors.blue70,
+    tagColorBlue: CarbonColors.blue20,
+    tagHoverBlue: CarbonColors.blue70Hover,
+    tagBackgroundCyan: CarbonColors.cyan70,
+    tagColorCyan: CarbonColors.cyan20,
+    tagHoverCyan: CarbonColors.cyan70Hover,
+    tagBackgroundTeal: CarbonColors.teal70,
+    tagColorTeal: CarbonColors.teal20,
+    tagHoverTeal: CarbonColors.teal70Hover,
+    tagBackgroundGreen: CarbonColors.green70,
+    tagColorGreen: CarbonColors.green20,
+    tagHoverGreen: CarbonColors.green70Hover,
+    tagBackgroundGray: CarbonColors.gray70,
+    tagColorGray: CarbonColors.gray10,
+    tagHoverGray: CarbonColors.gray70Hover,
+    tagBackgroundCoolGray: CarbonColors.coolGray70,
+    tagColorCoolGray: CarbonColors.coolGray10,
+    tagHoverCoolGray: CarbonColors.coolGray70Hover,
+    tagBackgroundWarmGray: CarbonColors.warmGray70,
+    tagColorWarmGray: CarbonColors.warmGray10,
+    tagHoverWarmGray: CarbonColors.warmGray70Hover,
+    tagBorderRed: CarbonColors.red50,
+    tagBorderBlue: CarbonColors.blue50,
+    tagBorderCyan: CarbonColors.cyan50,
+    tagBorderTeal: CarbonColors.teal50,
+    tagBorderGreen: CarbonColors.green50,
+    tagBorderMagenta: CarbonColors.magenta50,
+    tagBorderPurple: CarbonColors.purple50,
+    tagBorderGray: CarbonColors.gray50,
+    tagBorderCoolGray: CarbonColors.coolGray50,
+    tagBorderWarmGray: CarbonColors.warmGray50,
   );
 
   /// The Gray 100 theme.
@@ -880,6 +1265,61 @@ class CarbonThemeData {
     overlay: _alpha(CarbonColors.black, 0.6),
     toggleOff: CarbonColors.gray60,
     shadow: _alpha(CarbonColors.black, 0.8),
+    buttonSeparator: CarbonColors.gray100,
+    buttonPrimary: CarbonColors.blue60,
+    buttonSecondary: CarbonColors.gray60,
+    buttonTertiary: CarbonColors.white,
+    buttonDangerPrimary: CarbonColors.red60,
+    buttonDangerSecondary: CarbonColors.red50,
+    buttonDangerActive: CarbonColors.red80,
+    buttonPrimaryActive: CarbonColors.blue80,
+    buttonSecondaryActive: CarbonColors.gray80,
+    buttonTertiaryActive: CarbonColors.gray30,
+    buttonDangerHover: const Color(0xFFB81921),
+    buttonPrimaryHover: const Color(0xFF0050E6),
+    buttonSecondaryHover: const Color(0xFF5E5E5E),
+    buttonTertiaryHover: CarbonColors.gray10,
+    buttonDisabled: const Color.fromRGBO(141, 141, 141, 0.3),
+    tagBackgroundRed: CarbonColors.red70,
+    tagColorRed: CarbonColors.red20,
+    tagHoverRed: CarbonColors.red70Hover,
+    tagBackgroundMagenta: CarbonColors.magenta70,
+    tagColorMagenta: CarbonColors.magenta20,
+    tagHoverMagenta: CarbonColors.magenta70Hover,
+    tagBackgroundPurple: CarbonColors.purple70,
+    tagColorPurple: CarbonColors.purple20,
+    tagHoverPurple: CarbonColors.purple70Hover,
+    tagBackgroundBlue: CarbonColors.blue70,
+    tagColorBlue: CarbonColors.blue20,
+    tagHoverBlue: CarbonColors.blue70Hover,
+    tagBackgroundCyan: CarbonColors.cyan70,
+    tagColorCyan: CarbonColors.cyan20,
+    tagHoverCyan: CarbonColors.cyan70Hover,
+    tagBackgroundTeal: CarbonColors.teal70,
+    tagColorTeal: CarbonColors.teal20,
+    tagHoverTeal: CarbonColors.teal70Hover,
+    tagBackgroundGreen: CarbonColors.green70,
+    tagColorGreen: CarbonColors.green20,
+    tagHoverGreen: CarbonColors.green70Hover,
+    tagBackgroundGray: CarbonColors.gray70,
+    tagColorGray: CarbonColors.gray10,
+    tagHoverGray: CarbonColors.gray70Hover,
+    tagBackgroundCoolGray: CarbonColors.coolGray70,
+    tagColorCoolGray: CarbonColors.coolGray10,
+    tagHoverCoolGray: CarbonColors.coolGray70Hover,
+    tagBackgroundWarmGray: CarbonColors.warmGray70,
+    tagColorWarmGray: CarbonColors.warmGray10,
+    tagHoverWarmGray: CarbonColors.warmGray70Hover,
+    tagBorderRed: CarbonColors.red50,
+    tagBorderBlue: CarbonColors.blue50,
+    tagBorderCyan: CarbonColors.cyan50,
+    tagBorderTeal: CarbonColors.teal50,
+    tagBorderGreen: CarbonColors.green50,
+    tagBorderMagenta: CarbonColors.magenta50,
+    tagBorderPurple: CarbonColors.purple50,
+    tagBorderGray: CarbonColors.gray50,
+    tagBorderCoolGray: CarbonColors.coolGray50,
+    tagBorderWarmGray: CarbonColors.warmGray50,
   );
 
   /// A copy of this theme with the given tokens replaced.
@@ -989,6 +1429,61 @@ class CarbonThemeData {
     Color? overlay,
     Color? toggleOff,
     Color? shadow,
+    Color? buttonSeparator,
+    Color? buttonPrimary,
+    Color? buttonSecondary,
+    Color? buttonTertiary,
+    Color? buttonDangerPrimary,
+    Color? buttonDangerSecondary,
+    Color? buttonDangerActive,
+    Color? buttonPrimaryActive,
+    Color? buttonSecondaryActive,
+    Color? buttonTertiaryActive,
+    Color? buttonDangerHover,
+    Color? buttonPrimaryHover,
+    Color? buttonSecondaryHover,
+    Color? buttonTertiaryHover,
+    Color? buttonDisabled,
+    Color? tagBackgroundRed,
+    Color? tagColorRed,
+    Color? tagHoverRed,
+    Color? tagBackgroundMagenta,
+    Color? tagColorMagenta,
+    Color? tagHoverMagenta,
+    Color? tagBackgroundPurple,
+    Color? tagColorPurple,
+    Color? tagHoverPurple,
+    Color? tagBackgroundBlue,
+    Color? tagColorBlue,
+    Color? tagHoverBlue,
+    Color? tagBackgroundCyan,
+    Color? tagColorCyan,
+    Color? tagHoverCyan,
+    Color? tagBackgroundTeal,
+    Color? tagColorTeal,
+    Color? tagHoverTeal,
+    Color? tagBackgroundGreen,
+    Color? tagColorGreen,
+    Color? tagHoverGreen,
+    Color? tagBackgroundGray,
+    Color? tagColorGray,
+    Color? tagHoverGray,
+    Color? tagBackgroundCoolGray,
+    Color? tagColorCoolGray,
+    Color? tagHoverCoolGray,
+    Color? tagBackgroundWarmGray,
+    Color? tagColorWarmGray,
+    Color? tagHoverWarmGray,
+    Color? tagBorderRed,
+    Color? tagBorderBlue,
+    Color? tagBorderCyan,
+    Color? tagBorderTeal,
+    Color? tagBorderGreen,
+    Color? tagBorderMagenta,
+    Color? tagBorderPurple,
+    Color? tagBorderGray,
+    Color? tagBorderCoolGray,
+    Color? tagBorderWarmGray,
   }) {
     return CarbonThemeData(
       brightness: brightness ?? this.brightness,
@@ -1105,6 +1600,65 @@ class CarbonThemeData {
       overlay: overlay ?? this.overlay,
       toggleOff: toggleOff ?? this.toggleOff,
       shadow: shadow ?? this.shadow,
+      buttonSeparator: buttonSeparator ?? this.buttonSeparator,
+      buttonPrimary: buttonPrimary ?? this.buttonPrimary,
+      buttonSecondary: buttonSecondary ?? this.buttonSecondary,
+      buttonTertiary: buttonTertiary ?? this.buttonTertiary,
+      buttonDangerPrimary: buttonDangerPrimary ?? this.buttonDangerPrimary,
+      buttonDangerSecondary:
+          buttonDangerSecondary ?? this.buttonDangerSecondary,
+      buttonDangerActive: buttonDangerActive ?? this.buttonDangerActive,
+      buttonPrimaryActive: buttonPrimaryActive ?? this.buttonPrimaryActive,
+      buttonSecondaryActive:
+          buttonSecondaryActive ?? this.buttonSecondaryActive,
+      buttonTertiaryActive: buttonTertiaryActive ?? this.buttonTertiaryActive,
+      buttonDangerHover: buttonDangerHover ?? this.buttonDangerHover,
+      buttonPrimaryHover: buttonPrimaryHover ?? this.buttonPrimaryHover,
+      buttonSecondaryHover: buttonSecondaryHover ?? this.buttonSecondaryHover,
+      buttonTertiaryHover: buttonTertiaryHover ?? this.buttonTertiaryHover,
+      buttonDisabled: buttonDisabled ?? this.buttonDisabled,
+      tagBackgroundRed: tagBackgroundRed ?? this.tagBackgroundRed,
+      tagColorRed: tagColorRed ?? this.tagColorRed,
+      tagHoverRed: tagHoverRed ?? this.tagHoverRed,
+      tagBackgroundMagenta: tagBackgroundMagenta ?? this.tagBackgroundMagenta,
+      tagColorMagenta: tagColorMagenta ?? this.tagColorMagenta,
+      tagHoverMagenta: tagHoverMagenta ?? this.tagHoverMagenta,
+      tagBackgroundPurple: tagBackgroundPurple ?? this.tagBackgroundPurple,
+      tagColorPurple: tagColorPurple ?? this.tagColorPurple,
+      tagHoverPurple: tagHoverPurple ?? this.tagHoverPurple,
+      tagBackgroundBlue: tagBackgroundBlue ?? this.tagBackgroundBlue,
+      tagColorBlue: tagColorBlue ?? this.tagColorBlue,
+      tagHoverBlue: tagHoverBlue ?? this.tagHoverBlue,
+      tagBackgroundCyan: tagBackgroundCyan ?? this.tagBackgroundCyan,
+      tagColorCyan: tagColorCyan ?? this.tagColorCyan,
+      tagHoverCyan: tagHoverCyan ?? this.tagHoverCyan,
+      tagBackgroundTeal: tagBackgroundTeal ?? this.tagBackgroundTeal,
+      tagColorTeal: tagColorTeal ?? this.tagColorTeal,
+      tagHoverTeal: tagHoverTeal ?? this.tagHoverTeal,
+      tagBackgroundGreen: tagBackgroundGreen ?? this.tagBackgroundGreen,
+      tagColorGreen: tagColorGreen ?? this.tagColorGreen,
+      tagHoverGreen: tagHoverGreen ?? this.tagHoverGreen,
+      tagBackgroundGray: tagBackgroundGray ?? this.tagBackgroundGray,
+      tagColorGray: tagColorGray ?? this.tagColorGray,
+      tagHoverGray: tagHoverGray ?? this.tagHoverGray,
+      tagBackgroundCoolGray:
+          tagBackgroundCoolGray ?? this.tagBackgroundCoolGray,
+      tagColorCoolGray: tagColorCoolGray ?? this.tagColorCoolGray,
+      tagHoverCoolGray: tagHoverCoolGray ?? this.tagHoverCoolGray,
+      tagBackgroundWarmGray:
+          tagBackgroundWarmGray ?? this.tagBackgroundWarmGray,
+      tagColorWarmGray: tagColorWarmGray ?? this.tagColorWarmGray,
+      tagHoverWarmGray: tagHoverWarmGray ?? this.tagHoverWarmGray,
+      tagBorderRed: tagBorderRed ?? this.tagBorderRed,
+      tagBorderBlue: tagBorderBlue ?? this.tagBorderBlue,
+      tagBorderCyan: tagBorderCyan ?? this.tagBorderCyan,
+      tagBorderTeal: tagBorderTeal ?? this.tagBorderTeal,
+      tagBorderGreen: tagBorderGreen ?? this.tagBorderGreen,
+      tagBorderMagenta: tagBorderMagenta ?? this.tagBorderMagenta,
+      tagBorderPurple: tagBorderPurple ?? this.tagBorderPurple,
+      tagBorderGray: tagBorderGray ?? this.tagBorderGray,
+      tagBorderCoolGray: tagBorderCoolGray ?? this.tagBorderCoolGray,
+      tagBorderWarmGray: tagBorderWarmGray ?? this.tagBorderWarmGray,
     );
   }
 
@@ -1354,6 +1908,145 @@ class CarbonThemeData {
       overlay: Color.lerp(a.overlay, b.overlay, t)!,
       toggleOff: Color.lerp(a.toggleOff, b.toggleOff, t)!,
       shadow: Color.lerp(a.shadow, b.shadow, t)!,
+      buttonSeparator: Color.lerp(a.buttonSeparator, b.buttonSeparator, t)!,
+      buttonPrimary: Color.lerp(a.buttonPrimary, b.buttonPrimary, t)!,
+      buttonSecondary: Color.lerp(a.buttonSecondary, b.buttonSecondary, t)!,
+      buttonTertiary: Color.lerp(a.buttonTertiary, b.buttonTertiary, t)!,
+      buttonDangerPrimary: Color.lerp(
+        a.buttonDangerPrimary,
+        b.buttonDangerPrimary,
+        t,
+      )!,
+      buttonDangerSecondary: Color.lerp(
+        a.buttonDangerSecondary,
+        b.buttonDangerSecondary,
+        t,
+      )!,
+      buttonDangerActive: Color.lerp(
+        a.buttonDangerActive,
+        b.buttonDangerActive,
+        t,
+      )!,
+      buttonPrimaryActive: Color.lerp(
+        a.buttonPrimaryActive,
+        b.buttonPrimaryActive,
+        t,
+      )!,
+      buttonSecondaryActive: Color.lerp(
+        a.buttonSecondaryActive,
+        b.buttonSecondaryActive,
+        t,
+      )!,
+      buttonTertiaryActive: Color.lerp(
+        a.buttonTertiaryActive,
+        b.buttonTertiaryActive,
+        t,
+      )!,
+      buttonDangerHover: Color.lerp(
+        a.buttonDangerHover,
+        b.buttonDangerHover,
+        t,
+      )!,
+      buttonPrimaryHover: Color.lerp(
+        a.buttonPrimaryHover,
+        b.buttonPrimaryHover,
+        t,
+      )!,
+      buttonSecondaryHover: Color.lerp(
+        a.buttonSecondaryHover,
+        b.buttonSecondaryHover,
+        t,
+      )!,
+      buttonTertiaryHover: Color.lerp(
+        a.buttonTertiaryHover,
+        b.buttonTertiaryHover,
+        t,
+      )!,
+      buttonDisabled: Color.lerp(a.buttonDisabled, b.buttonDisabled, t)!,
+      tagBackgroundRed: Color.lerp(a.tagBackgroundRed, b.tagBackgroundRed, t)!,
+      tagColorRed: Color.lerp(a.tagColorRed, b.tagColorRed, t)!,
+      tagHoverRed: Color.lerp(a.tagHoverRed, b.tagHoverRed, t)!,
+      tagBackgroundMagenta: Color.lerp(
+        a.tagBackgroundMagenta,
+        b.tagBackgroundMagenta,
+        t,
+      )!,
+      tagColorMagenta: Color.lerp(a.tagColorMagenta, b.tagColorMagenta, t)!,
+      tagHoverMagenta: Color.lerp(a.tagHoverMagenta, b.tagHoverMagenta, t)!,
+      tagBackgroundPurple: Color.lerp(
+        a.tagBackgroundPurple,
+        b.tagBackgroundPurple,
+        t,
+      )!,
+      tagColorPurple: Color.lerp(a.tagColorPurple, b.tagColorPurple, t)!,
+      tagHoverPurple: Color.lerp(a.tagHoverPurple, b.tagHoverPurple, t)!,
+      tagBackgroundBlue: Color.lerp(
+        a.tagBackgroundBlue,
+        b.tagBackgroundBlue,
+        t,
+      )!,
+      tagColorBlue: Color.lerp(a.tagColorBlue, b.tagColorBlue, t)!,
+      tagHoverBlue: Color.lerp(a.tagHoverBlue, b.tagHoverBlue, t)!,
+      tagBackgroundCyan: Color.lerp(
+        a.tagBackgroundCyan,
+        b.tagBackgroundCyan,
+        t,
+      )!,
+      tagColorCyan: Color.lerp(a.tagColorCyan, b.tagColorCyan, t)!,
+      tagHoverCyan: Color.lerp(a.tagHoverCyan, b.tagHoverCyan, t)!,
+      tagBackgroundTeal: Color.lerp(
+        a.tagBackgroundTeal,
+        b.tagBackgroundTeal,
+        t,
+      )!,
+      tagColorTeal: Color.lerp(a.tagColorTeal, b.tagColorTeal, t)!,
+      tagHoverTeal: Color.lerp(a.tagHoverTeal, b.tagHoverTeal, t)!,
+      tagBackgroundGreen: Color.lerp(
+        a.tagBackgroundGreen,
+        b.tagBackgroundGreen,
+        t,
+      )!,
+      tagColorGreen: Color.lerp(a.tagColorGreen, b.tagColorGreen, t)!,
+      tagHoverGreen: Color.lerp(a.tagHoverGreen, b.tagHoverGreen, t)!,
+      tagBackgroundGray: Color.lerp(
+        a.tagBackgroundGray,
+        b.tagBackgroundGray,
+        t,
+      )!,
+      tagColorGray: Color.lerp(a.tagColorGray, b.tagColorGray, t)!,
+      tagHoverGray: Color.lerp(a.tagHoverGray, b.tagHoverGray, t)!,
+      tagBackgroundCoolGray: Color.lerp(
+        a.tagBackgroundCoolGray,
+        b.tagBackgroundCoolGray,
+        t,
+      )!,
+      tagColorCoolGray: Color.lerp(a.tagColorCoolGray, b.tagColorCoolGray, t)!,
+      tagHoverCoolGray: Color.lerp(a.tagHoverCoolGray, b.tagHoverCoolGray, t)!,
+      tagBackgroundWarmGray: Color.lerp(
+        a.tagBackgroundWarmGray,
+        b.tagBackgroundWarmGray,
+        t,
+      )!,
+      tagColorWarmGray: Color.lerp(a.tagColorWarmGray, b.tagColorWarmGray, t)!,
+      tagHoverWarmGray: Color.lerp(a.tagHoverWarmGray, b.tagHoverWarmGray, t)!,
+      tagBorderRed: Color.lerp(a.tagBorderRed, b.tagBorderRed, t)!,
+      tagBorderBlue: Color.lerp(a.tagBorderBlue, b.tagBorderBlue, t)!,
+      tagBorderCyan: Color.lerp(a.tagBorderCyan, b.tagBorderCyan, t)!,
+      tagBorderTeal: Color.lerp(a.tagBorderTeal, b.tagBorderTeal, t)!,
+      tagBorderGreen: Color.lerp(a.tagBorderGreen, b.tagBorderGreen, t)!,
+      tagBorderMagenta: Color.lerp(a.tagBorderMagenta, b.tagBorderMagenta, t)!,
+      tagBorderPurple: Color.lerp(a.tagBorderPurple, b.tagBorderPurple, t)!,
+      tagBorderGray: Color.lerp(a.tagBorderGray, b.tagBorderGray, t)!,
+      tagBorderCoolGray: Color.lerp(
+        a.tagBorderCoolGray,
+        b.tagBorderCoolGray,
+        t,
+      )!,
+      tagBorderWarmGray: Color.lerp(
+        a.tagBorderWarmGray,
+        b.tagBorderWarmGray,
+        t,
+      )!,
     );
   }
 
@@ -1467,7 +2160,62 @@ class CarbonThemeData {
         other.highlight == highlight &&
         other.overlay == overlay &&
         other.toggleOff == toggleOff &&
-        other.shadow == shadow;
+        other.shadow == shadow &&
+        other.buttonSeparator == buttonSeparator &&
+        other.buttonPrimary == buttonPrimary &&
+        other.buttonSecondary == buttonSecondary &&
+        other.buttonTertiary == buttonTertiary &&
+        other.buttonDangerPrimary == buttonDangerPrimary &&
+        other.buttonDangerSecondary == buttonDangerSecondary &&
+        other.buttonDangerActive == buttonDangerActive &&
+        other.buttonPrimaryActive == buttonPrimaryActive &&
+        other.buttonSecondaryActive == buttonSecondaryActive &&
+        other.buttonTertiaryActive == buttonTertiaryActive &&
+        other.buttonDangerHover == buttonDangerHover &&
+        other.buttonPrimaryHover == buttonPrimaryHover &&
+        other.buttonSecondaryHover == buttonSecondaryHover &&
+        other.buttonTertiaryHover == buttonTertiaryHover &&
+        other.buttonDisabled == buttonDisabled &&
+        other.tagBackgroundRed == tagBackgroundRed &&
+        other.tagColorRed == tagColorRed &&
+        other.tagHoverRed == tagHoverRed &&
+        other.tagBackgroundMagenta == tagBackgroundMagenta &&
+        other.tagColorMagenta == tagColorMagenta &&
+        other.tagHoverMagenta == tagHoverMagenta &&
+        other.tagBackgroundPurple == tagBackgroundPurple &&
+        other.tagColorPurple == tagColorPurple &&
+        other.tagHoverPurple == tagHoverPurple &&
+        other.tagBackgroundBlue == tagBackgroundBlue &&
+        other.tagColorBlue == tagColorBlue &&
+        other.tagHoverBlue == tagHoverBlue &&
+        other.tagBackgroundCyan == tagBackgroundCyan &&
+        other.tagColorCyan == tagColorCyan &&
+        other.tagHoverCyan == tagHoverCyan &&
+        other.tagBackgroundTeal == tagBackgroundTeal &&
+        other.tagColorTeal == tagColorTeal &&
+        other.tagHoverTeal == tagHoverTeal &&
+        other.tagBackgroundGreen == tagBackgroundGreen &&
+        other.tagColorGreen == tagColorGreen &&
+        other.tagHoverGreen == tagHoverGreen &&
+        other.tagBackgroundGray == tagBackgroundGray &&
+        other.tagColorGray == tagColorGray &&
+        other.tagHoverGray == tagHoverGray &&
+        other.tagBackgroundCoolGray == tagBackgroundCoolGray &&
+        other.tagColorCoolGray == tagColorCoolGray &&
+        other.tagHoverCoolGray == tagHoverCoolGray &&
+        other.tagBackgroundWarmGray == tagBackgroundWarmGray &&
+        other.tagColorWarmGray == tagColorWarmGray &&
+        other.tagHoverWarmGray == tagHoverWarmGray &&
+        other.tagBorderRed == tagBorderRed &&
+        other.tagBorderBlue == tagBorderBlue &&
+        other.tagBorderCyan == tagBorderCyan &&
+        other.tagBorderTeal == tagBorderTeal &&
+        other.tagBorderGreen == tagBorderGreen &&
+        other.tagBorderMagenta == tagBorderMagenta &&
+        other.tagBorderPurple == tagBorderPurple &&
+        other.tagBorderGray == tagBorderGray &&
+        other.tagBorderCoolGray == tagBorderCoolGray &&
+        other.tagBorderWarmGray == tagBorderWarmGray;
   }
 
   @override
@@ -1577,6 +2325,61 @@ class CarbonThemeData {
     overlay,
     toggleOff,
     shadow,
+    buttonSeparator,
+    buttonPrimary,
+    buttonSecondary,
+    buttonTertiary,
+    buttonDangerPrimary,
+    buttonDangerSecondary,
+    buttonDangerActive,
+    buttonPrimaryActive,
+    buttonSecondaryActive,
+    buttonTertiaryActive,
+    buttonDangerHover,
+    buttonPrimaryHover,
+    buttonSecondaryHover,
+    buttonTertiaryHover,
+    buttonDisabled,
+    tagBackgroundRed,
+    tagColorRed,
+    tagHoverRed,
+    tagBackgroundMagenta,
+    tagColorMagenta,
+    tagHoverMagenta,
+    tagBackgroundPurple,
+    tagColorPurple,
+    tagHoverPurple,
+    tagBackgroundBlue,
+    tagColorBlue,
+    tagHoverBlue,
+    tagBackgroundCyan,
+    tagColorCyan,
+    tagHoverCyan,
+    tagBackgroundTeal,
+    tagColorTeal,
+    tagHoverTeal,
+    tagBackgroundGreen,
+    tagColorGreen,
+    tagHoverGreen,
+    tagBackgroundGray,
+    tagColorGray,
+    tagHoverGray,
+    tagBackgroundCoolGray,
+    tagColorCoolGray,
+    tagHoverCoolGray,
+    tagBackgroundWarmGray,
+    tagColorWarmGray,
+    tagHoverWarmGray,
+    tagBorderRed,
+    tagBorderBlue,
+    tagBorderCyan,
+    tagBorderTeal,
+    tagBorderGreen,
+    tagBorderMagenta,
+    tagBorderPurple,
+    tagBorderGray,
+    tagBorderCoolGray,
+    tagBorderWarmGray,
   ]);
 }
 
