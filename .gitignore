@@ -31,3 +31,4 @@ skills-lock.json
 .flutter-plugins-dependencies
 /build/
 /coverage/
+failures/
