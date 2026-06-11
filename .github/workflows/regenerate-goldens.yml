@@ -1,0 +1,48 @@
+name: Regenerate goldens
+
+# Regenerates golden baselines on Linux — the authoritative platform for
+# goldens that contain text (glyph rasterization differs between macOS and
+# Linux; see CONTRIBUTING). Dispatch this on a branch; any changed goldens
+# are committed back to it.
+#
+# Note: the commit is made with GITHUB_TOKEN, which intentionally does not
+# trigger a new CI run. Pull the branch and push (or open the PR) afterwards
+# so CI runs on the regenerated state.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    name: Regenerate goldens on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Regenerate goldens
+        run: flutter test --update-goldens
+
+      - name: Commit regenerated goldens
+        run: |
+          git add -A -- '*/goldens/*.png'
+          if git diff --cached --quiet; then
+            echo "No golden changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: regenerate goldens on Linux (CI-authoritative)"
+          git push

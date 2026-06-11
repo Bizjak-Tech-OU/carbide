@@ -109,6 +109,7 @@ void main() {
     await expectThemeGoldens(
       tester,
       name: 'carbon_text',
+      containsText: true,
       size: const Size(220, 96),
       builder: (BuildContext context) => const Center(
         child: Column(
