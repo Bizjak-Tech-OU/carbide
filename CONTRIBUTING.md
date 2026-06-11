@@ -74,13 +74,9 @@ production parser/painter and gates on **blurred-coverage mismatch ≤ 0.5%**
 side-by-side comparison with the reference; fix the data (or regenerate after
 a deliberate upstream bump) rather than loosening the gate.
 
-When bumping the Carbon submodule, regenerate both data and references:
-
-```sh
-python3 tool/generate_carbon_icons.py
-python3 tool/generate_icon_references.py   # requires rsvg-convert (librsvg)
-dart format lib test
-```
+When bumping the Carbon submodule, follow [docs/ICON_UPDATES.md](docs/ICON_UPDATES.md):
+regenerate data + references, review the lockfile diff report, and commit it
+all together — CI's drift guard rejects a bump without regeneration.
 
 ## Definition of done
 
