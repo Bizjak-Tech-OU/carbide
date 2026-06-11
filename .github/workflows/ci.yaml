@@ -31,6 +31,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Icon lockfile drift guard
+        run: |
+          python3 tool/test_icons_lock.py
+          python3 tool/check_icons_lock.py
+
       - name: Verify formatting
         run: dart format --set-exit-if-changed .
 

@@ -24,6 +24,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import icons_lock
 from carbon_svg import IDENTITY, extract, fnum
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -324,6 +325,14 @@ def main() -> None:
         lines.append(f"  {bucket_of(ident)}_.{ident},")
     lines += ["];", ""]
     ALL_LIST.write_text("\n".join(lines))
+
+    # Lockfile: record what this generation was produced from, and report
+    # what changed relative to the previous generation (see icons_lock.py).
+    previous = icons_lock.read_lock()
+    lock = icons_lock.compute_lock(icons, deprecated)
+    icons_lock.write_lock(lock)
+    if previous is not None:
+        print(icons_lock.format_report(icons_lock.diff_locks(previous, lock)))
 
     glyphs = sum(1 for e in entries if any(a[0] == "glyph" for a in e[2]))
     multi = sum(1 for e in entries if len(e[2]) > 1)
