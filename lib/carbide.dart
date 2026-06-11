@@ -33,8 +33,10 @@ export 'src/foundations/typography.dart';
 // Components.
 export 'src/components/text/carbon_text.dart';
 
-// Icons — generated Carbon icon data.
+// Icons — generated Carbon icon data and the icon widget.
+export 'src/icons/carbon_icon.dart';
 export 'src/icons/carbon_icon_data.dart';
+export 'src/icons/carbon_icon_painter.dart';
 export 'src/icons/carbon_icons.dart';
 
 // Theme — semantic token sets and propagation.
