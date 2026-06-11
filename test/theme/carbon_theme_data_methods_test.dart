@@ -64,6 +64,31 @@ void main() {
     });
   });
 
+  group('component tokens (hand-sourced from component-tokens/*.ts)', () {
+    test('button tokens fold into every theme', () {
+      for (final CarbonThemeData theme in <CarbonThemeData>[
+        CarbonThemeData.white,
+        CarbonThemeData.gray10,
+        CarbonThemeData.gray90,
+        CarbonThemeData.gray100,
+      ]) {
+        expect(theme.buttonPrimary, CarbonColors.blue60);
+        expect(theme.buttonDangerPrimary, CarbonColors.red60);
+      }
+    });
+
+    test('theme-dependent component tokens diverge light vs dark', () {
+      expect(CarbonThemeData.white.buttonSeparator, CarbonColors.gray20);
+      expect(CarbonThemeData.gray100.buttonSeparator, CarbonColors.gray100);
+      expect(CarbonThemeData.white.tagBackgroundRed, CarbonColors.red20);
+      expect(CarbonThemeData.gray100.tagBackgroundRed, CarbonColors.red70);
+      expect(
+        CarbonThemeData.gray90.buttonDisabled,
+        const Color.fromRGBO(141, 141, 141, 0.3),
+      );
+    });
+  });
+
   group('equality', () {
     test('a theme equals itself and a field-identical copy', () {
       expect(CarbonThemeData.white, CarbonThemeData.white);
