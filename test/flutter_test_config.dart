@@ -10,6 +10,7 @@
 // development machine and CI.
 
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,11 +31,17 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 
 /// A [LocalFileComparator] that accepts a tiny fraction of differing pixels.
 ///
-/// Golden baselines are generated on one platform but compared on another
-/// (CI). Solid geometry is pixel-identical across platforms; text and curved
-/// edges can differ by a handful of anti-aliased pixels. A small threshold
-/// keeps those cosmetic differences from failing the suite while still
-/// catching real visual regressions.
+/// Golden baselines are compared across platforms. Vector geometry renders
+/// bit-identically everywhere (validated empirically by the icon spike), but
+/// **glyph rasterization does not**: macOS (CoreText) and Linux (FreeType)
+/// produce ~8–9% differing pixels on the same text. So:
+///
+/// - Goldens whose name contains `.text.` are generated **on Linux** (CI is
+///   authoritative; use the “Regenerate goldens” workflow) and compared
+///   strictly there; on other platforms they get a lenient bound that still
+///   catches gross errors (missing text, wrong layout) without false
+///   failures from rasterizer differences.
+/// - All other goldens use a small tolerance everywhere.
 class _CarbideGoldenComparator extends LocalFileComparator {
   _CarbideGoldenComparator(Uri baseDir)
     : super(Uri.parse('$baseDir$_dummyTestFile'));
@@ -43,9 +50,17 @@ class _CarbideGoldenComparator extends LocalFileComparator {
   // file it is given; the file itself never needs to exist.
   static const String _dummyTestFile = 'carbide_goldens.dart';
 
-  // Fraction (0..1) of pixels allowed to differ. `diffPercent` is reported as
-  // a fraction by the framework, so 0.005 is 0.5%.
+  // Fractions (0..1) of pixels allowed to differ. `diffPercent` is reported
+  // as a fraction by the framework, so 0.005 is 0.5%.
   static const double _maxDiffFraction = 0.005;
+  static const double _maxTextDiffFractionOffCi = 0.15;
+
+  static double _toleranceFor(Uri golden) {
+    if (golden.path.contains('.text.') && !Platform.isLinux) {
+      return _maxTextDiffFractionOffCi;
+    }
+    return _maxDiffFraction;
+  }
 
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
@@ -53,7 +68,7 @@ class _CarbideGoldenComparator extends LocalFileComparator {
       imageBytes,
       await getGoldenBytes(golden),
     );
-    if (result.passed || result.diffPercent <= _maxDiffFraction) {
+    if (result.passed || result.diffPercent <= _toleranceFor(golden)) {
       return true;
     }
     final String error = await generateFailureOutput(result, golden, basedir);

@@ -49,11 +49,17 @@ enum CarbonThemeVariant {
 /// fixes text scaling, surface size, and direction so output depends only on
 /// the widget under test. Builds with [builder] so the widget can read its
 /// `BuildContext` (and, later, theme tokens).
+///
+/// Set [containsText] when the snapshot renders glyphs: the golden is named
+/// `<name>.text.<variant>.png`, which the comparator treats as
+/// Linux-authoritative (glyph rasterization differs across platforms —
+/// generate these with the “Regenerate goldens” workflow, not locally).
 Future<void> expectThemeGoldens(
   WidgetTester tester, {
   required String name,
   required Size size,
   required WidgetBuilder builder,
+  bool containsText = false,
 }) async {
   await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -82,9 +88,10 @@ Future<void> expectThemeGoldens(
       ),
     );
     await tester.pump();
+    final String suffix = containsText ? '.text' : '';
     await expectLater(
       find.byKey(key),
-      matchesGoldenFile('goldens/$name.${variant.label}.png'),
+      matchesGoldenFile('goldens/$name$suffix.${variant.label}.png'),
     );
   }
 }
