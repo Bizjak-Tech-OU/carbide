@@ -103,11 +103,11 @@ def format_report(diff: dict[str, list[str]]) -> str:
     return "\n".join(lines)
 
 
-def read_lock() -> dict | None:
-    if LOCKFILE.exists():
-        return json.loads(LOCKFILE.read_text())
+def read_lock(lockfile: Path = LOCKFILE) -> dict | None:
+    if lockfile.exists():
+        return json.loads(lockfile.read_text())
     return None
 
 
-def write_lock(lock: dict) -> None:
-    LOCKFILE.write_text(json.dumps(lock, indent=2) + "\n")
+def write_lock(lock: dict, lockfile: Path = LOCKFILE) -> None:
+    lockfile.write_text(json.dumps(lock, indent=2) + "\n")

@@ -15,11 +15,14 @@ the gitlink — no submodule checkout needed).
    git submodule update --remote --merge -- documentation/carbon
    ```
 
-2. **Regenerate data, references, and the lockfile**:
+2. **Regenerate data, references, and the lockfiles** (icons and pictograms
+   share the workflow and the drift guard):
 
    ```sh
    python3 tool/generate_carbon_icons.py        # data + lockfile + diff report
    python3 tool/generate_icon_references.py     # upstream rasters (needs rsvg-convert)
+   python3 tool/generate_carbon_pictograms.py
+   python3 tool/generate_pictogram_references.py
    dart format lib test
    ```
 
