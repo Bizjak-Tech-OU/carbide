@@ -63,6 +63,25 @@ between machines. Vector geometry renders identically across platforms, but
   `--update-goldens` on Linux and commits the result back to the branch. The
   bot commit does not retrigger CI; pull and push (or open the PR) afterwards.
 
+### Icon fidelity sweep
+
+Every icon asset is verified on every PR against committed rasterizations of
+the **upstream SVGs** (`test/icons/references/`, produced by `rsvg-convert` at
+2× scale — external ground truth, not our own renderer). The sweep
+(`test/icons/icon_fidelity_sweep_test.dart`) renders each asset through the
+production parser/painter and gates on **blurred-coverage mismatch ≤ 0.5%**
+(ADR 0001). On failure, our renders are written to `test/icons/failures/` for
+side-by-side comparison with the reference; fix the data (or regenerate after
+a deliberate upstream bump) rather than loosening the gate.
+
+When bumping the Carbon submodule, regenerate both data and references:
+
+```sh
+python3 tool/generate_carbon_icons.py
+python3 tool/generate_icon_references.py   # requires rsvg-convert (librsvg)
+dart format lib test
+```
+
 ## Definition of done
 
 A token group or component is done only when it has:
