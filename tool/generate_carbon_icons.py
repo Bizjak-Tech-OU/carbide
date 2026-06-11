@@ -77,7 +77,7 @@ def parse_icons_yml() -> dict[str, set]:
     return entries
 
 
-def parse_deprecated_yml() -> dict[str, str]:
+def parse_deprecated_yml(path: Path = PKG / "deprecated.yml") -> dict[str, str]:
     """Returns deprecated icon name -> single-line reason."""
     out: dict[str, str] = {}
     name = None
@@ -87,7 +87,7 @@ def parse_deprecated_yml() -> dict[str, str]:
         if name is not None:
             out[name] = " ".join(" ".join(reason_lines).split())
 
-    for line in (PKG / "deprecated.yml").read_text().splitlines():
+    for line in path.read_text().splitlines():
         m = re.match(r"^  - name: (.+)$", line)
         if m:
             flush()

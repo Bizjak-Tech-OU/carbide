@@ -39,6 +39,10 @@ export 'src/icons/carbon_icon_data.dart';
 export 'src/icons/carbon_icon_painter.dart';
 export 'src/icons/carbon_icons.dart';
 
+// Pictograms — Carbon's larger expressive illustrations.
+export 'src/pictograms/carbon_pictogram.dart';
+export 'src/pictograms/carbon_pictograms.dart';
+
 // Theme — semantic token sets and propagation.
 export 'src/theme/carbon_layer.dart';
 export 'src/theme/carbon_theme.dart';

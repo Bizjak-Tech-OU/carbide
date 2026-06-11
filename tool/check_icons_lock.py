@@ -20,25 +20,35 @@ import sys
 import icons_lock
 
 
+LOCKFILES = {
+    "icon": icons_lock.LOCKFILE,
+    "pictogram": icons_lock.ROOT / "tool/carbon_pictograms.lock.json",
+}
+
+
 def main() -> int:
-    lock = icons_lock.read_lock()
-    if lock is None:
-        print("missing tool/carbon_icons.lock.json — run the icon generator")
-        return 1
-    recorded = lock.get("carbonCommit", "")
     pinned = icons_lock.carbon_commit_from_gitlink()
-    if recorded != pinned:
-        print(
-            "icon lockfile drift:\n"
-            f"  lockfile generated from carbon {recorded[:12]}\n"
-            f"  repository pins carbon       {pinned[:12]}\n"
-            "  -> run tool/generate_carbon_icons.py and "
-            "tool/generate_icon_references.py, review the diff report, and "
-            "commit the result (see docs/ICON_UPDATES.md)."
-        )
-        return 1
-    print(f"icon lockfile in sync with carbon {pinned[:12]}")
-    return 0
+    failures = 0
+    for kind, lockfile in LOCKFILES.items():
+        lock = icons_lock.read_lock(lockfile)
+        if lock is None:
+            print(f"missing {lockfile.name} — run the {kind} generator")
+            failures += 1
+            continue
+        recorded = lock.get("carbonCommit", "")
+        if recorded != pinned:
+            print(
+                f"{kind} lockfile drift:\n"
+                f"  lockfile generated from carbon {recorded[:12]}\n"
+                f"  repository pins carbon       {pinned[:12]}\n"
+                f"  -> run tool/generate_carbon_{kind}s.py and "
+                f"tool/generate_{kind}_references.py, review the diff "
+                "report, and commit the result (see docs/ICON_UPDATES.md)."
+            )
+            failures += 1
+        else:
+            print(f"{kind} lockfile in sync with carbon {pinned[:12]}")
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
