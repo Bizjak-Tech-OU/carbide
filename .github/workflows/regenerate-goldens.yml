@@ -11,10 +11,6 @@ name: Regenerate goldens
 
 on:
   workflow_dispatch:
-  # Temporary bootstrap trigger: workflow_dispatch only works once the file
-  # exists on the default branch. Removed after the first regeneration.
-  push:
-    branches: [fix/linux-goldens]
 
 permissions:
   contents: write
