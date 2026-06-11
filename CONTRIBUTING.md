@@ -50,10 +50,18 @@ widget on all four themes at once with `expectThemeGoldens` from
 
 Generate or update baselines with `flutter test --update-goldens` and review the
 images. A small tolerance (0.5%) absorbs sub-pixel anti-aliasing differences
-between machines. Solid-geometry goldens are pixel-stable across platforms;
-goldens that include **text or curved edges** can differ between macOS and
-Linux, so generate those on the **CI platform (Linux)** to keep `master`
-authoritative.
+between machines. Vector geometry renders identically across platforms, but
+**glyph rasterization does not** (macOS CoreText vs Linux FreeType differ by
+~8–9% of pixels on the same text), so text goldens are **Linux-authoritative**:
+
+- Pass `containsText: true` to `expectThemeGoldens` for any snapshot that
+  renders glyphs. The golden is named `<name>.text.<variant>.png`; the
+  comparator checks it strictly (0.5%) on Linux and leniently (15%) elsewhere,
+  so local macOS runs still catch gross errors without false failures.
+- Generate text goldens with the **“Regenerate goldens” workflow**
+  (`gh workflow run regenerate-goldens.yml --ref <branch>`), which runs
+  `--update-goldens` on Linux and commits the result back to the branch. The
+  bot commit does not retrigger CI; pull and push (or open the PR) afterwards.
 
 ## Definition of done
 
