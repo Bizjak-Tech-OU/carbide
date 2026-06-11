@@ -30,6 +30,35 @@ class CarbonIconData {
   /// bespoke "glyph" artwork (no nominal size) first.
   final List<CarbonIconArtwork> artwork;
 
+  /// The artwork variant best suited to render at [size] logical pixels.
+  ///
+  /// Selection mirrors upstream behaviour: an exact size match wins (Carbon
+  /// hand-tunes some icons at 16/20/24); otherwise the smallest artwork
+  /// larger than [size] is scaled down (typically the 32px master);
+  /// otherwise the largest sized artwork is scaled up. Bespoke glyph
+  /// artwork is only used when an icon has no sized artwork at all (the
+  /// glyph-only status indicators such as `circle-fill`).
+  CarbonIconArtwork artworkFor(double size) {
+    CarbonIconArtwork? larger;
+    CarbonIconArtwork? largest;
+    for (final CarbonIconArtwork variant in artwork) {
+      final int? nominal = variant.size;
+      if (nominal == null) {
+        continue;
+      }
+      if (nominal == size) {
+        return variant;
+      }
+      if (nominal > size && (larger == null || nominal < larger.size!)) {
+        larger = variant;
+      }
+      if (largest == null || nominal > largest.size!) {
+        largest = variant;
+      }
+    }
+    return larger ?? largest ?? artwork.first;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {

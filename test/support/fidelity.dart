@@ -12,7 +12,23 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:carbide/carbide.dart';
-import 'package:carbide/src/icons/svg_path_parser.dart';
+
+/// Paints [artwork] at [width]×[height] through [CarbonIconPainter] — the
+/// exact paint path the `CarbonIcon` widget uses, so the sweep verifies what
+/// apps actually draw, never a parallel code path.
+Future<ui.Image> _renderArtwork(
+  CarbonIconArtwork artwork,
+  int width,
+  int height,
+) {
+  final ui.PictureRecorder recorder = ui.PictureRecorder();
+  final ui.Canvas canvas = ui.Canvas(recorder);
+  CarbonIconPainter(
+    artwork: artwork,
+    color: const ui.Color(0xFF000000),
+  ).paint(canvas, ui.Size(width.toDouble(), height.toDouble()));
+  return recorder.endRecording().toImage(width, height);
+}
 
 /// Renders [artwork] at [width]×[height] and returns its alpha channel.
 Future<Uint8List> renderArtworkAlpha(
@@ -20,30 +36,7 @@ Future<Uint8List> renderArtworkAlpha(
   int width,
   int height,
 ) async {
-  final ui.PictureRecorder recorder = ui.PictureRecorder();
-  final ui.Canvas canvas = ui.Canvas(recorder);
-  canvas.scale(width / artwork.viewBoxWidth, height / artwork.viewBoxHeight);
-  final ui.Paint paint = ui.Paint()..color = const ui.Color(0xFF000000);
-  for (final CarbonIconShape shape in artwork.shapes) {
-    ui.Path path = parseSvgPath(shape.d);
-    final List<double>? m = shape.matrix;
-    if (m != null) {
-      path = path.transform(
-        Float64List.fromList(<double>[
-          m[0], m[1], 0, 0, //
-          m[2], m[3], 0, 0, //
-          0, 0, 1, 0, //
-          m[4], m[5], 0, 1, //
-        ]),
-      );
-    }
-    path.fillType = shape.evenOdd
-        ? ui.PathFillType.evenOdd
-        : ui.PathFillType.nonZero;
-    canvas.drawPath(path, paint);
-  }
-  final ui.Image image = await recorder.endRecording().toImage(width, height);
-  return alphaChannel(image);
+  return alphaChannel(await _renderArtwork(artwork, width, height));
 }
 
 /// Renders [artwork] at [width]×[height] and returns PNG bytes, for failure
@@ -53,29 +46,7 @@ Future<Uint8List> renderArtworkPng(
   int width,
   int height,
 ) async {
-  final ui.PictureRecorder recorder = ui.PictureRecorder();
-  final ui.Canvas canvas = ui.Canvas(recorder);
-  canvas.scale(width / artwork.viewBoxWidth, height / artwork.viewBoxHeight);
-  final ui.Paint paint = ui.Paint()..color = const ui.Color(0xFF000000);
-  for (final CarbonIconShape shape in artwork.shapes) {
-    ui.Path path = parseSvgPath(shape.d);
-    final List<double>? m = shape.matrix;
-    if (m != null) {
-      path = path.transform(
-        Float64List.fromList(<double>[
-          m[0], m[1], 0, 0, //
-          m[2], m[3], 0, 0, //
-          0, 0, 1, 0, //
-          m[4], m[5], 0, 1, //
-        ]),
-      );
-    }
-    path.fillType = shape.evenOdd
-        ? ui.PathFillType.evenOdd
-        : ui.PathFillType.nonZero;
-    canvas.drawPath(path, paint);
-  }
-  final ui.Image image = await recorder.endRecording().toImage(width, height);
+  final ui.Image image = await _renderArtwork(artwork, width, height);
   final ByteData data = (await image.toByteData(
     format: ui.ImageByteFormat.png,
   ))!;
