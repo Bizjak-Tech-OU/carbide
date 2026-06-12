@@ -40,6 +40,7 @@ export 'src/components/skeleton/carbon_skeleton_text.dart';
 export 'src/components/tag/carbon_interactive_tags.dart';
 export 'src/components/tag/carbon_tag.dart';
 export 'src/components/text/carbon_text.dart';
+export 'src/components/tile/carbon_tile.dart';
 
 // Icons — generated Carbon icon data and the icon widget.
 export 'src/icons/carbon_icon.dart';
