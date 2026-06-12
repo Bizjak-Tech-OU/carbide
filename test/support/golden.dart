@@ -54,12 +54,18 @@ enum CarbonThemeVariant {
 /// `<name>.text.<variant>.png`, which the comparator treats as
 /// Linux-authoritative (glyph rasterization differs across platforms —
 /// generate these with the “Regenerate goldens” workflow, not locally).
+///
+/// For animated widgets, [pumpBeforeSnapshot] advances the clock by a fixed
+/// amount after the initial frame, capturing a deterministic mid-animation
+/// frame: each theme variant re-pumps under a fresh key, so animations
+/// restart from zero and every variant snapshots the same cycle position.
 Future<void> expectThemeGoldens(
   WidgetTester tester, {
   required String name,
   required Size size,
   required WidgetBuilder builder,
   bool containsText = false,
+  Duration? pumpBeforeSnapshot,
 }) async {
   await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -88,6 +94,9 @@ Future<void> expectThemeGoldens(
       ),
     );
     await tester.pump();
+    if (pumpBeforeSnapshot != null) {
+      await tester.pump(pumpBeforeSnapshot);
+    }
     final String suffix = containsText ? '.text' : '';
     await expectLater(
       find.byKey(key),

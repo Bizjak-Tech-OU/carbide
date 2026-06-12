@@ -33,6 +33,9 @@ export 'src/foundations/typography.dart';
 // Components.
 export 'src/components/button/carbon_button.dart';
 export 'src/components/button/carbon_button_set.dart';
+export 'src/components/skeleton/carbon_skeleton.dart';
+export 'src/components/skeleton/carbon_skeleton_shapes.dart';
+export 'src/components/skeleton/carbon_skeleton_text.dart';
 export 'src/components/text/carbon_text.dart';
 
 // Icons — generated Carbon icon data and the icon widget.
