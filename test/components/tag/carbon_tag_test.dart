@@ -1,0 +1,369 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/golden.dart';
+
+Widget _host(Widget child, {CarbonThemeData? theme}) => Directionality(
+  textDirection: TextDirection.ltr,
+  child: CarbonTheme(
+    data: theme ?? CarbonThemeData.white,
+    child: Center(child: child),
+  ),
+);
+
+BoxDecoration _surfaceDecoration(WidgetTester tester) {
+  final Container container = tester.widget<Container>(
+    find.descendant(
+      of: find.byType(TagSurface),
+      matching: find.byType(Container),
+    ),
+  );
+  return container.decoration! as BoxDecoration;
+}
+
+void main() {
+  setUp(() {
+    FocusManager.instance.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
+  });
+  tearDown(() {
+    FocusManager.instance.highlightStrategy = FocusHighlightStrategy.automatic;
+  });
+
+  group('spec locks (styles/scss/components/tag/_tag.scss)', () {
+    testWidgets('heights per size; pill radius; width bounds', (
+      WidgetTester tester,
+    ) async {
+      for (final (CarbonTagSize size, double height)
+          in <(CarbonTagSize, double)>[
+            (CarbonTagSize.sm, 18),
+            (CarbonTagSize.md, 24),
+            (CarbonTagSize.lg, 32),
+          ]) {
+        await tester.pumpWidget(_host(CarbonTag(label: 'Tag', size: size)));
+        expect(
+          tester.getSize(find.byType(CarbonTag)).height,
+          height,
+          reason: '$size',
+        );
+      }
+      final BorderRadius radius =
+          _surfaceDecoration(tester).borderRadius! as BorderRadius;
+      expect(radius.topLeft, const Radius.circular(16));
+
+      // Max width 208 with ellipsis; min width 32 keeps the pill shape.
+      await tester.pumpWidget(_host(CarbonTag(label: 'T' * 100)));
+      expect(tester.getSize(find.byType(CarbonTag)).width, 208);
+      await tester.pumpWidget(_host(const CarbonTag(label: '')));
+      expect(tester.getSize(find.byType(CarbonTag)).width, 32);
+    });
+
+    test('label type style is label-01', () {
+      expect(CarbonTag.labelStyle, CarbonTypeStyles.label01);
+      expect(CarbonTag.labelStyle.fontSize, 12);
+    });
+
+    testWidgets('horizontal padding: 8 (12 for lg); icon shifts start to 4 '
+        '(8 for lg) with a 4px gap', (WidgetTester tester) async {
+      Future<double> labelStart(CarbonTagSize size, {bool icon = false}) async {
+        await tester.pumpWidget(
+          _host(
+            CarbonTag(
+              label: 'Tag',
+              size: size,
+              icon: icon ? CarbonIcons.add : null,
+            ),
+          ),
+        );
+        return tester.getTopLeft(find.text('Tag')).dx -
+            tester.getTopLeft(find.byType(CarbonTag)).dx;
+      }
+
+      expect(await labelStart(CarbonTagSize.md), 8);
+      expect(await labelStart(CarbonTagSize.lg), 12);
+      // icon start + 16 icon + 4 gap.
+      expect(await labelStart(CarbonTagSize.md, icon: true), 4 + 16 + 4);
+      expect(await labelStart(CarbonTagSize.lg, icon: true), 8 + 16 + 4);
+    });
+  });
+
+  group('type color matrix (tag-theme calls per modifier)', () {
+    final CarbonThemeData theme = CarbonThemeData.white;
+
+    testWidgets('colored types resolve the tag component tokens', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonTag(label: 'T', type: CarbonTagType.red)),
+      );
+      expect(_surfaceDecoration(tester).color, theme.tagBackgroundRed);
+      expect(
+        tester.widget<Text>(find.text('T')).style!.color,
+        theme.tagColorRed,
+      );
+
+      await tester.pumpWidget(
+        _host(const CarbonTag(label: 'T', type: CarbonTagType.coolGray)),
+      );
+      expect(_surfaceDecoration(tester).color, theme.tagBackgroundCoolGray);
+    });
+
+    testWidgets('high-contrast and outline variants', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonTag(label: 'T', type: CarbonTagType.highContrast)),
+      );
+      expect(_surfaceDecoration(tester).color, theme.backgroundInverse);
+      expect(
+        tester.widget<Text>(find.text('T')).style!.color,
+        theme.textInverse,
+      );
+
+      await tester.pumpWidget(
+        _host(const CarbonTag(label: 'T', type: CarbonTagType.outline)),
+      );
+      expect(_surfaceDecoration(tester).color, theme.background);
+      final Container container = tester.widget<Container>(
+        find.descendant(
+          of: find.byType(TagSurface),
+          matching: find.byType(Container),
+        ),
+      );
+      final BoxDecoration outline =
+          container.foregroundDecoration! as BoxDecoration;
+      expect(outline.border!.top.color, theme.backgroundInverse);
+    });
+
+    testWidgets('disabled uses the layer-contextual layer token', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonLayer(child: CarbonTag(label: 'T', disabled: true))),
+      );
+      // Inside one CarbonLayer the contextual layer is layer02.
+      expect(_surfaceDecoration(tester).color, theme.layer02);
+      expect(
+        tester.widget<Text>(find.text('T')).style!.color,
+        theme.textDisabled,
+      );
+    });
+  });
+
+  group('CarbonDismissibleTag', () {
+    testWidgets('close button dismisses; tag body does not', (
+      WidgetTester tester,
+    ) async {
+      int closed = 0;
+      await tester.pumpWidget(
+        _host(CarbonDismissibleTag(label: 'Filter', onClose: () => closed++)),
+      );
+      await tester.tap(find.text('Filter'));
+      expect(closed, 0);
+      await tester.tap(find.byType(CarbonIcon));
+      expect(closed, 1);
+    });
+
+    testWidgets('close button hover fills with the type hover token', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          CarbonDismissibleTag(
+            label: 'F',
+            type: CarbonTagType.blue,
+            onClose: () {},
+          ),
+        ),
+      );
+      final TestGesture mouse = await tester.createGesture(
+        kind: PointerDeviceKind.mouse,
+      );
+      addTearDown(mouse.removePointer);
+      await mouse.addPointer(
+        location: tester.getCenter(find.byType(CarbonIcon)),
+      );
+      await tester.pumpAndSettle();
+      // Nearest ancestor Container is the circular close button (the outer
+      // one is the tag surface itself).
+      final Container closeButton = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.byType(CarbonIcon),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      final BoxDecoration decoration = closeButton.decoration! as BoxDecoration;
+      expect(decoration.color, CarbonThemeData.white.tagHoverBlue);
+      expect(decoration.shape, BoxShape.circle);
+    });
+
+    testWidgets('exposes an accessible dismiss action', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(CarbonDismissibleTag(label: 'Filter', onClose: () {})),
+      );
+      expect(find.bySemanticsLabel('Dismiss Filter'), findsOneWidget);
+      handle.dispose();
+    });
+  });
+
+  group('CarbonSelectableTag', () {
+    testWidgets('toggles and renders the selected fill', (
+      WidgetTester tester,
+    ) async {
+      bool? changed;
+      await tester.pumpWidget(
+        _host(
+          CarbonSelectableTag(
+            label: 'Topic',
+            selected: false,
+            onChanged: (bool value) => changed = value,
+          ),
+        ),
+      );
+      expect(
+        _surfaceDecoration(tester).border!.top.color,
+        CarbonThemeData.white.borderInverse,
+      );
+      await tester.tap(find.byType(CarbonSelectableTag));
+      expect(changed, isTrue);
+
+      await tester.pumpWidget(
+        _host(
+          CarbonSelectableTag(
+            label: 'Topic',
+            selected: true,
+            onChanged: (bool value) => changed = value,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        _surfaceDecoration(tester).color,
+        CarbonThemeData.white.layerSelectedInverse,
+      );
+      await tester.tap(find.byType(CarbonSelectableTag));
+      expect(changed, isFalse);
+    });
+  });
+
+  group('CarbonOperationalTag', () {
+    testWidgets('activates, shows border and hover fill', (
+      WidgetTester tester,
+    ) async {
+      int pressed = 0;
+      await tester.pumpWidget(
+        _host(
+          CarbonOperationalTag(
+            label: 'View all',
+            type: CarbonTagType.purple,
+            onPressed: () => pressed++,
+          ),
+        ),
+      );
+      expect(
+        _surfaceDecoration(tester).border!.top.color,
+        CarbonThemeData.white.tagBorderPurple,
+      );
+      await tester.tap(find.byType(CarbonOperationalTag));
+      expect(pressed, 1);
+
+      final TestGesture mouse = await tester.createGesture(
+        kind: PointerDeviceKind.mouse,
+      );
+      addTearDown(mouse.removePointer);
+      await mouse.addPointer(
+        location: tester.getCenter(find.byType(CarbonOperationalTag)),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        _surfaceDecoration(tester).color,
+        CarbonThemeData.white.tagHoverPurple,
+      );
+    });
+
+    testWidgets('disabled uses layer + borderDisabled and ignores taps', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonOperationalTag(label: 'View all', onPressed: null)),
+      );
+      expect(_surfaceDecoration(tester).color, CarbonThemeData.white.layer01);
+      expect(
+        _surfaceDecoration(tester).border!.top.color,
+        CarbonThemeData.white.borderDisabled,
+      );
+    });
+  });
+
+  group('goldens', () {
+    testWidgets('tag types across themes', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'tag_types',
+        containsText: true,
+        size: const Size(420, 150),
+        builder: (BuildContext context) => Center(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: <Widget>[
+              for (final CarbonTagType type in CarbonTagType.values)
+                CarbonTag(label: type.name, type: type),
+              const CarbonTag(label: 'disabled', disabled: true),
+            ],
+          ),
+        ),
+      );
+    });
+
+    testWidgets('tag variants across themes', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'tag_variants',
+        containsText: true,
+        size: const Size(420, 90),
+        builder: (BuildContext context) => Center(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: <Widget>[
+              const CarbonTag(
+                label: 'icon',
+                type: CarbonTagType.blue,
+                icon: CarbonIcons.tag,
+              ),
+              CarbonDismissibleTag(
+                label: 'dismissible',
+                type: CarbonTagType.green,
+                onClose: () {},
+              ),
+              const CarbonSelectableTag(label: 'off', selected: false),
+              CarbonSelectableTag(
+                label: 'on',
+                selected: true,
+                onChanged: (_) {},
+              ),
+              CarbonOperationalTag(
+                label: 'operational',
+                type: CarbonTagType.teal,
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  });
+}

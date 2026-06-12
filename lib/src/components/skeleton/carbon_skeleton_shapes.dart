@@ -11,6 +11,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../button/carbon_button.dart';
+import '../tag/carbon_tag.dart';
 import 'carbon_skeleton.dart';
 
 /// A plain rectangular loading placeholder; 100×100 by default.
@@ -61,24 +62,6 @@ class CarbonButtonSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       CarbonSkeleton(width: width, height: size.height);
-}
-
-/// The Carbon tag heights, shared by the tag skeleton (and the Tag
-/// component when it lands).
-enum CarbonTagSize {
-  /// 18px.
-  sm(18),
-
-  /// 24px.
-  md(24),
-
-  /// 32px.
-  lg(32);
-
-  const CarbonTagSize(this.height);
-
-  /// The tag height in logical pixels.
-  final double height;
 }
 
 /// A loading placeholder for a tag: a 60px pill.
