@@ -140,6 +140,8 @@ void main() {
       final BoxDecoration outline =
           container.foregroundDecoration! as BoxDecoration;
       expect(outline.border!.top.color, theme.backgroundInverse);
+      // `_tag.scss`: `border: 1px solid $border-inverse`.
+      expect(outline.border!.top.width, 1);
     });
 
     testWidgets('disabled uses the layer-contextual layer token', (
@@ -276,6 +278,8 @@ void main() {
         _surfaceDecoration(tester).border!.top.color,
         CarbonThemeData.white.tagBorderPurple,
       );
+      // `_tag.scss`: operational tags use a `1px solid` border.
+      expect(_surfaceDecoration(tester).border!.top.width, 1);
       await tester.tap(find.byType(CarbonOperationalTag));
       expect(pressed, 1);
 
@@ -360,6 +364,33 @@ void main() {
                 type: CarbonTagType.teal,
                 onPressed: () {},
               ),
+            ],
+          ),
+        ),
+      );
+    });
+
+    testWidgets('tag sizes across themes', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'tag_sizes',
+        containsText: true,
+        size: const Size(260, 150),
+        builder: (BuildContext context) => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (final CarbonTagSize size in CarbonTagSize.values)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: CarbonTag(
+                    label: size.name,
+                    size: size,
+                    type: CarbonTagType.blue,
+                    icon: CarbonIcons.tag,
+                  ),
+                ),
             ],
           ),
         ),

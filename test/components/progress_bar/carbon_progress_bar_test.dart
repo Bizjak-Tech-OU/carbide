@@ -273,4 +273,43 @@ void main() {
       ),
     );
   });
+
+  testWidgets('progress bar types and indeterminate across themes', (
+    WidgetTester tester,
+  ) async {
+    // 350ms = 25% of the 1400ms indeterminate cycle: a deterministic stripe
+    // position (the determinate bars have settled by then).
+    await expectThemeGoldens(
+      tester,
+      name: 'progress_bar_types',
+      containsText: true,
+      size: const Size(320, 220),
+      pumpBeforeSnapshot: const Duration(milliseconds: 350),
+      builder: (BuildContext context) => Center(
+        child: SizedBox(
+          width: 280,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              CarbonProgressBar(label: 'Indeterminate'),
+              SizedBox(height: 16),
+              CarbonProgressBar(
+                label: 'Inline',
+                value: 60,
+                type: CarbonProgressBarType.inline,
+              ),
+              SizedBox(height: 16),
+              CarbonProgressBar(
+                label: 'Indented',
+                value: 45,
+                type: CarbonProgressBarType.indented,
+                helperText: 'Indented helper',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  });
 }

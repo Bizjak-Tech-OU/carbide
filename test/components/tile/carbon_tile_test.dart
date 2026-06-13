@@ -249,6 +249,8 @@ void main() {
         (container.decoration! as BoxDecoration).border!.top.color,
         theme.layerSelectedInverse,
       );
+      // `_tile.scss`: the selection border is `1px solid`.
+      expect((container.decoration! as BoxDecoration).border!.top.width, 1);
       final CustomPaint paint = tester.widget<CustomPaint>(
         find.descendant(
           of: find.byType(CarbonIcon),
@@ -330,6 +332,34 @@ void main() {
         size: const Size(260, 260),
         builder: (BuildContext context) =>
             CarbonLayer(child: Builder(builder: specimen)),
+      );
+    });
+
+    testWidgets('focused clickable tile shows the inset focus ring', (
+      WidgetTester tester,
+    ) async {
+      final FocusNode node = FocusNode();
+      addTearDown(node.dispose);
+      await expectThemeGoldens(
+        tester,
+        name: 'tile_focus',
+        containsText: true,
+        size: const Size(260, 120),
+        builder: (BuildContext context) => Center(
+          child: SizedBox(
+            width: 200,
+            child: CarbonClickableTile(
+              onPressed: () {},
+              focusNode: node,
+              icon: CarbonIcons.arrowRight,
+              child: const Text('Focused tile'),
+            ),
+          ),
+        ),
+        afterPump: (WidgetTester tester) async {
+          node.requestFocus();
+          await tester.pumpAndSettle();
+        },
       );
     });
   });

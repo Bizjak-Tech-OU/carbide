@@ -157,6 +157,22 @@ void main() {
       expect(CarbonButton.labelStyle.fontSize, 14);
       expect(CarbonButton.labelStyle.fontWeight, FontWeight.w400);
     });
+
+    testWidgets('rest border is 1px (the 2px var is the focus inset only)', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          CarbonButton(
+            label: 'B',
+            kind: CarbonButtonKind.tertiary,
+            onPressed: () {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(_decorationOf(tester).border!.top.width, 1);
+    });
   });
 
   group('kind × state token matrix (_button.scss button-theme calls)', () {
@@ -497,6 +513,67 @@ void main() {
             ],
           ),
         ),
+      );
+    });
+
+    testWidgets('icon-only buttons across themes', (WidgetTester tester) async {
+      // Icons are vector (platform-stable); no text glyphs here.
+      await expectThemeGoldens(
+        tester,
+        name: 'button_icon_only',
+        size: const Size(360, 90),
+        builder: (BuildContext context) => Center(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: <Widget>[
+              for (final CarbonButtonKind kind in <CarbonButtonKind>[
+                CarbonButtonKind.primary,
+                CarbonButtonKind.secondary,
+                CarbonButtonKind.tertiary,
+                CarbonButtonKind.ghost,
+                CarbonButtonKind.danger,
+              ])
+                CarbonButton.iconOnly(
+                  icon: CarbonIcons.add,
+                  iconDescription: kind.name,
+                  kind: kind,
+                  onPressed: () {},
+                ),
+              const CarbonButton.iconOnly(
+                icon: CarbonIcons.add,
+                iconDescription: 'disabled',
+                onPressed: null,
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+
+    testWidgets('focused button shows the double inset ring', (
+      WidgetTester tester,
+    ) async {
+      // The focus ring is custom-painted (border → focus + 1px + 2px inset);
+      // the matrix tests assert its tokens, this golden pins its geometry.
+      final FocusNode node = FocusNode();
+      addTearDown(node.dispose);
+      await expectThemeGoldens(
+        tester,
+        name: 'button_focus',
+        containsText: true,
+        size: const Size(200, 100),
+        builder: (BuildContext context) => Center(
+          child: CarbonButton(
+            label: 'Focused',
+            focusNode: node,
+            onPressed: () {},
+          ),
+        ),
+        afterPump: (WidgetTester tester) async {
+          node.requestFocus();
+          await tester.pumpAndSettle();
+        },
       );
     });
   });
