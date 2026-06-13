@@ -212,4 +212,28 @@ void main() {
       ),
     );
   });
+
+  testWidgets('focused link shows the 1px focus outline', (
+    WidgetTester tester,
+  ) async {
+    final FocusNode node = FocusNode();
+    addTearDown(node.dispose);
+    await expectThemeGoldens(
+      tester,
+      name: 'link_focus',
+      containsText: true,
+      size: const Size(220, 80),
+      builder: (BuildContext context) => Center(
+        child: CarbonLink(
+          label: 'Focused link',
+          focusNode: node,
+          onPressed: () {},
+        ),
+      ),
+      afterPump: (WidgetTester tester) async {
+        node.requestFocus();
+        await tester.pumpAndSettle();
+      },
+    );
+  });
 }

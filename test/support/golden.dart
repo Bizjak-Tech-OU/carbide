@@ -59,6 +59,13 @@ enum CarbonThemeVariant {
 /// amount after the initial frame, capturing a deterministic mid-animation
 /// frame: each theme variant re-pumps under a fresh key, so animations
 /// restart from zero and every variant snapshots the same cycle position.
+///
+/// [afterPump] runs once per variant after the initial frame, before the
+/// snapshot, so a test can stage an interactive state — typically focusing a
+/// node to capture a focus ring (custom-painted geometry that the state-matrix
+/// tests assert by token but never pin as pixels). It should settle any
+/// resulting animation itself (e.g. `await tester.pumpAndSettle()`). Pair it
+/// with `FocusHighlightStrategy.alwaysTraditional` so the ring actually paints.
 Future<void> expectThemeGoldens(
   WidgetTester tester, {
   required String name,
@@ -66,6 +73,7 @@ Future<void> expectThemeGoldens(
   required WidgetBuilder builder,
   bool containsText = false,
   Duration? pumpBeforeSnapshot,
+  Future<void> Function(WidgetTester tester)? afterPump,
 }) async {
   await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -94,6 +102,9 @@ Future<void> expectThemeGoldens(
       ),
     );
     await tester.pump();
+    if (afterPump != null) {
+      await afterPump(tester);
+    }
     if (pumpBeforeSnapshot != null) {
       await tester.pump(pumpBeforeSnapshot);
     }

@@ -310,5 +310,35 @@ void main() {
             CarbonLayer(child: Builder(builder: (_) => specimen(true))),
       );
     });
+
+    testWidgets('focused interactive chevron shows its focus ring', (
+      WidgetTester tester,
+    ) async {
+      final FocusNode node = FocusNode();
+      addTearDown(node.dispose);
+      await expectThemeGoldens(
+        tester,
+        name: 'expandable_tile_focus',
+        containsText: true,
+        size: const Size(300, 140),
+        builder: (BuildContext context) => Center(
+          child: SizedBox(
+            width: 240,
+            child: CarbonExpandableTile(
+              interactive: true,
+              expanded: false,
+              focusNode: node,
+              onExpandedChanged: (_) {},
+              aboveTheFold: const Text('Above the fold'),
+              belowTheFold: const Text('Below the fold detail'),
+            ),
+          ),
+        ),
+        afterPump: (WidgetTester tester) async {
+          node.requestFocus();
+          await tester.pumpAndSettle();
+        },
+      );
+    });
   });
 }
