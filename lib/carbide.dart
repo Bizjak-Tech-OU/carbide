@@ -33,6 +33,7 @@ export 'src/foundations/typography.dart';
 // Components.
 export 'src/components/button/carbon_button.dart';
 export 'src/components/button/carbon_button_set.dart';
+export 'src/components/form/carbon_form.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
 export 'src/components/list/carbon_list.dart';
