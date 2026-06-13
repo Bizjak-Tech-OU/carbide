@@ -46,6 +46,7 @@ export 'src/components/stack/carbon_stack.dart';
 export 'src/components/tag/carbon_interactive_tags.dart';
 export 'src/components/tag/carbon_tag.dart';
 export 'src/components/text/carbon_text.dart';
+export 'src/components/tile/carbon_expandable_tile.dart';
 export 'src/components/tile/carbon_tile.dart';
 
 // Icons — generated Carbon icon data and the icon widget.
