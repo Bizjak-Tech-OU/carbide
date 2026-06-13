@@ -35,6 +35,7 @@ export 'src/components/button/carbon_button.dart';
 export 'src/components/button/carbon_button_set.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
+export 'src/components/list/carbon_list.dart';
 export 'src/components/loading/carbon_inline_loading.dart';
 export 'src/components/loading/carbon_loading.dart';
 export 'src/components/progress_bar/carbon_progress_bar.dart';
