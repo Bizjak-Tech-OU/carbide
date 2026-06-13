@@ -37,6 +37,7 @@ export 'src/components/link/carbon_link.dart';
 export 'src/components/skeleton/carbon_skeleton.dart';
 export 'src/components/skeleton/carbon_skeleton_shapes.dart';
 export 'src/components/skeleton/carbon_skeleton_text.dart';
+export 'src/components/stack/carbon_stack.dart';
 export 'src/components/tag/carbon_interactive_tags.dart';
 export 'src/components/tag/carbon_tag.dart';
 export 'src/components/text/carbon_text.dart';
