@@ -37,6 +37,7 @@ export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
 export 'src/components/loading/carbon_inline_loading.dart';
 export 'src/components/loading/carbon_loading.dart';
+export 'src/components/progress_bar/carbon_progress_bar.dart';
 export 'src/components/skeleton/carbon_skeleton.dart';
 export 'src/components/skeleton/carbon_skeleton_shapes.dart';
 export 'src/components/skeleton/carbon_skeleton_text.dart';
