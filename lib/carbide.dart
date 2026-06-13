@@ -41,6 +41,7 @@ export 'src/components/list/carbon_list.dart';
 export 'src/components/loading/carbon_inline_loading.dart';
 export 'src/components/loading/carbon_loading.dart';
 export 'src/components/progress_bar/carbon_progress_bar.dart';
+export 'src/components/radio_button/carbon_radio_button.dart';
 export 'src/components/skeleton/carbon_skeleton.dart';
 export 'src/components/skeleton/carbon_skeleton_shapes.dart';
 export 'src/components/skeleton/carbon_skeleton_text.dart';
