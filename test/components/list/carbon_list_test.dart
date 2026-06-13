@@ -1,0 +1,227 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/golden.dart';
+
+Widget _host(Widget child) => Directionality(
+  textDirection: TextDirection.ltr,
+  child: CarbonTheme(
+    data: CarbonThemeData.white,
+    child: Center(child: SizedBox(width: 280, child: child)),
+  ),
+);
+
+// The marker's own SizedBox is the nearest ancestor (the outer test host is
+// also a SizedBox, hence `.first`).
+double _markerGutter(WidgetTester tester, String marker) => tester
+    .widget<SizedBox>(
+      find
+          .ancestor(of: find.text(marker), matching: find.byType(SizedBox))
+          .first,
+    )
+    .width!;
+
+void main() {
+  final CarbonThemeData theme = CarbonThemeData.white;
+
+  group('markers (styles/scss/components/list/_list.scss)', () {
+    testWidgets('ordered top-level numbers items; nested uses lower-latin', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonOrderedList(
+            children: <CarbonListItem>[
+              CarbonListItem(
+                child: CarbonOrderedList(
+                  children: <CarbonListItem>[
+                    CarbonListItem(child: Text('nested one')),
+                    CarbonListItem(child: Text('nested two')),
+                  ],
+                ),
+              ),
+              CarbonListItem(child: Text('second')),
+            ],
+          ),
+        ),
+      );
+      // Top-level: 1. then 2.
+      expect(find.text('1.'), findsOneWidget);
+      expect(find.text('2.'), findsOneWidget);
+      // Nested ordered: a. then b.
+      expect(find.text('a.'), findsOneWidget);
+      expect(find.text('b.'), findsOneWidget);
+    });
+
+    testWidgets('unordered top-level is en-dash; nested is a square', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonUnorderedList(
+            children: <CarbonListItem>[
+              CarbonListItem(
+                child: CarbonUnorderedList(
+                  children: <CarbonListItem>[
+                    CarbonListItem(child: Text('nested')),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(find.text('–'), findsOneWidget); // –
+      expect(find.text('▪'), findsOneWidget); // ▪
+    });
+
+    testWidgets('marker gutters: ordered 24, unordered 16, nested square 12', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonOrderedList(
+            children: <CarbonListItem>[CarbonListItem(child: Text('x'))],
+          ),
+        ),
+      );
+      expect(_markerGutter(tester, '1.'), 24);
+
+      await tester.pumpWidget(
+        _host(
+          const CarbonUnorderedList(
+            children: <CarbonListItem>[
+              CarbonListItem(
+                child: CarbonUnorderedList(
+                  children: <CarbonListItem>[CarbonListItem(child: Text('y'))],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(_markerGutter(tester, '–'), 16);
+      expect(_markerGutter(tester, '▪'), 12);
+    });
+  });
+
+  group('typography', () {
+    testWidgets('body-01 by default; body-02 when expressive (inherited)', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonUnorderedList(
+            children: <CarbonListItem>[CarbonListItem(child: Text('item'))],
+          ),
+        ),
+      );
+      // The marker Text carries the resolved style (content inherits it via
+      // the wrapping DefaultTextStyle).
+      expect(
+        tester.widget<Text>(find.text('–')).style!.fontSize,
+        CarbonTypeStyles.body01.fontSize,
+      );
+      expect(
+        tester.widget<Text>(find.text('–')).style!.color,
+        theme.textPrimary,
+      );
+
+      await tester.pumpWidget(
+        _host(
+          const CarbonUnorderedList(
+            expressive: true,
+            children: <CarbonListItem>[
+              CarbonListItem(
+                child: CarbonUnorderedList(
+                  children: <CarbonListItem>[
+                    CarbonListItem(child: Text('deep')),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      // Nested list inherits the expressive scale (read off its marker).
+      expect(
+        tester.widget<Text>(find.text('▪')).style!.fontSize,
+        CarbonTypeStyles.body02.fontSize,
+      );
+    });
+  });
+
+  group('semantics', () {
+    testWidgets('item content is readable by assistive technology', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(
+          const CarbonUnorderedList(
+            children: <CarbonListItem>[
+              CarbonListItem(child: Text('First')),
+              CarbonListItem(child: Text('Second')),
+            ],
+          ),
+        ),
+      );
+      expect(find.bySemanticsLabel('First'), findsOneWidget);
+      expect(find.bySemanticsLabel('Second'), findsOneWidget);
+      handle.dispose();
+    });
+  });
+
+  testWidgets('list variants across themes', (WidgetTester tester) async {
+    await expectThemeGoldens(
+      tester,
+      name: 'list',
+      containsText: true,
+      size: const Size(320, 320),
+      builder: (BuildContext context) => Center(
+        child: SizedBox(
+          width: 280,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const CarbonOrderedList(
+                children: <CarbonListItem>[
+                  CarbonListItem(child: Text('Ordered one')),
+                  CarbonListItem(
+                    child: CarbonOrderedList(
+                      children: <CarbonListItem>[
+                        CarbonListItem(child: Text('Nested a')),
+                        CarbonListItem(child: Text('Nested b')),
+                      ],
+                    ),
+                  ),
+                  CarbonListItem(child: Text('Ordered three')),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const CarbonUnorderedList(
+                children: <CarbonListItem>[
+                  CarbonListItem(child: Text('Unordered one')),
+                  CarbonListItem(
+                    child: CarbonUnorderedList(
+                      children: <CarbonListItem>[
+                        CarbonListItem(child: Text('Nested square')),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  });
+}
