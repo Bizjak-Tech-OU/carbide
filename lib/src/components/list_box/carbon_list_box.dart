@@ -1,0 +1,474 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+//
+// Spec sources (Apache-2.0 Carbon Design System; see NOTICE):
+//   styles/scss/components/list-box/_list-box.scss
+//   react/src/components/ListBox/{ListBox,ListBoxField,ListBoxMenu,
+//     ListBoxMenuItem,ListBoxMenuIcon,ListBoxSelection}
+//
+// ListBox is the shared, presentational chrome behind Dropdown, ComboBox and
+// MultiSelect — the field trigger surface, the popup menu, its option rows,
+// the chevron, and the clear / count selection controls. Like Carbon's
+// ListBox, it carries no selection state of its own: each consumer drives
+// `expanded`, `isHighlighted`, `isSelected`, etc. (Carbon does this with a
+// Downshift hook per consumer.)
+
+import 'package:flutter/widgets.dart';
+
+import '../../foundations/layout.dart';
+import '../../foundations/motion.dart';
+import '../../foundations/typography.dart';
+import '../../icons/carbon_icon.dart';
+import '../../icons/carbon_icons.dart';
+import '../../theme/carbon_layer.dart';
+import '../../theme/carbon_theme.dart';
+import '../../theme/carbon_theme_data.dart';
+import '../../utils/focus_ring.dart';
+import '../form/carbon_form.dart' show CarbonFieldSize;
+
+/// The drop shadow under a list-box menu (`box-shadow()`: `0 2px 6px $shadow`;
+/// `$shadow` is `rgba(0, 0, 0, 0.3)`).
+const BoxShadow _menuShadow = BoxShadow(
+  color: Color(0x4D000000),
+  offset: Offset(0, 2),
+  blurRadius: 6,
+);
+
+/// The field trigger surface for a list-box control.
+///
+/// Renders the value (or placeholder) [child], an optional [selection] control
+/// (clear button or count), and the rotating chevron. State — open/closed,
+/// validation, focus — is supplied by the consumer; this widget only paints the
+/// chrome (background, hover, bottom border, focus ring) to `_list-box.scss`.
+class CarbonListBox extends StatefulWidget {
+  /// Creates a list-box field surface.
+  const CarbonListBox({
+    required this.child,
+    this.size = CarbonFieldSize.md,
+    this.expanded = false,
+    this.disabled = false,
+    this.invalid = false,
+    this.warn = false,
+    this.focused = false,
+    this.selection,
+    this.onTap,
+    super.key,
+  }) : assert(!(invalid && warn), 'A field cannot be both invalid and warn.');
+
+  /// The value or placeholder shown in the field.
+  final Widget child;
+
+  /// The field height: sm/md/lg = 32/40/48.
+  final CarbonFieldSize size;
+
+  /// Whether the menu is open (rotates the chevron and softens the border).
+  final bool expanded;
+
+  /// Whether the control is disabled.
+  final bool disabled;
+
+  /// Whether the control is in an error state.
+  final bool invalid;
+
+  /// Whether the control is in a warning state.
+  final bool warn;
+
+  /// Whether the field owns keyboard focus (draws the focus ring).
+  final bool focused;
+
+  /// An optional clear button or selection count, shown before the chevron.
+  final Widget? selection;
+
+  /// Called when the field is tapped.
+  final VoidCallback? onTap;
+
+  @override
+  State<CarbonListBox> createState() => _CarbonListBoxState();
+}
+
+class _CarbonListBoxState extends State<CarbonListBox> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final bool enabled = !widget.disabled;
+
+    // _list-box.scss: background $field, hover $field-hover; disabled keeps
+    // $field (no hover).
+    final Color background = enabled && _hovered
+        ? layer.fieldHover
+        : layer.field;
+    final Color textColor = widget.disabled
+        ? theme.textDisabled
+        : theme.textPrimary;
+
+    // bottom border: 1px $border-strong, $border-subtle when expanded,
+    // transparent when disabled (_list-box.scss).
+    final Color borderColor = widget.disabled
+        ? const Color(0x00000000)
+        : widget.expanded
+        ? layer.borderSubtle
+        : theme.borderStrong01;
+
+    // invalid draws a 2px support-error ring on all sides (shared field
+    // treatment); warning keeps the bottom border and adds its icon.
+    final Border border = widget.invalid && enabled
+        ? Border.all(color: theme.supportError, width: 2)
+        : Border(bottom: BorderSide(color: borderColor));
+
+    final List<Widget> trailing = <Widget>[
+      if (widget.invalid)
+        CarbonIcon(CarbonIcons.errorFilled, color: theme.supportError)
+      else if (widget.warn)
+        CarbonIcon(CarbonIcons.warningAltFilled, color: theme.supportWarning),
+      if (widget.selection != null) widget.selection!,
+      CarbonListBoxMenuIcon(open: widget.expanded, disabled: widget.disabled),
+    ];
+
+    return MouseRegion(
+      cursor: widget.disabled
+          ? SystemMouseCursors.forbidden
+          : SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.disabled ? null : widget.onTap,
+        child: CarbonFocusRing(
+          visible: widget.focused,
+          inset: true,
+          child: AnimatedContainer(
+            duration: CarbonDuration.fast01,
+            curve: CarbonEasing.standardProductive,
+            height: widget.size.height,
+            decoration: BoxDecoration(color: background, border: border),
+            padding: const EdgeInsetsDirectional.only(
+              start: CarbonSpacing.spacing05,
+              end: CarbonSpacing.spacing04,
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: DefaultTextStyle.merge(
+                    style: CarbonTypeStyles.bodyCompact01.copyWith(
+                      color: textColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    child: widget.child,
+                  ),
+                ),
+                for (final Widget w in trailing) ...<Widget>[
+                  const SizedBox(width: CarbonSpacing.spacing03),
+                  w,
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The chevron at the end of a [CarbonListBox] field, rotating 180° when open.
+class CarbonListBoxMenuIcon extends StatelessWidget {
+  /// Creates the menu chevron.
+  const CarbonListBoxMenuIcon({
+    required this.open,
+    this.disabled = false,
+    super.key,
+  });
+
+  /// Whether the menu is open (rotates the chevron).
+  final bool open;
+
+  /// Whether the host control is disabled (greys the icon).
+  final bool disabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    // _list-box.scss: 24x24 box, transform rotate(180deg) when open,
+    // transition transform fast-01.
+    return SizedBox.square(
+      dimension: 24,
+      child: Center(
+        child: AnimatedRotation(
+          turns: open ? 0.5 : 0,
+          duration: CarbonDuration.fast01,
+          curve: CarbonEasing.standardProductive,
+          child: CarbonIcon(
+            CarbonIcons.chevronDown,
+            color: disabled ? theme.iconDisabled : theme.iconPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The popup list of options under a [CarbonListBox].
+///
+/// Consumers render this inside an `OverlayPortal` anchored to the field. It
+/// shows at most 5.5 rows (`max-block-size` per size) before scrolling.
+class CarbonListBoxMenu extends StatelessWidget {
+  /// Creates a list-box menu wrapping [children] option rows.
+  const CarbonListBoxMenu({
+    required this.children,
+    this.size = CarbonFieldSize.md,
+    super.key,
+  });
+
+  /// The option rows (typically [CarbonListBoxMenuItem]s).
+  final List<Widget> children;
+
+  /// The host field size, which sets the visible-row cap.
+  final CarbonFieldSize size;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: layer.layer,
+        boxShadow: const <BoxShadow>[_menuShadow],
+      ),
+      child: ConstrainedBox(
+        // _list-box.scss: 5.5 rows of the item height (40 -> 220, etc.).
+        constraints: BoxConstraints(maxHeight: size.height * 5.5),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A single option row inside a [CarbonListBoxMenu].
+///
+/// [isHighlighted] marks the keyboard-roved row (focus ring + emphasised
+/// text); [isActive] marks the currently selected value. A top divider
+/// separates rows, suppressed on the first row and around the highlighted row,
+/// matching `_list-box.scss`.
+class CarbonListBoxMenuItem extends StatefulWidget {
+  /// Creates a list-box option row.
+  const CarbonListBoxMenuItem({
+    required this.child,
+    this.size = CarbonFieldSize.md,
+    this.isHighlighted = false,
+    this.isActive = false,
+    this.isFirst = false,
+    this.disabled = false,
+    this.onTap,
+    super.key,
+  });
+
+  /// The row contents (typically the option label, plus a trailing checkmark
+  /// the consumer adds for the selected value).
+  final Widget child;
+
+  /// The host field size, which sets the row height.
+  final CarbonFieldSize size;
+
+  /// Whether this row is keyboard-highlighted.
+  final bool isHighlighted;
+
+  /// Whether this row is the selected value.
+  final bool isActive;
+
+  /// Whether this is the first row (suppresses its top divider).
+  final bool isFirst;
+
+  /// Whether the row is disabled.
+  final bool disabled;
+
+  /// Called when the row is tapped.
+  final VoidCallback? onTap;
+
+  @override
+  State<CarbonListBoxMenuItem> createState() => _CarbonListBoxMenuItemState();
+}
+
+class _CarbonListBoxMenuItemState extends State<CarbonListBoxMenuItem> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final bool enabled = !widget.disabled;
+    final bool emphasised =
+        enabled && (widget.isActive || widget.isHighlighted || _hovered);
+
+    // _list-box.scss: active -> $layer-selected; hover/highlighted ->
+    // $layer-hover; otherwise transparent.
+    final Color background = !enabled
+        ? const Color(0x00000000)
+        : widget.isActive
+        ? layer.layerSelected
+        : widget.isHighlighted || _hovered
+        ? layer.layerHover
+        : const Color(0x00000000);
+
+    final Color textColor = widget.disabled
+        ? theme.textDisabled
+        : emphasised
+        ? theme.textPrimary
+        : theme.textSecondary;
+
+    // 1px $border-subtle top divider, transparent on the first row and around
+    // the highlighted row.
+    final bool showDivider =
+        !widget.isFirst && !widget.isHighlighted && !_hovered;
+    final Color dividerColor = showDivider
+        ? layer.borderSubtle
+        : const Color(0x00000000);
+
+    return MouseRegion(
+      cursor: widget.disabled
+          ? SystemMouseCursors.basic
+          : SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.disabled ? null : widget.onTap,
+        child: CarbonFocusRing(
+          visible: widget.isHighlighted,
+          inset: true,
+          child: ColoredBox(
+            color: background,
+            child: Container(
+              height: widget.size.height,
+              alignment: AlignmentDirectional.centerStart,
+              // The divider sits inside a spacing-05 inset (`margin: 0 16px`).
+              margin: const EdgeInsetsDirectional.symmetric(
+                horizontal: CarbonSpacing.spacing05,
+              ),
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(color: dividerColor)),
+              ),
+              child: DefaultTextStyle.merge(
+                style: CarbonTypeStyles.bodyCompact01.copyWith(
+                  color: textColor,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                child: widget.child,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The clear (X) control inside a [CarbonListBox] field.
+class CarbonListBoxSelection extends StatelessWidget {
+  /// Creates a clear control.
+  const CarbonListBoxSelection({
+    required this.onClear,
+    this.disabled = false,
+    this.semanticLabel = 'Clear selection',
+    super.key,
+  });
+
+  /// Called when the control is tapped.
+  final VoidCallback onClear;
+
+  /// Whether the host control is disabled.
+  final bool disabled;
+
+  /// The accessible label for the clear control.
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: disabled ? null : onClear,
+      child: SizedBox.square(
+        // _list-box.scss: 24x24 selection button.
+        dimension: 24,
+        child: Center(
+          child: CarbonIcon(
+            CarbonIcons.close,
+            color: disabled ? theme.iconDisabled : theme.iconPrimary,
+            semanticLabel: semanticLabel,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The multi-select count badge (a pill showing how many items are selected
+/// with an inline clear control).
+class CarbonListBoxSelectionCount extends StatelessWidget {
+  /// Creates a selection-count badge.
+  const CarbonListBoxSelectionCount({
+    required this.count,
+    required this.onClear,
+    this.disabled = false,
+    super.key,
+  });
+
+  /// The number of selected items.
+  final int count;
+
+  /// Called when the inline clear control is tapped.
+  final VoidCallback onClear;
+
+  /// Whether the host control is disabled.
+  final bool disabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    // disabled: tag-theme($text-disabled, $layer).
+    final Color background = disabled ? layer.layer : theme.backgroundInverse;
+    final Color foreground = disabled ? theme.textDisabled : theme.textInverse;
+    final Color iconColor = disabled ? theme.iconDisabled : theme.iconInverse;
+
+    return Container(
+      height: 24,
+      padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 2, 8),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            '$count',
+            style: CarbonTypeStyles.label01.copyWith(color: foreground),
+          ),
+          const SizedBox(width: 4),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: disabled ? null : onClear,
+            child: CarbonIcon(
+              CarbonIcons.close,
+              size: 20,
+              color: iconColor,
+              semanticLabel: 'Clear all selected items',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

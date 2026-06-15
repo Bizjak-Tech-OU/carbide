@@ -38,6 +38,7 @@ export 'src/components/form/carbon_form.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
 export 'src/components/list/carbon_list.dart';
+export 'src/components/list_box/carbon_list_box.dart';
 export 'src/components/loading/carbon_inline_loading.dart';
 export 'src/components/loading/carbon_loading.dart';
 export 'src/components/number_input/carbon_number_input.dart';
