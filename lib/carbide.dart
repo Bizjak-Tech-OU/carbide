@@ -34,6 +34,7 @@ export 'src/foundations/typography.dart';
 export 'src/components/button/carbon_button.dart';
 export 'src/components/button/carbon_button_set.dart';
 export 'src/components/checkbox/carbon_checkbox.dart';
+export 'src/components/combo_box/carbon_combo_box.dart';
 export 'src/components/form/carbon_form.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
