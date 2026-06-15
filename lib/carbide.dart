@@ -55,6 +55,7 @@ export 'src/components/notification/carbon_notification.dart';
 export 'src/components/popover/carbon_popover.dart';
 export 'src/components/pagination/carbon_pagination.dart';
 export 'src/components/progress_bar/carbon_progress_bar.dart';
+export 'src/components/progress_indicator/carbon_progress_indicator.dart';
 export 'src/components/radio_button/carbon_radio_button.dart';
 export 'src/components/search/carbon_search.dart';
 export 'src/components/select/carbon_select.dart';
