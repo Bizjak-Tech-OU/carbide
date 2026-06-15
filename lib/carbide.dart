@@ -64,6 +64,7 @@ export 'src/components/skeleton/carbon_skeleton.dart';
 export 'src/components/skeleton/carbon_skeleton_shapes.dart';
 export 'src/components/skeleton/carbon_skeleton_text.dart';
 export 'src/components/stack/carbon_stack.dart';
+export 'src/components/structured_list/carbon_structured_list.dart';
 export 'src/components/tag/carbon_interactive_tags.dart';
 export 'src/components/tag/carbon_tag.dart';
 export 'src/components/tabs/carbon_tabs.dart';
