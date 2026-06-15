@@ -126,6 +126,7 @@ class CarbonPopover extends StatefulWidget {
     this.highContrast = false,
     this.autoAlign = false,
     this.onRequestClose,
+    this.tapRegionGroupId,
     super.key,
   });
 
@@ -161,6 +162,10 @@ class CarbonPopover extends StatefulWidget {
 
   /// Called when the user requests dismissal (outside tap or Escape).
   final VoidCallback? onRequestClose;
+
+  /// An optional `TapRegion` group the surface joins, so taps on a trigger in
+  /// the same group are not treated as outside taps.
+  final Object? tapRegionGroupId;
 
   @override
   State<CarbonPopover> createState() => _CarbonPopoverState();
@@ -308,6 +313,7 @@ class _CarbonPopoverState extends State<CarbonPopover> {
     );
 
     surface = TapRegion(
+      groupId: widget.tapRegionGroupId,
       onTapOutside: (_) {
         if (_overlay.isShowing) widget.onRequestClose?.call();
       },

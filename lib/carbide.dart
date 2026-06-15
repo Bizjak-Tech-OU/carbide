@@ -60,6 +60,7 @@ export 'src/components/tag/carbon_interactive_tags.dart';
 export 'src/components/tag/carbon_tag.dart';
 export 'src/components/text/carbon_text.dart';
 export 'src/components/toggle/carbon_toggle.dart';
+export 'src/components/toggletip/carbon_toggletip.dart';
 export 'src/components/text_area/carbon_text_area.dart';
 export 'src/components/text_input/carbon_text_input.dart';
 export 'src/components/tile/carbon_expandable_tile.dart';
