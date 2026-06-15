@@ -1,0 +1,159 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/golden.dart';
+
+Widget _host(Widget child) => Directionality(
+  textDirection: TextDirection.ltr,
+  child: CarbonTheme(
+    data: CarbonThemeData.white,
+    child: Center(child: SizedBox(width: 400, child: child)),
+  ),
+);
+
+List<CarbonStructuredListRow> _rows() => const <CarbonStructuredListRow>[
+  CarbonStructuredListRow(
+    cells: <Widget>[Text('Load balancer'), Text('Routine')],
+  ),
+  CarbonStructuredListRow(cells: <Widget>[Text('Database'), Text('Default')]),
+  CarbonStructuredListRow(cells: <Widget>[Text('Cache'), Text('Routine')]),
+];
+
+void main() {
+  final CarbonThemeData theme = CarbonThemeData.white;
+
+  setUp(() {
+    FocusManager.instance.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
+  });
+  tearDown(() {
+    FocusManager.instance.highlightStrategy = FocusHighlightStrategy.automatic;
+  });
+
+  group('structure', () {
+    testWidgets('renders headers and cells', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _host(
+          CarbonStructuredList(
+            headers: const <String>['Name', 'Type'],
+            rows: _rows(),
+          ),
+        ),
+      );
+      expect(find.text('Name'), findsOneWidget);
+      expect(find.text('Load balancer'), findsOneWidget);
+      expect(find.text('Database'), findsOneWidget);
+      // The header uses the secondary label colour.
+      expect(
+        tester.widget<Text>(find.text('Name')).style!.color,
+        theme.textSecondary,
+      );
+    });
+  });
+
+  group('selection', () {
+    testWidgets('selecting a row reports its index and shows a checkmark', (
+      WidgetTester tester,
+    ) async {
+      int? selected;
+      await tester.pumpWidget(
+        _host(
+          StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return CarbonStructuredList(
+                headers: const <String>['Name', 'Type'],
+                rows: _rows(),
+                selectable: true,
+                selectedIndex: selected,
+                onSelected: (int i) => setState(() => selected = i),
+              );
+            },
+          ),
+        ),
+      );
+      expect(find.byType(CarbonIcon), findsNothing);
+      await tester.tap(find.text('Database'));
+      await tester.pump();
+      expect(selected, 1);
+      // A CheckmarkFilled marks the selected row.
+      expect(
+        tester
+            .widgetList<CarbonIcon>(find.byType(CarbonIcon))
+            .where((CarbonIcon i) => i.icon == CarbonIcons.checkmarkFilled)
+            .length,
+        1,
+      );
+    });
+
+    testWidgets('non-selectable rows are not tappable radios', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(
+          CarbonStructuredList(
+            headers: const <String>['Name', 'Type'],
+            rows: _rows(),
+          ),
+        ),
+      );
+      expect(find.byType(GestureDetector), findsNothing);
+      handle.dispose();
+    });
+  });
+
+  group('semantics', () {
+    testWidgets('selectable rows are exclusive-group radios', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(
+          CarbonStructuredList(
+            headers: const <String>['Name', 'Type'],
+            rows: _rows(),
+            selectable: true,
+            selectedIndex: 0,
+            onSelected: (_) {},
+          ),
+        ),
+      );
+      expect(
+        tester.getSemantics(find.bySemanticsLabel(RegExp('Load balancer'))),
+        isSemantics(isInMutuallyExclusiveGroup: true, isChecked: true),
+      );
+      handle.dispose();
+    });
+  });
+
+  group('goldens', () {
+    testWidgets('selectable structured list across themes', (
+      WidgetTester tester,
+    ) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'structured_list',
+        containsText: true,
+        size: const Size(420, 240),
+        builder: (BuildContext context) => Center(
+          child: SizedBox(
+            width: 380,
+            child: CarbonStructuredList(
+              headers: const <String>['Name', 'Type'],
+              rows: _rows(),
+              selectable: true,
+              selectedIndex: 1,
+              onSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+    });
+  });
+}
