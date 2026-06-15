@@ -44,6 +44,7 @@ export 'src/components/list_box/carbon_list_box.dart';
 export 'src/components/loading/carbon_inline_loading.dart';
 export 'src/components/loading/carbon_loading.dart';
 export 'src/components/menu/carbon_menu.dart';
+export 'src/components/multi_select/carbon_multi_select.dart';
 export 'src/components/number_input/carbon_number_input.dart';
 export 'src/components/popover/carbon_popover.dart';
 export 'src/components/progress_bar/carbon_progress_bar.dart';
