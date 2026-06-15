@@ -24,6 +24,9 @@ import '../../theme/carbon_layer.dart';
 import '../../theme/carbon_theme.dart';
 import '../../theme/carbon_theme_data.dart';
 import '../../utils/focus_ring.dart';
+import '../button/carbon_button.dart';
+import '../checkbox/carbon_checkbox.dart';
+import '../radio_button/carbon_radio_button.dart';
 
 /// The row height of a [CarbonDataTable] (`_data-table.scss` size variants).
 enum CarbonTableSize {
@@ -88,6 +91,30 @@ class CarbonTableRow {
   final List<Widget> cells;
 }
 
+/// How a [CarbonDataTable]'s rows may be selected.
+enum CarbonTableSelection {
+  /// Rows are not selectable.
+  none,
+
+  /// One row at a time (radio).
+  single,
+
+  /// Any number of rows (checkbox + select-all).
+  multi,
+}
+
+/// An action shown in a [CarbonDataTable]'s batch-actions bar.
+class CarbonTableBatchAction {
+  /// Creates a batch action.
+  const CarbonTableBatchAction({required this.label, this.onPressed});
+
+  /// The action label.
+  final String label;
+
+  /// The action.
+  final VoidCallback? onPressed;
+}
+
 /// A Carbon data table.
 ///
 /// ```dart
@@ -117,6 +144,11 @@ class CarbonDataTable extends StatelessWidget {
     this.sortColumnIndex,
     this.sortDirection = CarbonSortDirection.none,
     this.onSort,
+    this.selection = CarbonTableSelection.none,
+    this.selectedRows = const <int>{},
+    this.onSelectionChanged,
+    this.batchActions,
+    this.batchCancelLabel = 'Cancel',
   });
 
   /// The columns.
@@ -153,10 +185,67 @@ class CarbonDataTable extends StatelessWidget {
   /// consumer cycles none → ascending → descending → none.
   final ValueChanged<int>? onSort;
 
+  /// How rows may be selected.
+  final CarbonTableSelection selection;
+
+  /// The currently selected row indices.
+  final Set<int> selectedRows;
+
+  /// Called with the new selection when a row (or select-all) toggles.
+  final ValueChanged<Set<int>>? onSelectionChanged;
+
+  /// Actions shown in the batch-actions bar (multi-select).
+  final List<CarbonTableBatchAction>? batchActions;
+
+  /// The label of the batch-actions Cancel control.
+  final String batchCancelLabel;
+
+  bool get _selectable => selection != CarbonTableSelection.none;
+
+  void _toggleRow(int index) {
+    final Set<int> next = Set<int>.of(selectedRows);
+    if (selection == CarbonTableSelection.single) {
+      next
+        ..clear()
+        ..add(index);
+    } else {
+      next.contains(index) ? next.remove(index) : next.add(index);
+    }
+    onSelectionChanged?.call(next);
+  }
+
+  void _toggleAll() {
+    final bool all = selectedRows.length == rows.length && rows.isNotEmpty;
+    onSelectionChanged?.call(
+      all ? <int>{} : <int>{for (int i = 0; i < rows.length; i++) i},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final CarbonThemeData theme = CarbonTheme.of(context);
     final CarbonLayerTokens layer = CarbonLayer.of(context);
+
+    // The leading select-all cell (multi only): checked when all rows are
+    // selected, indeterminate on a partial selection.
+    final bool allSelected =
+        rows.isNotEmpty && selectedRows.length == rows.length;
+    final Widget? selectAll = selection == CarbonTableSelection.multi
+        ? Semantics(
+            label: 'Select all rows',
+            checked: allSelected,
+            child: ExcludeSemantics(
+              child: CarbonCheckbox(
+                label: '',
+                value: allSelected,
+                indeterminate: selectedRows.isNotEmpty && !allSelected,
+                onChanged: onSelectionChanged != null
+                    ? (_) => _toggleAll()
+                    : null,
+              ),
+            ),
+          )
+        : null;
 
     final Widget header = _HeaderRow(
       columns: columns,
@@ -164,6 +253,7 @@ class CarbonDataTable extends StatelessWidget {
       sortColumnIndex: sortColumnIndex,
       sortDirection: sortDirection,
       onSort: onSort,
+      leading: _selectable ? selectAll ?? const SizedBox.shrink() : null,
     );
 
     final List<Widget> bodyRows = <Widget>[
@@ -176,8 +266,30 @@ class CarbonDataTable extends StatelessWidget {
           // CSS, so the 0-based odd index is the even child.
           tinted: zebra && i.isOdd,
           isLast: i == rows.length - 1,
+          selected: selectedRows.contains(i),
+          leading: _selectable
+              ? _RowSelector(
+                  multi: selection == CarbonTableSelection.multi,
+                  selected: selectedRows.contains(i),
+                  label: 'Select row ${i + 1}',
+                  onChanged: onSelectionChanged != null
+                      ? () => _toggleRow(i)
+                      : null,
+                )
+              : null,
         ),
     ];
+
+    final Widget headerArea = selection == CarbonTableSelection.multi
+        ? _BatchHeader(
+            size: size,
+            header: header,
+            selectedCount: selectedRows.length,
+            actions: batchActions ?? const <CarbonTableBatchAction>[],
+            cancelLabel: batchCancelLabel,
+            onCancel: () => onSelectionChanged?.call(<int>{}),
+          )
+        : header;
 
     final Widget body = stickyHeader
         ? ConstrainedBox(
@@ -240,7 +352,7 @@ class CarbonDataTable extends StatelessWidget {
                   ],
                 ),
               ),
-            header,
+            headerArea,
             body,
           ],
         ),
@@ -258,6 +370,7 @@ class _HeaderRow extends StatelessWidget {
     required this.sortColumnIndex,
     required this.sortDirection,
     required this.onSort,
+    required this.leading,
   });
 
   final List<CarbonTableColumn> columns;
@@ -265,6 +378,7 @@ class _HeaderRow extends StatelessWidget {
   final int? sortColumnIndex;
   final CarbonSortDirection sortDirection;
   final ValueChanged<int>? onSort;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +389,7 @@ class _HeaderRow extends StatelessWidget {
         height: size.height,
         child: Row(
           children: <Widget>[
+            if (leading != null) _SelectorCell(child: leading!),
             for (int i = 0; i < columns.length; i++)
               Expanded(
                 flex: columns[i].flex,
@@ -415,6 +530,8 @@ class _BodyRow extends StatefulWidget {
     required this.size,
     required this.tinted,
     required this.isLast,
+    required this.selected,
+    required this.leading,
   });
 
   final CarbonTableRow row;
@@ -422,6 +539,8 @@ class _BodyRow extends StatefulWidget {
   final CarbonTableSize size;
   final bool tinted;
   final bool isLast;
+  final bool selected;
+  final Widget? leading;
 
   @override
   State<_BodyRow> createState() => _BodyRowState();
@@ -435,14 +554,18 @@ class _BodyRowState extends State<_BodyRow> {
     final CarbonThemeData theme = CarbonTheme.of(context);
     final CarbonLayerTokens layer = CarbonLayer.of(context);
 
-    final Color background = _hovered
+    final Color background = widget.selected
+        ? (_hovered ? layer.layerSelectedHover : layer.layerSelected)
+        : _hovered
         ? layer.layerHover
         : widget.tinted
         ? layer.layerAccent
         : layer.layer;
-    final Color textColor = _hovered ? theme.textPrimary : theme.textSecondary;
+    final Color textColor = _hovered || widget.selected
+        ? theme.textPrimary
+        : theme.textSecondary;
 
-    return MouseRegion(
+    Widget content = MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: AnimatedContainer(
@@ -466,6 +589,8 @@ class _BodyRowState extends State<_BodyRow> {
             style: CarbonTypeStyles.bodyCompact01.copyWith(color: textColor),
             child: Row(
               children: <Widget>[
+                if (widget.leading != null)
+                  _SelectorCell(child: widget.leading!),
                 for (int i = 0; i < widget.columns.length; i++)
                   Expanded(
                     flex: widget.columns[i].flex,
@@ -485,6 +610,145 @@ class _BodyRowState extends State<_BodyRow> {
             ),
           ),
         ),
+      ),
+    );
+
+    // Selected rows carry a 3px border-interactive marker on the start edge.
+    if (widget.selected) {
+      content = DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(color: theme.borderInteractive, width: 3),
+          ),
+        ),
+        child: content,
+      );
+    }
+    return content;
+  }
+}
+
+/// A fixed-width leading cell holding a row/select-all selector.
+class _SelectorCell extends StatelessWidget {
+  const _SelectorCell({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: CarbonSpacing.spacing09,
+    child: Align(child: child),
+  );
+}
+
+/// The leading per-row selector — a checkbox (multi) or radio (single).
+class _RowSelector extends StatelessWidget {
+  const _RowSelector({
+    required this.multi,
+    required this.selected,
+    required this.label,
+    required this.onChanged,
+  });
+
+  final bool multi;
+  final bool selected;
+  final String label;
+  final VoidCallback? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: label,
+      checked: selected,
+      inMutuallyExclusiveGroup: !multi,
+      child: ExcludeSemantics(
+        child: multi
+            ? CarbonCheckbox(
+                label: '',
+                value: selected,
+                onChanged: onChanged != null ? (_) => onChanged!() : null,
+              )
+            : CarbonRadioButton(
+                label: '',
+                selected: selected,
+                onSelected: onChanged,
+              ),
+      ),
+    );
+  }
+}
+
+/// The header area for a multi-select table: the normal header with the
+/// batch-actions bar sliding over it when rows are selected.
+class _BatchHeader extends StatelessWidget {
+  const _BatchHeader({
+    required this.size,
+    required this.header,
+    required this.selectedCount,
+    required this.actions,
+    required this.cancelLabel,
+    required this.onCancel,
+  });
+
+  final CarbonTableSize size;
+  final Widget header;
+  final int selectedCount;
+  final List<CarbonTableBatchAction> actions;
+  final String cancelLabel;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final bool active = selectedCount > 0;
+
+    final Widget bar = Container(
+      color: theme.backgroundBrand,
+      padding: const EdgeInsetsDirectional.only(start: CarbonSpacing.spacing05),
+      child: Row(
+        children: <Widget>[
+          Text(
+            '$selectedCount item${selectedCount == 1 ? '' : 's'} selected',
+            style: CarbonTypeStyles.bodyCompact01.copyWith(
+              color: theme.textOnColor,
+            ),
+          ),
+          const Spacer(),
+          // Batch buttons size to their content (a bare CarbonButton would
+          // expand to its 320px max under the bar's loose constraints).
+          for (final CarbonTableBatchAction action in actions)
+            IntrinsicWidth(
+              child: CarbonButton(
+                label: action.label,
+                size: CarbonButtonSize.lg,
+                onPressed: action.onPressed,
+              ),
+            ),
+          IntrinsicWidth(
+            child: CarbonButton(
+              label: cancelLabel,
+              size: CarbonButtonSize.lg,
+              onPressed: onCancel,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return SizedBox(
+      height: size.height,
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          header,
+          // Slide the bar down over the header when a selection exists.
+          AnimatedSlide(
+            offset: active ? Offset.zero : const Offset(0, -1),
+            duration: CarbonDuration.fast02,
+            curve: CarbonEasing.standardProductive,
+            child: IgnorePointer(ignoring: !active, child: bar),
+          ),
+        ],
       ),
     );
   }
