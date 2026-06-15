@@ -1,0 +1,190 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
+import 'package:flutter/services.dart' show LogicalKeyboardKey;
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/golden.dart';
+
+Widget _host(Widget child) => Directionality(
+  textDirection: TextDirection.ltr,
+  child: CarbonTheme(
+    data: CarbonThemeData.white,
+    child: Overlay(
+      initialEntries: <OverlayEntry>[
+        OverlayEntry(builder: (BuildContext context) => Center(child: child)),
+      ],
+    ),
+  ),
+);
+
+/// A focusable trigger so the tooltip's focus path can be exercised.
+Widget _trigger(FocusNode node) => Focus(
+  focusNode: node,
+  child: const SizedBox(
+    width: 40,
+    height: 40,
+    child: ColoredBox(color: Color(0xFF8A3FFC)),
+  ),
+);
+
+void main() {
+  setUp(() {
+    FocusManager.instance.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
+  });
+  tearDown(() {
+    FocusManager.instance.highlightStrategy = FocusHighlightStrategy.automatic;
+  });
+
+  group('hover', () {
+    testWidgets('shows after the enter delay, hides after the leave delay', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonTooltip(
+            label: 'Duplicate',
+            child: SizedBox(width: 40, height: 40),
+          ),
+        ),
+      );
+      final TestGesture gesture = await tester.createGesture(
+        kind: PointerDeviceKind.mouse,
+      );
+      await gesture.addPointer(location: Offset.zero);
+      addTearDown(gesture.removePointer);
+      await tester.pump();
+
+      await gesture.moveTo(tester.getCenter(find.byType(CarbonTooltip)));
+      await tester.pump();
+      // Not yet — still within the 100ms enter delay.
+      expect(find.text('Duplicate'), findsNothing);
+      await tester.pump(const Duration(milliseconds: 120));
+      await tester.pump(); // the popover's deferred show renders next frame.
+      expect(find.text('Duplicate'), findsOneWidget);
+
+      await gesture.moveTo(const Offset(500, 500));
+      await tester.pump();
+      // Still shown during the 300ms leave delay.
+      expect(find.text('Duplicate'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 320));
+      await tester.pump();
+      expect(find.text('Duplicate'), findsNothing);
+    });
+  });
+
+  group('focus + escape', () {
+    testWidgets('focus shows immediately; Escape hides', (
+      WidgetTester tester,
+    ) async {
+      final FocusNode node = FocusNode();
+      addTearDown(node.dispose);
+      await tester.pumpWidget(
+        _host(CarbonTooltip(label: 'Info', child: _trigger(node))),
+      );
+      node.requestFocus();
+      await tester.pumpAndSettle();
+      expect(find.text('Info'), findsOneWidget);
+      await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+      await tester.pumpAndSettle();
+      expect(find.text('Info'), findsNothing);
+    });
+  });
+
+  group('semantics + chrome', () {
+    testWidgets('trigger exposes the tooltip label', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(
+          const CarbonTooltip(
+            label: 'Help',
+            child: SizedBox(width: 40, height: 40),
+          ),
+        ),
+      );
+      expect(
+        tester
+            .getSemantics(find.byType(CarbonTooltip))
+            .getSemanticsData()
+            .tooltip,
+        'Help',
+      );
+      handle.dispose();
+    });
+
+    testWidgets('bubble uses the inverse palette', (WidgetTester tester) async {
+      final CarbonThemeData theme = CarbonThemeData.white;
+      await tester.pumpWidget(
+        _host(
+          const CarbonTooltip(
+            label: 'Dark',
+            defaultOpen: true,
+            child: SizedBox(width: 40, height: 40),
+          ),
+        ),
+      );
+      await tester.pump();
+      final BoxDecoration box =
+          tester
+                  .widget<DecoratedBox>(
+                    find
+                        .ancestor(
+                          of: find.text('Dark'),
+                          matching: find.byType(DecoratedBox),
+                        )
+                        .first,
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(box.color, theme.backgroundInverse);
+      final DefaultTextStyle style = tester.widget<DefaultTextStyle>(
+        find
+            .ancestor(
+              of: find.text('Dark'),
+              matching: find.byType(DefaultTextStyle),
+            )
+            .first,
+      );
+      expect(style.style.color, theme.textInverse);
+    });
+  });
+
+  group('goldens', () {
+    testWidgets('tooltip bubble across themes', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'tooltip_bubble',
+        containsText: true,
+        size: const Size(220, 160),
+        builder: (BuildContext context) => Overlay(
+          initialEntries: <OverlayEntry>[
+            OverlayEntry(
+              builder: (BuildContext context) => const Center(
+                child: CarbonTooltip(
+                  label: 'Duplicate',
+                  defaultOpen: true,
+                  child: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: ColoredBox(color: Color(0xFF8A3FFC)),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        afterPump: (WidgetTester tester) async {
+          await tester.pump();
+        },
+      );
+    });
+  });
+}
