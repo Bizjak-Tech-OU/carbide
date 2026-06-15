@@ -1,0 +1,859 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+//
+// Spec sources (Apache-2.0 Carbon Design System; see NOTICE):
+//   styles/scss/components/menu/_menu.scss
+//   react/src/components/Menu/{Menu,MenuItem}
+//
+// The composable action-menu primitive behind OverflowMenu, MenuButton and
+// ComboButton. CarbonMenu is the floating surface + keyboard roving; consumers
+// position it (typically inside a CarbonPopover) and open/close it.
+
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../foundations/layout.dart';
+import '../../foundations/motion.dart';
+import '../../foundations/typography.dart';
+import '../../icons/carbon_icon.dart';
+import '../../icons/carbon_icon_data.dart';
+import '../../icons/carbon_icons.dart';
+import '../../theme/carbon_layer.dart';
+import '../../theme/carbon_theme.dart';
+import '../../theme/carbon_theme_data.dart';
+import '../../utils/focus_ring.dart';
+
+/// The drop shadow under a menu (`box-shadow()`: `0 2px 6px $shadow`).
+const BoxShadow _menuShadow = BoxShadow(
+  color: Color(0x4D000000),
+  offset: Offset(0, 2),
+  blurRadius: 6,
+);
+
+/// The item height of a [CarbonMenu] (`_menu.scss` supported sizes).
+enum CarbonMenuSize {
+  /// 24px rows.
+  xs(24),
+
+  /// 32px rows — the default.
+  sm(32),
+
+  /// 40px rows.
+  md(40),
+
+  /// 48px rows.
+  lg(48);
+
+  const CarbonMenuSize(this.height);
+
+  /// The row height in logical pixels.
+  final double height;
+}
+
+/// Registers the focusable rows of a [CarbonMenu] in visual order so the menu
+/// can rove focus across them with the arrow keys, Home/End and type-ahead.
+class _MenuRegistry {
+  final List<({FocusNode node, String label})> entries =
+      <({FocusNode node, String label})>[];
+
+  void register(FocusNode node, String label) =>
+      entries.add((node: node, label: label));
+
+  void unregister(FocusNode node) => entries.removeWhere(
+    (({FocusNode node, String label}) e) => e.node == node,
+  );
+}
+
+/// Inherited menu context shared with descendant items.
+class _MenuScope extends InheritedWidget {
+  const _MenuScope({
+    required this.size,
+    required this.reserveLeading,
+    required this.registry,
+    required this.onClose,
+    required super.child,
+  });
+
+  final CarbonMenuSize size;
+  final bool reserveLeading;
+  final _MenuRegistry registry;
+  final VoidCallback? onClose;
+
+  static _MenuScope of(BuildContext context) {
+    final _MenuScope? scope = context
+        .dependOnInheritedWidgetOfExactType<_MenuScope>();
+    assert(scope != null, 'Menu items must be placed inside a CarbonMenu.');
+    return scope!;
+  }
+
+  @override
+  bool updateShouldNotify(_MenuScope old) =>
+      size != old.size || reserveLeading != old.reserveLeading;
+}
+
+/// A floating action menu: a shadowed surface of [children] rows that the user
+/// roves with the keyboard.
+///
+/// CarbonMenu owns no position of its own — a consumer renders it inside an
+/// overlay (for example a [CarbonPopover]) anchored to its trigger, and calls
+/// [onClose] in response to selection or dismissal.
+///
+/// ```dart
+/// CarbonMenu(
+///   onClose: () => setState(() => _open = false),
+///   children: <Widget>[
+///     CarbonMenuItem(label: 'Cut', onPressed: _cut),
+///     CarbonMenuItem(label: 'Copy', onPressed: _copy),
+///     const CarbonMenuItemDivider(),
+///     CarbonMenuItem(label: 'Delete', kind: CarbonMenuItemKind.danger,
+///         onPressed: _delete),
+///   ],
+/// )
+/// ```
+class CarbonMenu extends StatefulWidget {
+  /// Creates an action menu.
+  const CarbonMenu({
+    required this.children,
+    this.size = CarbonMenuSize.sm,
+    this.border = false,
+    this.autofocus = true,
+    this.onClose,
+    super.key,
+  });
+
+  /// The menu rows (items, groups, dividers).
+  final List<Widget> children;
+
+  /// The row height.
+  final CarbonMenuSize size;
+
+  /// Whether to outline the surface with a 1px subtle border.
+  final bool border;
+
+  /// Whether to focus the first item when the menu mounts.
+  final bool autofocus;
+
+  /// Called when the menu requests dismissal (Escape, or after a selection).
+  final VoidCallback? onClose;
+
+  @override
+  State<CarbonMenu> createState() => _CarbonMenuState();
+}
+
+class _CarbonMenuState extends State<CarbonMenu> {
+  final _MenuRegistry _registry = _MenuRegistry();
+  final FocusNode _key = FocusNode(skipTraversal: true, canRequestFocus: false);
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autofocus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _registry.entries.isNotEmpty) {
+          _registry.entries.first.node.requestFocus();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _key.dispose();
+    super.dispose();
+  }
+
+  int get _focusedIndex => _registry.entries.indexWhere(
+    (({FocusNode node, String label}) e) => e.node.hasFocus,
+  );
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+      return KeyEventResult.ignored;
+    }
+    final List<({FocusNode node, String label})> items = _registry.entries;
+    if (items.isEmpty) return KeyEventResult.ignored;
+    final int current = _focusedIndex;
+
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.arrowDown:
+        items[(current + 1) % items.length].node.requestFocus();
+        return KeyEventResult.handled;
+      case LogicalKeyboardKey.arrowUp:
+        items[(current - 1 + items.length) % items.length].node.requestFocus();
+        return KeyEventResult.handled;
+      case LogicalKeyboardKey.home:
+        items.first.node.requestFocus();
+        return KeyEventResult.handled;
+      case LogicalKeyboardKey.end:
+        items.last.node.requestFocus();
+        return KeyEventResult.handled;
+      case LogicalKeyboardKey.escape:
+        widget.onClose?.call();
+        return KeyEventResult.handled;
+    }
+
+    // Type-ahead: jump to the next item whose label starts with the character.
+    final String? ch = event.character?.toLowerCase();
+    if (ch != null && ch.length == 1 && RegExp(r'[a-z0-9]').hasMatch(ch)) {
+      for (int offset = 1; offset <= items.length; offset++) {
+        final int i = (current + offset) % items.length;
+        if (items[i].label.toLowerCase().startsWith(ch)) {
+          items[i].node.requestFocus();
+          return KeyEventResult.handled;
+        }
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final bool reserveLeading = _reservesLeading(widget.children);
+
+    return Focus(
+      focusNode: _key,
+      onKeyEvent: _onKey,
+      child: _MenuScope(
+        size: widget.size,
+        reserveLeading: reserveLeading,
+        registry: _registry,
+        onClose: widget.onClose,
+        child: ConstrainedBox(
+          // _menu.scss: min 10rem (12rem with icons), max 18rem.
+          constraints: BoxConstraints(
+            minWidth: reserveLeading ? 192 : 160,
+            maxWidth: 288,
+          ),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: layer.layer,
+              boxShadow: const <BoxShadow>[_menuShadow],
+              border: widget.border
+                  ? Border.all(color: layer.borderSubtle)
+                  : null,
+            ),
+            child: Padding(
+              // padding: $spacing-02 0.
+              padding: const EdgeInsets.symmetric(
+                vertical: CarbonSpacing.spacing02,
+              ),
+              child: DefaultTextStyle.merge(
+                style: CarbonTypeStyles.bodyCompact01.copyWith(
+                  color: theme.textSecondary,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: widget.children,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Whether any item (recursively) reserves a leading icon/selection column.
+bool _reservesLeading(List<Widget> children) {
+  for (final Widget child in children) {
+    if (child is CarbonMenuItem && child.icon != null) return true;
+    if (child is CarbonMenuItemSelectable) return true;
+    if (child is CarbonMenuItemRadioGroup) return true;
+    if (child is CarbonMenuItemGroup && _reservesLeading(child.children)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/// The visual kind of a [CarbonMenuItem].
+enum CarbonMenuItemKind {
+  /// The default appearance.
+  normal,
+
+  /// A destructive action: red fill on hover/focus.
+  danger,
+}
+
+/// A single selectable row in a [CarbonMenu].
+class CarbonMenuItem extends StatefulWidget {
+  /// Creates a menu item.
+  const CarbonMenuItem({
+    required this.label,
+    this.icon,
+    this.shortcut,
+    this.kind = CarbonMenuItemKind.normal,
+    this.disabled = false,
+    this.submenu,
+    this.onPressed,
+    super.key,
+  });
+
+  /// The item label.
+  final String label;
+
+  /// An optional leading icon.
+  final CarbonIconData? icon;
+
+  /// An optional trailing shortcut hint (for example `⌘C`).
+  final String? shortcut;
+
+  /// The item kind (normal or danger).
+  final CarbonMenuItemKind kind;
+
+  /// Whether the item is disabled (not focusable, inert).
+  final bool disabled;
+
+  /// An optional submenu opened to the side; renders a trailing chevron.
+  final List<Widget>? submenu;
+
+  /// Called when the item is activated; the menu then closes.
+  final VoidCallback? onPressed;
+
+  @override
+  State<CarbonMenuItem> createState() => _CarbonMenuItemState();
+}
+
+class _CarbonMenuItemState extends State<CarbonMenuItem> {
+  final FocusNode _node = FocusNode();
+  final OverlayPortalController _submenu = OverlayPortalController();
+  final LayerLink _link = LayerLink();
+  bool _hovered = false;
+  bool _focused = false;
+  _MenuRegistry? _registry;
+
+  bool get _hasSubmenu => widget.submenu != null;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final _MenuRegistry registry = _MenuScope.of(context).registry;
+    if (registry != _registry) {
+      _registry?.unregister(_node);
+      _registry = registry;
+      if (!widget.disabled) registry.register(_node, widget.label);
+    }
+  }
+
+  @override
+  void dispose() {
+    _registry?.unregister(_node);
+    _node.dispose();
+    super.dispose();
+  }
+
+  void _activate() {
+    if (widget.disabled) return;
+    if (_hasSubmenu) {
+      _submenu.show();
+      return;
+    }
+    widget.onPressed?.call();
+    _MenuScope.of(context).onClose?.call();
+  }
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    if (event.logicalKey == LogicalKeyboardKey.enter ||
+        event.logicalKey == LogicalKeyboardKey.space) {
+      _activate();
+      return KeyEventResult.handled;
+    }
+    if (_hasSubmenu &&
+        event.logicalKey == LogicalKeyboardKey.arrowRight &&
+        !_submenu.isShowing) {
+      _submenu.show();
+      return KeyEventResult.handled;
+    }
+    if (_hasSubmenu &&
+        event.logicalKey == LogicalKeyboardKey.arrowLeft &&
+        _submenu.isShowing) {
+      _submenu.hide();
+      _node.requestFocus();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _MenuScope scope = _MenuScope.of(context);
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final bool enabled = !widget.disabled;
+    final bool danger = widget.kind == CarbonMenuItemKind.danger;
+    final bool active = enabled && (_hovered || _focused);
+
+    final Color background = active
+        ? (danger ? theme.buttonDangerPrimary : layer.layerHover)
+        : const Color(0x00000000);
+    final Color foreground = !enabled
+        ? theme.textDisabled
+        : danger && active
+        ? theme.textOnColor
+        : active
+        ? theme.textPrimary
+        : theme.textSecondary;
+
+    final Widget row = _MenuItemRow(
+      size: scope.size,
+      reserveLeading: scope.reserveLeading,
+      leading: widget.icon != null
+          ? CarbonIcon(widget.icon!, color: foreground)
+          : null,
+      label: widget.label,
+      foreground: foreground,
+      trailing: _hasSubmenu
+          ? CarbonIcon(CarbonIcons.chevronRight, color: foreground)
+          : widget.shortcut != null
+          ? Text(
+              widget.shortcut!,
+              style: CarbonTypeStyles.bodyCompact01.copyWith(color: foreground),
+            )
+          : null,
+      background: background,
+    );
+
+    Widget item = MouseRegion(
+      cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: enabled ? _activate : null,
+        child: Focus(
+          focusNode: _node,
+          canRequestFocus: enabled,
+          onKeyEvent: _onKey,
+          onFocusChange: (bool f) => setState(() => _focused = f),
+          child: CarbonFocusRing(visible: _focused, inset: true, child: row),
+        ),
+      ),
+    );
+
+    item = Semantics(
+      button: true,
+      enabled: enabled,
+      label: widget.label,
+      onTap: enabled ? _activate : null,
+      child: ExcludeSemantics(child: item),
+    );
+
+    if (!_hasSubmenu) return item;
+
+    return CompositedTransformTarget(
+      link: _link,
+      child: OverlayPortal(
+        controller: _submenu,
+        overlayChildBuilder: (BuildContext context) => Positioned(
+          left: 0,
+          top: 0,
+          child: CompositedTransformFollower(
+            link: _link,
+            targetAnchor: Alignment.topRight,
+            followerAnchor: Alignment.topLeft,
+            child: Focus(
+              skipTraversal: true,
+              canRequestFocus: false,
+              // ArrowLeft anywhere in the submenu closes it and returns focus
+              // to the parent item (the submenu owns focus once open).
+              onKeyEvent: (FocusNode node, KeyEvent event) {
+                if (event is KeyDownEvent &&
+                    event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                  _submenu.hide();
+                  _node.requestFocus();
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              },
+              child: TapRegion(
+                onTapOutside: (_) => _submenu.hide(),
+                child: CarbonMenu(
+                  size: scope.size,
+                  onClose: () {
+                    _submenu.hide();
+                    scope.onClose?.call();
+                  },
+                  children: widget.submenu!,
+                ),
+              ),
+            ),
+          ),
+        ),
+        child: item,
+      ),
+    );
+  }
+}
+
+/// Shared row layout for menu items: optional leading slot, label, trailing.
+class _MenuItemRow extends StatelessWidget {
+  const _MenuItemRow({
+    required this.size,
+    required this.reserveLeading,
+    required this.leading,
+    required this.label,
+    required this.foreground,
+    required this.trailing,
+    required this.background,
+  });
+
+  final CarbonMenuSize size;
+  final bool reserveLeading;
+  final Widget? leading;
+  final String label;
+  final Color foreground;
+  final Widget? trailing;
+  final Color background;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: CarbonDuration.fast01,
+      curve: CarbonEasing.standardProductive,
+      height: size.height,
+      decoration: BoxDecoration(color: background),
+      padding: const EdgeInsets.symmetric(horizontal: CarbonSpacing.spacing05),
+      child: Row(
+        children: <Widget>[
+          if (reserveLeading) ...<Widget>[
+            SizedBox.square(dimension: 16, child: leading),
+            const SizedBox(width: CarbonSpacing.spacing03),
+          ],
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: CarbonTypeStyles.bodyCompact01.copyWith(color: foreground),
+            ),
+          ),
+          if (trailing != null) ...<Widget>[
+            const SizedBox(width: CarbonSpacing.spacing03),
+            trailing!,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// A 1px divider between menu sections (`_menu.scss` MenuItemDivider).
+class CarbonMenuItemDivider extends StatelessWidget {
+  /// Creates a menu divider.
+  const CarbonMenuItemDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    return Padding(
+      // margin-block: $spacing-02.
+      padding: const EdgeInsets.symmetric(vertical: CarbonSpacing.spacing02),
+      child: SizedBox(height: 1, child: ColoredBox(color: layer.borderSubtle)),
+    );
+  }
+}
+
+/// A labelled group of menu items.
+class CarbonMenuItemGroup extends StatelessWidget {
+  /// Creates a menu item group.
+  const CarbonMenuItemGroup({
+    required this.label,
+    required this.children,
+    super.key,
+  });
+
+  /// The group's accessible label.
+  final String label;
+
+  /// The grouped items.
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      label: label,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+}
+
+/// A toggleable menu item showing a leading checkmark when [selected].
+class CarbonMenuItemSelectable extends StatefulWidget {
+  /// Creates a selectable menu item.
+  const CarbonMenuItemSelectable({
+    required this.label,
+    required this.selected,
+    required this.onChanged,
+    this.disabled = false,
+    super.key,
+  });
+
+  /// The item label.
+  final String label;
+
+  /// Whether the item is currently selected.
+  final bool selected;
+
+  /// Called with the new value when toggled.
+  final ValueChanged<bool>? onChanged;
+
+  /// Whether the item is disabled.
+  final bool disabled;
+
+  @override
+  State<CarbonMenuItemSelectable> createState() =>
+      _CarbonMenuItemSelectableState();
+}
+
+class _CarbonMenuItemSelectableState extends State<CarbonMenuItemSelectable> {
+  final FocusNode _node = FocusNode();
+  bool _hovered = false;
+  bool _focused = false;
+  _MenuRegistry? _registry;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final _MenuRegistry registry = _MenuScope.of(context).registry;
+    if (registry != _registry) {
+      _registry?.unregister(_node);
+      _registry = registry;
+      if (!widget.disabled) registry.register(_node, widget.label);
+    }
+  }
+
+  @override
+  void dispose() {
+    _registry?.unregister(_node);
+    _node.dispose();
+    super.dispose();
+  }
+
+  void _toggle() {
+    if (widget.disabled) return;
+    widget.onChanged?.call(!widget.selected);
+  }
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent &&
+        (event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space)) {
+      _toggle();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonMenuSize size = _MenuScope.of(context).size;
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final bool enabled = !widget.disabled;
+    final bool active = enabled && (_hovered || _focused);
+    final Color foreground = !enabled
+        ? theme.textDisabled
+        : active
+        ? theme.textPrimary
+        : theme.textSecondary;
+
+    final Widget row = _MenuItemRow(
+      size: size,
+      reserveLeading: true,
+      leading: widget.selected
+          ? CarbonIcon(CarbonIcons.checkmark, color: foreground)
+          : null,
+      label: widget.label,
+      foreground: foreground,
+      trailing: null,
+      background: active ? layer.layerHover : const Color(0x00000000),
+    );
+
+    return Semantics(
+      inMutuallyExclusiveGroup: false,
+      checked: widget.selected,
+      enabled: enabled,
+      label: widget.label,
+      onTap: enabled ? _toggle : null,
+      child: ExcludeSemantics(
+        child: MouseRegion(
+          cursor: enabled
+              ? SystemMouseCursors.click
+              : SystemMouseCursors.forbidden,
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() => _hovered = false),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: enabled ? _toggle : null,
+            child: Focus(
+              focusNode: _node,
+              canRequestFocus: enabled,
+              onKeyEvent: _onKey,
+              onFocusChange: (bool f) => setState(() => _focused = f),
+              child: CarbonFocusRing(
+                visible: _focused,
+                inset: true,
+                child: row,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A single-select group of radio menu items.
+class CarbonMenuItemRadioGroup<T> extends StatelessWidget {
+  /// Creates a radio group of menu items.
+  const CarbonMenuItemRadioGroup({
+    required this.label,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+    super.key,
+  });
+
+  /// The group's accessible label.
+  final String label;
+
+  /// The currently selected value.
+  final T? value;
+
+  /// The options as `(value, label)` pairs.
+  final List<(T, String)> options;
+
+  /// Called with the chosen value.
+  final ValueChanged<T>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      label: label,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          for (final (T v, String l) in options)
+            _RadioItem<T>(
+              label: l,
+              selected: v == value,
+              onSelected: () => onChanged?.call(v),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RadioItem<T> extends StatefulWidget {
+  const _RadioItem({
+    required this.label,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onSelected;
+
+  @override
+  State<_RadioItem<T>> createState() => _RadioItemState<T>();
+}
+
+class _RadioItemState<T> extends State<_RadioItem<T>> {
+  final FocusNode _node = FocusNode();
+  bool _hovered = false;
+  bool _focused = false;
+  _MenuRegistry? _registry;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final _MenuRegistry registry = _MenuScope.of(context).registry;
+    if (registry != _registry) {
+      _registry?.unregister(_node);
+      _registry = registry;
+      registry.register(_node, widget.label);
+    }
+  }
+
+  @override
+  void dispose() {
+    _registry?.unregister(_node);
+    _node.dispose();
+    super.dispose();
+  }
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (event is KeyDownEvent &&
+        (event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space)) {
+      widget.onSelected();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonMenuSize size = _MenuScope.of(context).size;
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    final bool active = _hovered || _focused;
+    final Color foreground = active ? theme.textPrimary : theme.textSecondary;
+
+    final Widget row = _MenuItemRow(
+      size: size,
+      reserveLeading: true,
+      leading: widget.selected
+          ? CarbonIcon(CarbonIcons.checkmark, color: foreground)
+          : null,
+      label: widget.label,
+      foreground: foreground,
+      trailing: null,
+      background: active ? layer.layerHover : const Color(0x00000000),
+    );
+
+    return Semantics(
+      inMutuallyExclusiveGroup: true,
+      checked: widget.selected,
+      label: widget.label,
+      onTap: widget.onSelected,
+      child: ExcludeSemantics(
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() => _hovered = false),
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onSelected,
+            child: Focus(
+              focusNode: _node,
+              onKeyEvent: _onKey,
+              onFocusChange: (bool f) => setState(() => _focused = f),
+              child: CarbonFocusRing(
+                visible: _focused,
+                inset: true,
+                child: row,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
