@@ -85,10 +85,14 @@ class CarbonTableColumn {
 /// A row of cells for a [CarbonDataTable].
 class CarbonTableRow {
   /// Creates a table row.
-  const CarbonTableRow({required this.cells});
+  const CarbonTableRow({required this.cells, this.expandedContent});
 
   /// The cell contents, one per column.
   final List<Widget> cells;
+
+  /// Detail content revealed below the row when expanded (requires the table's
+  /// `expandable` flag).
+  final Widget? expandedContent;
 }
 
 /// How a [CarbonDataTable]'s rows may be selected.
@@ -149,6 +153,9 @@ class CarbonDataTable extends StatelessWidget {
     this.onSelectionChanged,
     this.batchActions,
     this.batchCancelLabel = 'Cancel',
+    this.expandable = false,
+    this.expandedRows = const <int>{},
+    this.onExpandedChanged,
   });
 
   /// The columns.
@@ -200,7 +207,22 @@ class CarbonDataTable extends StatelessWidget {
   /// The label of the batch-actions Cancel control.
   final String batchCancelLabel;
 
+  /// Whether rows can expand to reveal [CarbonTableRow.expandedContent].
+  final bool expandable;
+
+  /// The currently expanded row indices.
+  final Set<int> expandedRows;
+
+  /// Called with the new set when a row expands or collapses.
+  final ValueChanged<Set<int>>? onExpandedChanged;
+
   bool get _selectable => selection != CarbonTableSelection.none;
+
+  void _toggleExpanded(int index) {
+    final Set<int> next = Set<int>.of(expandedRows);
+    next.contains(index) ? next.remove(index) : next.add(index);
+    onExpandedChanged?.call(next);
+  }
 
   void _toggleRow(int index) {
     final Set<int> next = Set<int>.of(selectedRows);
@@ -247,17 +269,53 @@ class CarbonDataTable extends StatelessWidget {
           )
         : null;
 
+    // A leading row of fixed-width control cells: an expand chevron and/or a
+    // selector. Header and body share the same column layout.
+    Widget? leadingRow({required int? rowIndex}) {
+      if (!expandable && !_selectable) return null;
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (expandable)
+            _LeadingCell(
+              child: rowIndex != null && rows[rowIndex].expandedContent != null
+                  ? _ExpandChevron(
+                      expanded: expandedRows.contains(rowIndex),
+                      label: 'Expand row ${rowIndex + 1}',
+                      onTap: onExpandedChanged != null
+                          ? () => _toggleExpanded(rowIndex)
+                          : null,
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          if (_selectable)
+            _LeadingCell(
+              child: rowIndex == null
+                  ? (selectAll ?? const SizedBox.shrink())
+                  : _RowSelector(
+                      multi: selection == CarbonTableSelection.multi,
+                      selected: selectedRows.contains(rowIndex),
+                      label: 'Select row ${rowIndex + 1}',
+                      onChanged: onSelectionChanged != null
+                          ? () => _toggleRow(rowIndex)
+                          : null,
+                    ),
+            ),
+        ],
+      );
+    }
+
     final Widget header = _HeaderRow(
       columns: columns,
       size: size,
       sortColumnIndex: sortColumnIndex,
       sortDirection: sortDirection,
       onSort: onSort,
-      leading: _selectable ? selectAll ?? const SizedBox.shrink() : null,
+      leading: leadingRow(rowIndex: null),
     );
 
     final List<Widget> bodyRows = <Widget>[
-      for (int i = 0; i < rows.length; i++)
+      for (int i = 0; i < rows.length; i++) ...<Widget>[
         _BodyRow(
           row: rows[i],
           columns: columns,
@@ -265,19 +323,18 @@ class CarbonDataTable extends StatelessWidget {
           // Zebra tints even rows (`tr:nth-child(even)`); rows are 1-based in
           // CSS, so the 0-based odd index is the even child.
           tinted: zebra && i.isOdd,
-          isLast: i == rows.length - 1,
+          isLast: i == rows.length - 1 && !expandedRows.contains(i),
           selected: selectedRows.contains(i),
-          leading: _selectable
-              ? _RowSelector(
-                  multi: selection == CarbonTableSelection.multi,
-                  selected: selectedRows.contains(i),
-                  label: 'Select row ${i + 1}',
-                  onChanged: onSelectionChanged != null
-                      ? () => _toggleRow(i)
-                      : null,
-                )
-              : null,
+          expanded: expandedRows.contains(i),
+          leading: leadingRow(rowIndex: i),
         ),
+        if (expandable && rows[i].expandedContent != null)
+          _ExpandedDetail(
+            expanded: expandedRows.contains(i),
+            isLast: i == rows.length - 1,
+            child: rows[i].expandedContent!,
+          ),
+      ],
     ];
 
     final Widget headerArea = selection == CarbonTableSelection.multi
@@ -389,7 +446,7 @@ class _HeaderRow extends StatelessWidget {
         height: size.height,
         child: Row(
           children: <Widget>[
-            if (leading != null) _SelectorCell(child: leading!),
+            ?leading,
             for (int i = 0; i < columns.length; i++)
               Expanded(
                 flex: columns[i].flex,
@@ -531,6 +588,7 @@ class _BodyRow extends StatefulWidget {
     required this.tinted,
     required this.isLast,
     required this.selected,
+    required this.expanded,
     required this.leading,
   });
 
@@ -540,6 +598,7 @@ class _BodyRow extends StatefulWidget {
   final bool tinted;
   final bool isLast;
   final bool selected;
+  final bool expanded;
   final Widget? leading;
 
   @override
@@ -556,7 +615,7 @@ class _BodyRowState extends State<_BodyRow> {
 
     final Color background = widget.selected
         ? (_hovered ? layer.layerSelectedHover : layer.layerSelected)
-        : _hovered
+        : _hovered || widget.expanded
         ? layer.layerHover
         : widget.tinted
         ? layer.layerAccent
@@ -589,8 +648,7 @@ class _BodyRowState extends State<_BodyRow> {
             style: CarbonTypeStyles.bodyCompact01.copyWith(color: textColor),
             child: Row(
               children: <Widget>[
-                if (widget.leading != null)
-                  _SelectorCell(child: widget.leading!),
+                ?widget.leading,
                 for (int i = 0; i < widget.columns.length; i++)
                   Expanded(
                     flex: widget.columns[i].flex,
@@ -628,9 +686,9 @@ class _BodyRowState extends State<_BodyRow> {
   }
 }
 
-/// A fixed-width leading cell holding a row/select-all selector.
-class _SelectorCell extends StatelessWidget {
-  const _SelectorCell({required this.child});
+/// A fixed-width leading cell holding an expand chevron or a selector.
+class _LeadingCell extends StatelessWidget {
+  const _LeadingCell({required this.child});
 
   final Widget child;
 
@@ -639,6 +697,127 @@ class _SelectorCell extends StatelessWidget {
     width: CarbonSpacing.spacing09,
     child: Align(child: child),
   );
+}
+
+/// The per-row expand toggle — a chevron that rotates a quarter turn when open.
+class _ExpandChevron extends StatefulWidget {
+  const _ExpandChevron({
+    required this.expanded,
+    required this.label,
+    required this.onTap,
+  });
+
+  final bool expanded;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  State<_ExpandChevron> createState() => _ExpandChevronState();
+}
+
+class _ExpandChevronState extends State<_ExpandChevron> {
+  bool _focused = false;
+
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    if (widget.onTap != null &&
+        event is KeyDownEvent &&
+        (event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space)) {
+      widget.onTap!();
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    return Semantics(
+      button: true,
+      expanded: widget.expanded,
+      label: widget.label,
+      onTap: widget.onTap,
+      child: ExcludeSemantics(
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onTap,
+            child: Focus(
+              onKeyEvent: _onKey,
+              onFocusChange: (bool f) => setState(() => _focused = f),
+              child: CarbonFocusRing(
+                visible: _focused,
+                inset: true,
+                child: SizedBox.square(
+                  dimension: 24,
+                  child: AnimatedRotation(
+                    turns: widget.expanded ? 0.25 : 0,
+                    duration: CarbonDuration.fast02,
+                    curve: CarbonEasing.standardProductive,
+                    child: CarbonIcon(
+                      CarbonIcons.chevronRight,
+                      color: theme.iconPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The full-width detail row revealed below an expanded row.
+class _ExpandedDetail extends StatelessWidget {
+  const _ExpandedDetail({
+    required this.expanded,
+    required this.isLast,
+    required this.child,
+  });
+
+  final bool expanded;
+  final bool isLast;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData theme = CarbonTheme.of(context);
+    final CarbonLayerTokens layer = CarbonLayer.of(context);
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: expanded ? 1 : 0),
+      duration: CarbonDuration.moderate01,
+      curve: CarbonEasing.standardProductive,
+      builder: (BuildContext context, double t, Widget? child) => ClipRect(
+        child: Align(
+          alignment: Alignment.topLeft,
+          heightFactor: t,
+          child: child,
+        ),
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: layer.layerHover,
+          border: Border(
+            bottom: BorderSide(
+              color: isLast ? const Color(0x00000000) : layer.borderSubtle,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(CarbonSpacing.spacing05),
+          child: DefaultTextStyle.merge(
+            style: CarbonTypeStyles.bodyCompact01.copyWith(
+              color: theme.textPrimary,
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// The leading per-row selector — a checkbox (multi) or radio (single).
