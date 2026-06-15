@@ -31,6 +31,7 @@ export 'src/foundations/motion.dart';
 export 'src/foundations/typography.dart';
 
 // Components.
+export 'src/components/accordion/carbon_accordion.dart';
 export 'src/components/button/carbon_button.dart';
 export 'src/components/button/carbon_button_set.dart';
 export 'src/components/checkbox/carbon_checkbox.dart';
