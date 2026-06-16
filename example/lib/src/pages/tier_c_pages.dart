@@ -1,0 +1,549 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of the Carbide gallery and is licensed under the GNU
+// Affero General Public License v3.0 or later.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/widgets.dart';
+
+import '../demo_scaffold.dart';
+import '../registry.dart';
+
+/// Tier C — composite components.
+final GalleryCategory tierCCategory = GalleryCategory(
+  title: 'Composite',
+  icon: CarbonIcons.categories,
+  entries: <GalleryEntry>[
+    GalleryEntry(
+      slug: 'dropdown',
+      title: 'Dropdown',
+      builder: () => const _DropdownPage(),
+    ),
+    GalleryEntry(
+      slug: 'combo-box',
+      title: 'Combo box',
+      builder: () => const _ComboBoxPage(),
+    ),
+    GalleryEntry(
+      slug: 'multi-select',
+      title: 'Multi-select',
+      builder: () => const _MultiSelectPage(),
+    ),
+    GalleryEntry(
+      slug: 'tooltip',
+      title: 'Tooltip',
+      builder: () => const _TooltipPage(),
+    ),
+    GalleryEntry(
+      slug: 'toggletip',
+      title: 'Toggletip',
+      builder: () => const _ToggletipPage(),
+    ),
+    GalleryEntry(
+      slug: 'overflow-menu',
+      title: 'Overflow menu',
+      builder: () => const _OverflowMenuPage(),
+    ),
+    GalleryEntry(slug: 'tabs', title: 'Tabs', builder: () => const _TabsPage()),
+    GalleryEntry(
+      slug: 'accordion',
+      title: 'Accordion',
+      builder: () => const _AccordionPage(),
+    ),
+    GalleryEntry(
+      slug: 'content-switcher',
+      title: 'Content switcher',
+      builder: () => const _ContentSwitcherPage(),
+    ),
+    GalleryEntry(
+      slug: 'breadcrumb',
+      title: 'Breadcrumb',
+      builder: () => const _BreadcrumbPage(),
+    ),
+    GalleryEntry(
+      slug: 'pagination',
+      title: 'Pagination',
+      builder: () => const _PaginationPage(),
+    ),
+    GalleryEntry(
+      slug: 'modal',
+      title: 'Modal',
+      builder: () => const _ModalPage(),
+    ),
+    GalleryEntry(
+      slug: 'notification',
+      title: 'Notification',
+      builder: () => const _NotificationPage(),
+    ),
+    GalleryEntry(
+      slug: 'progress-indicator',
+      title: 'Progress indicator',
+      builder: () => const _ProgressIndicatorPage(),
+    ),
+    GalleryEntry(
+      slug: 'structured-list',
+      title: 'Structured list',
+      builder: () => const _StructuredListPage(),
+    ),
+  ],
+);
+
+class _DropdownPage extends StatefulWidget {
+  const _DropdownPage();
+  @override
+  State<_DropdownPage> createState() => _DropdownPageState();
+}
+
+class _DropdownPageState extends State<_DropdownPage> {
+  String _value = 'cyan';
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Dropdown',
+      description: 'A single-select on the list-box chrome.',
+      previewAlignment: Alignment.topCenter,
+      preview: SizedBox(
+        width: 320,
+        child: CarbonDropdown<String>(
+          titleText: 'Favourite colour',
+          selectedItem: _value,
+          onChanged: (String v) => setState(() => _value = v),
+          items: const <CarbonDropdownItem<String>>[
+            CarbonDropdownItem<String>(value: 'cyan', label: 'Cyan'),
+            CarbonDropdownItem<String>(value: 'magenta', label: 'Magenta'),
+            CarbonDropdownItem<String>(value: 'teal', label: 'Teal'),
+          ],
+        ),
+      ),
+      code: 'CarbonDropdown<String>(titleText: \'…\', items: <…>[…]);',
+    );
+  }
+}
+
+class _ComboBoxPage extends StatefulWidget {
+  const _ComboBoxPage();
+  @override
+  State<_ComboBoxPage> createState() => _ComboBoxPageState();
+}
+
+class _ComboBoxPageState extends State<_ComboBoxPage> {
+  String? _value;
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Combo box',
+      description: 'A filterable single-select.',
+      previewAlignment: Alignment.topCenter,
+      preview: SizedBox(
+        width: 320,
+        child: CarbonComboBox<String>(
+          titleText: 'Country',
+          selectedItem: _value,
+          onChanged: (String? v) => setState(() => _value = v),
+          items: const <CarbonComboBoxItem<String>>[
+            CarbonComboBoxItem<String>(value: 'ee', label: 'Estonia'),
+            CarbonComboBoxItem<String>(value: 'fi', label: 'Finland'),
+            CarbonComboBoxItem<String>(value: 'se', label: 'Sweden'),
+            CarbonComboBoxItem<String>(value: 'no', label: 'Norway'),
+          ],
+        ),
+      ),
+      code: 'CarbonComboBox<String>(titleText: \'Country\', items: <…>[…]);',
+    );
+  }
+}
+
+class _MultiSelectPage extends StatefulWidget {
+  const _MultiSelectPage();
+  @override
+  State<_MultiSelectPage> createState() => _MultiSelectPageState();
+}
+
+class _MultiSelectPageState extends State<_MultiSelectPage> {
+  Set<String> _selected = <String>{'read'};
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Multi-select',
+      description: 'Pick several values, with an optional filter.',
+      previewAlignment: Alignment.topCenter,
+      preview: SizedBox(
+        width: 320,
+        child: CarbonMultiSelect<String>(
+          titleText: 'Permissions',
+          label: 'Choose permissions',
+          selectedValues: _selected,
+          onChanged: (Set<String> v) => setState(() => _selected = v),
+          items: const <CarbonMultiSelectItem<String>>[
+            CarbonMultiSelectItem<String>(value: 'read', label: 'Read'),
+            CarbonMultiSelectItem<String>(value: 'write', label: 'Write'),
+            CarbonMultiSelectItem<String>(value: 'admin', label: 'Admin'),
+          ],
+        ),
+      ),
+      code: 'CarbonMultiSelect<String>(titleText: \'…\', items: <…>[…]);',
+    );
+  }
+}
+
+class _TooltipPage extends StatelessWidget {
+  const _TooltipPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Tooltip',
+      description: 'Hover or focus to reveal contextual help.',
+      preview: CarbonTooltip(
+        label: 'Carbide is an unofficial Carbon port.',
+        child: CarbonButton(label: 'Hover me', onPressed: () {}),
+      ),
+      code: 'CarbonTooltip(label: \'…\', child: CarbonButton(...));',
+    );
+  }
+}
+
+class _ToggletipPage extends StatelessWidget {
+  const _ToggletipPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    return DemoScaffold(
+      title: 'Toggletip',
+      description: 'Click to reveal interactive content.',
+      preview: CarbonToggletip(
+        content: Text(
+          'Toggletips hold interactive content and stay open until dismissed.',
+          style: CarbonTypeStyles.body01.copyWith(color: t.textPrimary),
+        ),
+      ),
+      code: 'CarbonToggletip(content: Text(\'…\'));',
+    );
+  }
+}
+
+class _OverflowMenuPage extends StatelessWidget {
+  const _OverflowMenuPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Overflow menu',
+      description: 'A trigger that opens an action menu.',
+      preview: CarbonOverflowMenu(
+        items: <Widget>[
+          CarbonMenuItem(
+            label: 'Edit',
+            icon: CarbonIcons.edit,
+            onPressed: () {},
+          ),
+          CarbonMenuItem(
+            label: 'Duplicate',
+            icon: CarbonIcons.copy,
+            onPressed: () {},
+          ),
+          const CarbonMenuItemDivider(),
+          CarbonMenuItem(
+            label: 'Delete',
+            icon: CarbonIcons.trashCan,
+            kind: CarbonMenuItemKind.danger,
+            onPressed: () {},
+          ),
+        ],
+      ),
+      code: 'CarbonOverflowMenu(items: <Widget>[CarbonMenuItem(...)]);',
+    );
+  }
+}
+
+class _TabsPage extends StatelessWidget {
+  const _TabsPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    Widget panel(String s) => Padding(
+      padding: const EdgeInsets.only(top: CarbonSpacing.spacing05),
+      child: Text(
+        s,
+        style: CarbonTypeStyles.body01.copyWith(color: t.textPrimary),
+      ),
+    );
+    return DemoScaffold(
+      title: 'Tabs',
+      description: 'Line tabs switching between panels.',
+      previewAlignment: Alignment.topLeft,
+      preview: SizedBox(
+        width: 480,
+        child: CarbonTabs(
+          tabs: const <CarbonTab>[
+            CarbonTab(label: 'Overview'),
+            CarbonTab(label: 'Specs'),
+            CarbonTab(label: 'Reviews'),
+          ],
+          panels: <Widget>[
+            panel('Overview content.'),
+            panel('Technical specifications.'),
+            panel('Customer reviews.'),
+          ],
+        ),
+      ),
+      code: 'CarbonTabs(tabs: <CarbonTab>[…], panels: <Widget>[…]);',
+    );
+  }
+}
+
+class _AccordionPage extends StatelessWidget {
+  const _AccordionPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    Widget body(String s) =>
+        Text(s, style: CarbonTypeStyles.body01.copyWith(color: t.textPrimary));
+    return DemoScaffold(
+      title: 'Accordion',
+      description: 'Vertically stacked, expandable sections.',
+      previewAlignment: Alignment.topLeft,
+      preview: SizedBox(
+        width: 480,
+        child: CarbonAccordion(
+          children: <CarbonAccordionItem>[
+            CarbonAccordionItem(
+              title: 'Shipping',
+              initiallyOpen: true,
+              child: body('Free standard shipping on orders over €50.'),
+            ),
+            CarbonAccordionItem(
+              title: 'Returns',
+              child: body('30-day returns.'),
+            ),
+            CarbonAccordionItem(
+              title: 'Warranty',
+              child: body('Two-year warranty.'),
+            ),
+          ],
+        ),
+      ),
+      code: 'CarbonAccordion(children: <CarbonAccordionItem>[…]);',
+    );
+  }
+}
+
+class _ContentSwitcherPage extends StatefulWidget {
+  const _ContentSwitcherPage();
+  @override
+  State<_ContentSwitcherPage> createState() => _ContentSwitcherPageState();
+}
+
+class _ContentSwitcherPageState extends State<_ContentSwitcherPage> {
+  int _index = 0;
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Content switcher',
+      description: 'A segmented control for mutually exclusive views.',
+      previewAlignment: Alignment.topLeft,
+      preview: SizedBox(
+        width: 360,
+        child: CarbonContentSwitcher(
+          selectedIndex: _index,
+          onChanged: (int i) => setState(() => _index = i),
+          switches: const <CarbonSwitch>[
+            CarbonSwitch(text: 'Day'),
+            CarbonSwitch(text: 'Week'),
+            CarbonSwitch(text: 'Month'),
+          ],
+        ),
+      ),
+      code: 'CarbonContentSwitcher(switches: <CarbonSwitch>[…]);',
+    );
+  }
+}
+
+class _BreadcrumbPage extends StatelessWidget {
+  const _BreadcrumbPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Breadcrumb',
+      description: 'A trail of ancestor pages.',
+      previewAlignment: Alignment.topLeft,
+      preview: CarbonBreadcrumb(
+        items: <CarbonBreadcrumbItem>[
+          CarbonBreadcrumbItem(label: 'Home', onPressed: () {}),
+          CarbonBreadcrumbItem(label: 'Components', onPressed: () {}),
+          const CarbonBreadcrumbItem(label: 'Breadcrumb', isCurrentPage: true),
+        ],
+      ),
+      code: 'CarbonBreadcrumb(items: <CarbonBreadcrumbItem>[…]);',
+    );
+  }
+}
+
+class _PaginationPage extends StatefulWidget {
+  const _PaginationPage();
+  @override
+  State<_PaginationPage> createState() => _PaginationPageState();
+}
+
+class _PaginationPageState extends State<_PaginationPage> {
+  int _page = 1;
+  int _pageSize = 10;
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Pagination',
+      description: 'Page through a large result set.',
+      previewAlignment: Alignment.topLeft,
+      preview: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: 1040,
+          child: CarbonPagination(
+            page: _page,
+            pageSize: _pageSize,
+            totalItems: 248,
+            onPageChanged: (int p) => setState(() => _page = p),
+            onPageSizeChanged: (int s) => setState(() {
+              _pageSize = s;
+              _page = 1;
+            }),
+          ),
+        ),
+      ),
+      code: 'CarbonPagination(page: 1, pageSize: 10, totalItems: 248);',
+    );
+  }
+}
+
+class _ModalPage extends StatefulWidget {
+  const _ModalPage();
+  @override
+  State<_ModalPage> createState() => _ModalPageState();
+}
+
+class _ModalPageState extends State<_ModalPage> {
+  bool _open = false;
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    return DemoScaffold(
+      title: 'Modal',
+      description: 'A focus-trapping dialog.',
+      preview: Stack(
+        children: <Widget>[
+          CarbonButton(
+            label: 'Open modal',
+            onPressed: () => setState(() => _open = true),
+          ),
+          CarbonModal(
+            open: _open,
+            title: 'Delete service?',
+            onClose: () => setState(() => _open = false),
+            danger: true,
+            primaryButton: CarbonModalAction(
+              label: 'Delete',
+              onPressed: () => setState(() => _open = false),
+            ),
+            secondaryButton: CarbonModalAction(
+              label: 'Cancel',
+              onPressed: () => setState(() => _open = false),
+            ),
+            child: Text(
+              'This action cannot be undone.',
+              style: CarbonTypeStyles.body01.copyWith(color: t.textPrimary),
+            ),
+          ),
+        ],
+      ),
+      code: 'CarbonModal(open: true, title: \'…\', child: Text(\'…\'));',
+    );
+  }
+}
+
+class _NotificationPage extends StatelessWidget {
+  const _NotificationPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Notification',
+      description: 'Inline, toast and actionable notifications.',
+      previewAlignment: Alignment.topLeft,
+      preview: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          for (final CarbonNotificationKind kind
+              in CarbonNotificationKind.values)
+            Padding(
+              padding: const EdgeInsets.only(bottom: CarbonSpacing.spacing05),
+              child: CarbonInlineNotification(
+                kind: kind,
+                title: '${kind.name[0].toUpperCase()}${kind.name.substring(1)}',
+                subtitle: 'An inline ${kind.name} notification.',
+                onClose: () {},
+              ),
+            ),
+        ],
+      ),
+      code:
+          'CarbonInlineNotification(kind: CarbonNotificationKind.success, …);',
+    );
+  }
+}
+
+class _ProgressIndicatorPage extends StatelessWidget {
+  const _ProgressIndicatorPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Progress indicator',
+      description: 'Steps through a multi-stage flow.',
+      previewAlignment: Alignment.topLeft,
+      preview: const SizedBox(
+        width: 560,
+        child: CarbonProgressIndicator(
+          currentIndex: 1,
+          steps: <CarbonProgressStep>[
+            CarbonProgressStep(label: 'Account'),
+            CarbonProgressStep(label: 'Profile'),
+            CarbonProgressStep(label: 'Confirm'),
+          ],
+        ),
+      ),
+      code: 'CarbonProgressIndicator(currentIndex: 1, steps: <…>[…]);',
+    );
+  }
+}
+
+class _StructuredListPage extends StatelessWidget {
+  const _StructuredListPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    Widget cell(String s) => Text(
+      s,
+      style: CarbonTypeStyles.bodyCompact01.copyWith(color: t.textPrimary),
+    );
+    return DemoScaffold(
+      title: 'Structured list',
+      description: 'A simple, read-only data list.',
+      previewAlignment: Alignment.topLeft,
+      preview: SizedBox(
+        width: 520,
+        child: CarbonStructuredList(
+          headers: const <String>['Name', 'Type', 'Status'],
+          rows: <CarbonStructuredListRow>[
+            CarbonStructuredListRow(
+              cells: <Widget>[
+                cell('api-gateway'),
+                cell('Service'),
+                cell('Running'),
+              ],
+            ),
+            CarbonStructuredListRow(
+              cells: <Widget>[cell('worker-01'), cell('Job'), cell('Idle')],
+            ),
+          ],
+        ),
+      ),
+      code: 'CarbonStructuredList(headers: <String>[…], rows: <…>[…]);',
+    );
+  }
+}
