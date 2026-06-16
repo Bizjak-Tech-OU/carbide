@@ -40,11 +40,10 @@ Widget _host(Widget child) => Directionality(
   ),
 );
 
-List<CarbonSelectEntry<String>> _periods() =>
-    const <CarbonSelectEntry<String>>[
-      CarbonSelectItem<String>(value: 'AM', label: 'AM'),
-      CarbonSelectItem<String>(value: 'PM', label: 'PM'),
-    ];
+List<CarbonSelectEntry<String>> _periods() => const <CarbonSelectEntry<String>>[
+  CarbonSelectItem<String>(value: 'AM', label: 'AM'),
+  CarbonSelectItem<String>(value: 'PM', label: 'PM'),
+];
 
 void main() {
   setUp(() {
@@ -59,9 +58,7 @@ void main() {
     testWidgets('renders the label and placeholder', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _host(const CarbonTimePicker(labelText: 'Time')),
-      );
+      await tester.pumpWidget(_host(const CarbonTimePicker(labelText: 'Time')));
       expect(find.text('Time'), findsOneWidget);
       expect(find.text('hh:mm'), findsOneWidget);
     });
@@ -86,9 +83,7 @@ void main() {
     testWidgets('the editable uses the code-02 monospace style', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        _host(const CarbonTimePicker(labelText: 'Time')),
-      );
+      await tester.pumpWidget(_host(const CarbonTimePicker(labelText: 'Time')));
       final TextStyle style = tester
           .widget<EditableText>(find.byType(EditableText))
           .style;
@@ -109,9 +104,7 @@ void main() {
         .width!;
 
     testWidgets('field is 4.875rem wide', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        _host(const CarbonTimePicker(labelText: 'Time')),
-      );
+      await tester.pumpWidget(_host(const CarbonTimePicker(labelText: 'Time')));
       expect(fieldBoxWidth(tester), CarbonTimePicker.fieldWidth);
     });
 
