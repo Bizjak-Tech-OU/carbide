@@ -289,7 +289,7 @@ void main() {
         tester,
         name: 'file_uploader',
         containsText: true,
-        size: const Size(360, 360),
+        size: const Size(360, 470),
         builder: (BuildContext context) => Align(
           alignment: Alignment.topLeft,
           child: SizedBox(
