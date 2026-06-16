@@ -1,0 +1,28 @@
+name: carbide_gallery
+description: >-
+  The Carbide gallery — an interactive showcase of every Carbide component,
+  built (like Carbide itself) with no Material and no Cupertino.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.12.2 <4.0.0"
+  flutter: ">=3.44.2"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  carbide:
+    path: ../
+  go_router: ^14.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: false
