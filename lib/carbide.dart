@@ -46,6 +46,7 @@ export 'src/components/data_table/carbon_table_toolbar.dart';
 export 'src/components/date_picker/carbon_date_picker.dart';
 export 'src/components/file_uploader/carbon_file_uploader.dart';
 export 'src/components/time_picker/carbon_time_picker.dart';
+export 'src/components/tree_view/carbon_tree_view.dart';
 export 'src/components/dropdown/carbon_dropdown.dart';
 export 'src/components/list/carbon_list.dart';
 export 'src/components/list_box/carbon_list_box.dart';
