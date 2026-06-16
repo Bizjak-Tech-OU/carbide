@@ -41,6 +41,7 @@ export 'src/components/content_switcher/carbon_content_switcher.dart';
 export 'src/components/form/carbon_form.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/link/carbon_link.dart';
+export 'src/components/data_table/carbon_data_table.dart';
 export 'src/components/dropdown/carbon_dropdown.dart';
 export 'src/components/list/carbon_list.dart';
 export 'src/components/list_box/carbon_list_box.dart';
