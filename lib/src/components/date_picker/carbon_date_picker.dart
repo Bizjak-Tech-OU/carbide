@@ -28,7 +28,15 @@ const List<String> _months = <String>[
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December', //
 ];
-const List<String> _weekdays = <String>['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const List<String> _weekdays = <String>[
+  'Su',
+  'Mo',
+  'Tu',
+  'We',
+  'Th',
+  'Fr',
+  'Sa',
+];
 
 /// A self-contained month calendar for picking a single date.
 class CarbonCalendar extends StatefulWidget {
