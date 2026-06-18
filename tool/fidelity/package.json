@@ -1,0 +1,10 @@
+{
+  "name": "carbide-fidelity-capture",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Playwright capture of upstream Carbon React Storybook reference screenshots (fidelity epic W3).",
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.61.0"
+  }
+}

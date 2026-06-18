@@ -32,3 +32,8 @@ skills-lock.json
 /build/
 /coverage/
 failures/
+
+# W3 fidelity: Carbon references (test/fidelity/references/) are committed
+# ground truth; the side-by-side comparison images are regenerated each test
+# run and uploaded by CI, never committed.
+test/fidelity/comparisons/
