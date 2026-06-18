@@ -75,6 +75,7 @@ enum CarbonTagType {
 /// The resolved colors for one tag type under one theme/layer context.
 @immutable
 class CarbonTagColors {
+  /// Creates a resolved set of tag colors.
   const CarbonTagColors({
     required this.background,
     required this.text,

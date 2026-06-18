@@ -1,0 +1,18 @@
+# Configuration for `dart doc`. The CI "API docs" job generates the reference
+# and fails on any warning, so the public API reference stays clean. Coverage
+# (every public member carries a `///` comment) is enforced separately by the
+# `public_member_api_docs` lint in analysis_options.yaml.
+dartdoc:
+  # Promote documentation defects to fatal errors so a broken cross-reference
+  # or dead link can never land silently.
+  errors:
+    - unresolved-doc-reference
+    - ambiguous-doc-reference
+    - ambiguous-reexport
+    - unknown-directive
+    - unknown-macro
+    - broken-link
+    - missing-from-search-index
+  # The example gallery is a separate package; it is not part of the reference.
+  exclude:
+    - "example/**"

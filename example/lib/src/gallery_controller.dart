@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 
 /// A named Carbon theme the gallery can switch between.
 class GalleryTheme {
+  /// Creates a named theme entry pairing a [label] with its [data].
   const GalleryTheme(this.label, this.data);
 
   /// The display name shown in the theme switcher.
@@ -63,6 +64,7 @@ class GalleryController extends ChangeNotifier {
 
 /// Exposes the [GalleryController] to the widget subtree.
 class GalleryScope extends InheritedNotifier<GalleryController> {
+  /// Creates a scope exposing [controller] to the [child] subtree.
   const GalleryScope({
     required GalleryController controller,
     required super.child,

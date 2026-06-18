@@ -177,7 +177,7 @@ analyzer:
     prefer_typing_uninitialized_variables: error
     # prefer_void_to_null: error
     provide_deprecation_message: error
-    # public_member_api_docs: error
+    public_member_api_docs: error
     recursive_getters: error
     # remove_deprecations_in_breaking_versions: error
     # require_trailing_commas: error
@@ -961,7 +961,7 @@ linter:
 
     # Document all public members.
     # Categories: publicInterface, style
-    # - public_member_api_docs
+    - public_member_api_docs
 
     # Property getter recursively returns itself.
     # Categories: errorProne, unintentional

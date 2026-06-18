@@ -11,6 +11,7 @@ typedef GalleryPageBuilder = Widget Function();
 
 /// A single showcase page (one component or a tight family of them).
 class GalleryEntry {
+  /// Creates a catalog entry.
   const GalleryEntry({
     required this.slug,
     required this.title,
@@ -32,6 +33,7 @@ class GalleryEntry {
 
 /// A side-nav group of related [GalleryEntry]s.
 class GalleryCategory {
+  /// Creates a side-nav category.
   const GalleryCategory({
     required this.title,
     required this.icon,

@@ -21,6 +21,7 @@ import '../../theme/carbon_theme_data.dart';
 /// the CSS `ease-in-out` per-segment timing.
 @immutable
 class CarbonSkeletonPhase {
+  /// Creates a single keyframe of the skeleton wipe animation.
   const CarbonSkeletonPhase({
     required this.alignment,
     required this.scaleX,

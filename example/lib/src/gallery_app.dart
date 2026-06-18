@@ -16,6 +16,7 @@ import 'registry.dart';
 /// The root of the Carbide gallery. Owns the [GalleryController], the router,
 /// and the animated theme — all with no Material in sight.
 class GalleryApp extends StatefulWidget {
+  /// Creates the gallery app root.
   const GalleryApp({super.key});
 
   @override

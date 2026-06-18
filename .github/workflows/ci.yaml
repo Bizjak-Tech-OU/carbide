@@ -45,13 +45,25 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      # API reference gate (M8): generate the public API docs and fail on any
+      # dartdoc warning — a broken cross-reference or dead link. Coverage (every
+      # public member documented) is enforced by the `public_member_api_docs`
+      # lint in the Analyze step above; this step guards reference/link health.
+      - name: Generate & validate API docs
+        run: |
+          dart doc --output build/api . 2>&1 | tee dartdoc.log
+          if grep -qiE "^[[:space:]]*(warning|error):" dartdoc.log; then
+            echo "::error::dart doc emitted warnings/errors — see the log above."
+            exit 1
+          fi
+
       # Upstream fidelity (epic W3): the fidelity test renders each Carbide
       # component beside its committed Carbon Storybook reference. Publish the
       # side-by-side images for human review on every PR (the test itself only
       # hard-gates on a non-blank render — see test/fidelity/).
       - name: Upload fidelity comparisons
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: carbide-fidelity-comparisons
           path: test/fidelity/comparisons/
@@ -94,7 +106,7 @@ jobs:
 
       - name: Upload contact sheet
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: carbide-contact-sheet
           path: example/test/screenshots/
