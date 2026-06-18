@@ -442,9 +442,16 @@ class CarbonListBoxSelectionCount extends StatelessWidget {
     final Color foreground = disabled ? theme.textDisabled : theme.textInverse;
     final Color iconColor = disabled ? theme.iconDisabled : theme.iconInverse;
 
+    // The SCSS pill is `block-size: 24px` with `padding: 8px` but
+    // `line-height: 0` + `align-items: center`, so the label and the 20px
+    // close icon overflow the padding box and stay vertically centered. A
+    // Flutter `Container(height: 24, padding-block: 8)` instead *clamps* the
+    // child to 8px and clips the count glyph to an illegible sliver. Reproduce
+    // the CSS result faithfully: fixed 24px height, horizontal-only padding,
+    // and a centered row that lets the content use the full height.
     return Container(
       height: 24,
-      padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 2, 8),
+      padding: const EdgeInsetsDirectional.only(start: 8, end: 2),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(12),
@@ -460,11 +467,16 @@ class CarbonListBoxSelectionCount extends StatelessWidget {
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: disabled ? null : onClear,
-            child: CarbonIcon(
-              CarbonIcons.close,
-              size: 20,
-              color: iconColor,
-              semanticLabel: 'Clear all selected items',
+            // `> svg { padding: 2px; block-size: 20px }` — a 16px glyph in a
+            // 20px box.
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: CarbonIcon(
+                CarbonIcons.close,
+                size: 16,
+                color: iconColor,
+                semanticLabel: 'Clear all selected items',
+              ),
             ),
           ),
         ],
