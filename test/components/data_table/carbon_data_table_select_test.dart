@@ -100,7 +100,10 @@ void main() {
       expect(box.height, CarbonCheckbox.boxSize);
       expect(
         box.center.dy,
-        moreOrLessEquals(tester.getRect(find.text('Load')).center.dy, epsilon: 0.5),
+        moreOrLessEquals(
+          tester.getRect(find.text('Load')).center.dy,
+          epsilon: 0.5,
+        ),
       );
     });
 
