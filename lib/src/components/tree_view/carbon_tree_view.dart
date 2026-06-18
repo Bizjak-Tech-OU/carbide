@@ -396,8 +396,11 @@ class _TreeRowState extends State<_TreeRow> {
       child: ConstrainedBox(
         constraints: BoxConstraints(minHeight: widget.size.height),
         child: Stack(
+          // Center the (shrink-wrapped) label within the row's minHeight; the
+          // Stack would otherwise pin it to the top.
+          alignment: AlignmentDirectional.centerStart,
           children: <Widget>[
-            Align(alignment: AlignmentDirectional.centerStart, child: label),
+            label,
             // The `active` 4px interactive marker on the leading edge.
             if (widget.selected)
               PositionedDirectional(

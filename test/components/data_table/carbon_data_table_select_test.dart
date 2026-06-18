@@ -81,6 +81,32 @@ void main() {
       expect(_rowColor(tester, 'Load'), theme.layer01);
     });
 
+    testWidgets('row checkbox is vertically centered in its row', (
+      WidgetTester tester,
+    ) async {
+      // Regression: an empty-label checkbox used to reserve a body text line,
+      // pinning the box to the top so it rode above the row centre.
+      await tester.pumpWidget(_host(const _Selectable()));
+      final Rect box = tester.getRect(
+        find
+            .descendant(
+              of: find.bySemanticsLabel('Select row 1'),
+              matching: find.byType(CarbonCheckbox),
+            )
+            .first,
+      );
+      // The selector is the 16px box only (no stray text line), and its centre
+      // lines up with the centred data-cell text in the same row.
+      expect(box.height, CarbonCheckbox.boxSize);
+      expect(
+        box.center.dy,
+        moreOrLessEquals(
+          tester.getRect(find.text('Load')).center.dy,
+          epsilon: 0.5,
+        ),
+      );
+    });
+
     testWidgets('select-all toggles every row, then clears', (
       WidgetTester tester,
     ) async {
