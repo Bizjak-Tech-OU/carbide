@@ -111,10 +111,25 @@ there are no long-lived credentials — a release is just a tag.
    ```
 
 The [`Publish to pub.dev`](.github/workflows/publish.yaml) workflow triggers on
-any `vX.Y.Z` tag: it first re-runs the format/analyze/test gate, then publishes
-via OIDC. The tag pattern is also enforced on the pub.dev trusted-publisher
-side, so only `vX.Y.Z` tags can publish.
+any `vX.Y.Z` tag: it first re-runs the format/analyze/test gate, then hands off
+to pub.dev's official reusable workflow
+(`dart-lang/setup-dart/.github/workflows/publish.yml`), which dry-runs and
+publishes with the OIDC token. The tag pattern is also enforced on the pub.dev
+trusted-publisher side.
 
-To rehearse the pipeline without publishing, run the workflow manually
-("Actions → Publish to pub.dev → Run workflow"); a manual run stops at
-`dart pub publish --dry-run`.
+**One-time setup (required for the action to work).** Automated publishing only
+works once `carbide` is registered as a trusted publisher: on pub.dev →
+*Admin → Automated publishing*, enable GitHub Actions for repository
+`Bizjak-Tech-OU/carbide` with tag pattern `v[0-9]+.[0-9]+.[0-9]+*`. Until that
+is configured, `dart pub publish` falls back to interactive auth and the action
+hangs.
+
+### Publishing manually
+
+The OIDC action is the normal path, but you can always publish by hand from a
+clean checkout — useful for the very first release of a new package (pub.dev
+can only configure a trusted publisher for a package that already exists):
+
+```sh
+dart pub publish        # authenticates via your pub.dev account in a browser
+```
