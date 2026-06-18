@@ -1,8 +1,19 @@
 # Changelog
 
+## 0.0.2
+
+Maintenance release — no API or component changes.
+
+- Refresh the gallery screenshots in the README, regenerated from the current
+  build (the previous images were from an earlier, broken render).
+- Packaging & tooling: trim the published archive with `.pubignore` and scope
+  the `.gitignore` lock/editor rules so they no longer reach into the
+  `documentation/` submodules, giving a clean `dart pub publish` run.
+- Automated pub.dev publishing on `vX.Y.Z` tags via OIDC trusted publishing.
+
 ## 0.0.1
 
-Initial public preview of **Carbide** — an unofficial Flutter port of the IBM
+Initial public release of **Carbide** — an unofficial Flutter port of the IBM
 Carbon Design System, built strictly on Flutter's base widgets (no Material, no
 Cupertino).
 

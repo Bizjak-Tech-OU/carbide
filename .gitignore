@@ -15,17 +15,23 @@ skills-lock.json
 *.iml
 *.ipr
 *.iws
-.idea/
+/.idea/
 
 # IDEs
-.vscode/
-.cursor/
-.claude/
-.zed/
-.agent/
+# Anchored to the repo root: an unanchored `.vscode/` etc. would also match
+# editor folders inside the `documentation/` submodules, which pub then flags
+# as "checked-in files ignored by a .gitignore" when publishing.
+/.vscode/
+/.cursor/
+/.claude/
+/.zed/
+/.agent/
 
 # Flutter/Dart/Pub related
-**/*.lock
+# Ignore only our own Dart lockfiles. A broad `**/*.lock` also matches the many
+# `yarn.lock` files inside the `documentation/` submodules, which pub then
+# reports as "checked-in files ignored by a .gitignore" when publishing.
+pubspec.lock
 **/doc/api/
 .dart_tool/
 .flutter-plugins-dependencies

@@ -2,26 +2,29 @@ name: Publish to pub.dev
 
 # Tag-triggered, hands-off publishing to pub.dev using pub.dev's automated
 # (OIDC) publishing — no long-lived credentials. The repository is registered
-# as a trusted publisher for `carbide` on pub.dev and restricted to the
-# `v[0-9]+.[0-9]+.[0-9]+` tag pattern below.
+# as a trusted publisher for `carbide` on pub.dev, restricted to the tag
+# pattern below.
+#
+# The actual upload uses pub.dev's official reusable workflow
+# (dart-lang/setup-dart/.github/workflows/publish.yml), which sets up the
+# Flutter SDK, runs `dart pub publish --dry-run`, then publishes with the OIDC
+# token. This is the mechanism pub.dev recommends and can verify; a hand-rolled
+# `dart pub publish --force` does not pick up the OIDC credential reliably and
+# hangs on the interactive auth prompt.
 #
 # Release flow (see CONTRIBUTING.md): bump `version` + CHANGELOG.md on master,
-# then push a matching `vX.Y.Z` tag. Use the manual "Run workflow" button for a
-# no-publish dry run that exercises the whole pipeline first.
+# then push a matching `vX.Y.Z` tag.
 
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-  workflow_dispatch:
-
-# Least privilege by default; the publish job opts into the OIDC token.
-permissions:
-  contents: read
+      # GitHub ref glob: one-or-more digits per segment, plus an optional
+      # suffix so pre-release tags (e.g. v0.0.2-rc.1) also publish.
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
 jobs:
-  # Gate: the package must pass the same format/analyze/test checks as CI before
-  # anything is published. Tag pushes don't trigger ci.yaml, so it runs here.
+  # Gate (issue #160): the package must pass the same format/analyze/test checks
+  # as CI before anything is published. Tag pushes don't trigger ci.yaml.
   verify:
     name: Format, analyze, test
     runs-on: ubuntu-latest
@@ -50,28 +53,6 @@ jobs:
   publish:
     name: Publish to pub.dev
     needs: verify
-    runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for OIDC authentication with pub.dev.
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      # Manual runs validate the full pipeline without publishing; only a
-      # vX.Y.Z tag push performs the real, OIDC-authenticated upload.
-      - name: Validate package (dry run)
-        if: github.event_name == 'workflow_dispatch'
-        run: dart pub publish --dry-run
-
-      - name: Publish
-        if: github.event_name == 'push'
-        run: dart pub publish --force
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
