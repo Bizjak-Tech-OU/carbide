@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -121,6 +122,9 @@ void main() {
             )
             .height;
         expect(rowHeight, height, reason: '$size');
+        // The cell text must not be clipped by the fixed row height (xs is
+        // 24px against an 18px body-compact-01 line box).
+        expectTextNotClipped(tester, find.text('A'));
       }
     });
   });
