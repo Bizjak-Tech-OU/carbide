@@ -10,6 +10,7 @@ import '../gallery_controller.dart';
 
 /// The landing page: what Carbide is, the active theme, and quick links.
 class OverviewPage extends StatelessWidget {
+  /// Creates the overview page.
   const OverviewPage({super.key});
 
   @override

@@ -48,6 +48,15 @@ def family_of(name: str) -> str:
     return re.sub(r"(\d+)?(Hover)?$", "", name)
 
 
+def doc_for(name: str, argb: str) -> str:
+    """A one-line dartdoc summary for a single swatch constant."""
+    hex_str = "#" + argb[len("0xFF"):]
+    if name.endswith("Hover"):
+        base = name[: -len("Hover")]
+        return f"  /// Hover-state variant of [{base}] ({hex_str})."
+    return f"  /// Carbon `{name}` swatch ({hex_str})."
+
+
 def parse() -> list[tuple[str, str]]:
     text = SRC.read_text()
     values: dict[str, str] = {}
@@ -87,6 +96,7 @@ def emit_lib(entries: list[tuple[str, str]]) -> str:
             current = fam
             lines.append("")
             lines.append(f"  // {fam}")
+        lines.append(doc_for(name, argb))
         lines.append(f"  static const Color {name} = Color({argb});")
     lines.append("}")
     lines.append("")

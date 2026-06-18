@@ -15,6 +15,7 @@ import 'registry.dart';
 /// frames every page. [activeSlug] highlights the current entry (`null` on the
 /// overview route).
 class GalleryShell extends StatelessWidget {
+  /// Creates the gallery shell.
   const GalleryShell({
     required this.activeSlug,
     required this.child,

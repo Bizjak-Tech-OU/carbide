@@ -15,6 +15,7 @@ const Key kDemoPreviewKey = ValueKey<String>('carbide-demo-preview');
 /// surface, an optional set of interactive controls, and an optional code
 /// snippet.
 class DemoScaffold extends StatelessWidget {
+  /// Creates a demo page layout.
   const DemoScaffold({
     required this.title,
     required this.preview,
@@ -156,6 +157,7 @@ class _CodeBlock extends StatelessWidget {
 
 /// A labelled wrapper for a single knob control, used inside [DemoScaffold].
 class DemoControl extends StatelessWidget {
+  /// Creates a labelled knob control.
   const DemoControl({
     required this.label,
     required this.child,
@@ -163,8 +165,13 @@ class DemoControl extends StatelessWidget {
     this.width = 220,
   });
 
+  /// The control's caption.
   final String label;
+
+  /// The knob widget itself.
   final Widget child;
+
+  /// The fixed width of the control column.
   final double width;
 
   @override

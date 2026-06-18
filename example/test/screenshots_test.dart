@@ -62,4 +62,24 @@ void main() {
       matchesGoldenFile('screenshots/button_dark.png'),
     );
   });
+
+  testWidgets('data table page, white theme', skip: !_enabled, (
+    WidgetTester tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(const GalleryApp());
+    await tester.pumpAndSettle();
+
+    // Open the Data table page (Complex & data category).
+    await tester.tap(find.text('Complex & data'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Data table'));
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(GalleryApp),
+      matchesGoldenFile('screenshots/data_table.png'),
+    );
+  });
 }

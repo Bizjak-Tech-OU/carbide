@@ -31,8 +31,8 @@ enum CarbonCounterMode {
 ///
 /// A growing field (min-height 40px, 11px/16px padding) on `field` with a
 /// `border-strong` bottom border, per `_text-area.scss`. Supports the full
-/// state matrix plus an optional character/word [counter] shown beside the
-/// label, and the [fluid] layout (label inside the box).
+/// state matrix plus an optional character/word counter ([enableCounter])
+/// shown beside the label, and the [fluid] layout (label inside the box).
 class CarbonTextArea extends StatefulWidget {
   /// Creates a text area.
   const CarbonTextArea({

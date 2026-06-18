@@ -1,17 +1,28 @@
-# carbide_gallery
+# Carbide gallery
 
-A new Flutter project.
+The gallery app for [Carbide](../README.md) — a browsable showcase of every
+component across all four Carbon themes, with live controls and copyable code
+for each one.
 
-## Getting Started
+It is deployed to the web here:
+**<https://bizjak-tech-ou.github.io/carbide/>**
 
-This project is a starting point for a Flutter application.
+## Run it locally
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+cd example
+flutter pub get
+flutter run            # any device
+flutter run -d chrome  # in the browser
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## What's inside
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- `lib/src/catalog.dart` — the tier grouping shown in the side navigation.
+- `lib/src/pages/` — one page per component, built on the shared `DemoScaffold`
+  (heading, live preview, interactive controls, code snippet).
+- `test/` — smoke tests plus the screenshot and contact-sheet generators used
+  for visual review (see `screenshots_test.dart` and `contact_sheet_test.dart`).
+
+This gallery doubles as the project's integration surface: if a component can be
+demoed here, it works.
