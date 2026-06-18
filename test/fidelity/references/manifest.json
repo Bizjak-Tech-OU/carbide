@@ -1,0 +1,302 @@
+{
+  "source": "https://react.carbondesignsystem.com",
+  "capturedAt": "2026-06-18T08:56:32.531Z",
+  "themes": [
+    "white",
+    "g10",
+    "g90",
+    "g100"
+  ],
+  "stories": [
+    {
+      "component": "button",
+      "storyId": "components-button--default"
+    },
+    {
+      "component": "tag",
+      "storyId": "components-tag--read-only"
+    },
+    {
+      "component": "checkbox",
+      "storyId": "components-checkbox--default"
+    },
+    {
+      "component": "toggle",
+      "storyId": "components-toggle--default"
+    },
+    {
+      "component": "text-input",
+      "storyId": "components-textinput--default"
+    },
+    {
+      "component": "dropdown",
+      "storyId": "components-dropdown--default"
+    },
+    {
+      "component": "tabs",
+      "storyId": "components-tabs--default"
+    },
+    {
+      "component": "accordion",
+      "storyId": "components-accordion--default"
+    },
+    {
+      "component": "tree-view",
+      "storyId": "components-treeview--default"
+    },
+    {
+      "component": "multiselect",
+      "storyId": "components-multiselect--default"
+    },
+    {
+      "component": "data-table",
+      "storyId": "components-datatable-basic--default"
+    },
+    {
+      "component": "notification",
+      "storyId": "components-notifications-inline--default"
+    }
+  ],
+  "results": [
+    {
+      "component": "button",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "button",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "button",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "button",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "tag",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "tag",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "tag",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "tag",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "checkbox",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "checkbox",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "checkbox",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "checkbox",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "toggle",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "toggle",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "toggle",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "toggle",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "text-input",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "text-input",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "text-input",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "text-input",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "dropdown",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "dropdown",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "dropdown",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "dropdown",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "tabs",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "tabs",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "tabs",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "tabs",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "accordion",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "accordion",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "accordion",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "accordion",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "tree-view",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "tree-view",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "tree-view",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "tree-view",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "multiselect",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "multiselect",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "multiselect",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "multiselect",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "data-table",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "data-table",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "data-table",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "data-table",
+      "theme": "g100",
+      "ok": true
+    },
+    {
+      "component": "notification",
+      "theme": "white",
+      "ok": true
+    },
+    {
+      "component": "notification",
+      "theme": "g10",
+      "ok": true
+    },
+    {
+      "component": "notification",
+      "theme": "g90",
+      "ok": true
+    },
+    {
+      "component": "notification",
+      "theme": "g100",
+      "ok": true
+    }
+  ]
+}

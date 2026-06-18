@@ -45,6 +45,18 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      # Upstream fidelity (epic W3): the fidelity test renders each Carbide
+      # component beside its committed Carbon Storybook reference. Publish the
+      # side-by-side images for human review on every PR (the test itself only
+      # hard-gates on a non-blank render — see test/fidelity/).
+      - name: Upload fidelity comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: carbide-fidelity-comparisons
+          path: test/fidelity/comparisons/
+          if-no-files-found: warn
+
   gallery:
     name: Gallery — analyze & test
     runs-on: ubuntu-latest

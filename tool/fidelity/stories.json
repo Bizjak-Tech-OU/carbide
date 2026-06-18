@@ -1,0 +1,17 @@
+{
+  "_comment": "Curated Carbon React Storybook stories captured as upstream fidelity references. `component` is the Carbide-side slug; `storyId` is the Storybook iframe id. Add entries here and a matching builder in test/fidelity/fidelity_test.dart to extend coverage.",
+  "stories": [
+    { "component": "button", "storyId": "components-button--default" },
+    { "component": "tag", "storyId": "components-tag--read-only" },
+    { "component": "checkbox", "storyId": "components-checkbox--default" },
+    { "component": "toggle", "storyId": "components-toggle--default" },
+    { "component": "text-input", "storyId": "components-textinput--default" },
+    { "component": "dropdown", "storyId": "components-dropdown--default" },
+    { "component": "tabs", "storyId": "components-tabs--default" },
+    { "component": "accordion", "storyId": "components-accordion--default" },
+    { "component": "tree-view", "storyId": "components-treeview--default" },
+    { "component": "multiselect", "storyId": "components-multiselect--default" },
+    { "component": "data-table", "storyId": "components-datatable-basic--default" },
+    { "component": "notification", "storyId": "components-notifications-inline--default" }
+  ]
+}
