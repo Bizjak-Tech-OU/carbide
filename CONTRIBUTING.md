@@ -93,3 +93,28 @@ A token group or component is done only when it has:
 
 Use clear, imperative messages (Conventional Commits encouraged:
 `feat(button): …`, `tokens(motion): …`, `test: …`, `docs: …`).
+
+## Releasing
+
+Carbide publishes to [pub.dev](https://pub.dev/packages/carbide) automatically
+from CI. The repository is a **trusted publisher** (pub.dev's OIDC flow), so
+there are no long-lived credentials — a release is just a tag.
+
+1. On `master`, bump `version` in `pubspec.yaml` and add a matching section to
+   the top of `CHANGELOG.md`.
+2. Commit (`chore(release): vX.Y.Z`) and merge to `master`.
+3. Tag the release commit and push the tag:
+
+   ```sh
+   git tag vX.Y.Z      # must match the version in pubspec.yaml
+   git push origin vX.Y.Z
+   ```
+
+The [`Publish to pub.dev`](.github/workflows/publish.yaml) workflow triggers on
+any `vX.Y.Z` tag: it first re-runs the format/analyze/test gate, then publishes
+via OIDC. The tag pattern is also enforced on the pub.dev trusted-publisher
+side, so only `vX.Y.Z` tags can publish.
+
+To rehearse the pipeline without publishing, run the workflow manually
+("Actions → Publish to pub.dev → Run workflow"); a manual run stops at
+`dart pub publish --dry-run`.
