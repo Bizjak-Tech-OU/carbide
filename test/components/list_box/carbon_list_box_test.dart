@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -429,6 +430,14 @@ void main() {
         ),
       );
       expect(find.text('3'), findsOneWidget);
+      // The pill is a fixed 24px box; assert the count renders at its full
+      // line height (regression for the clip bug #162 — find.text passing only
+      // proves the widget exists, not that it is legible).
+      expectTextNotClipped(tester, find.text('3'));
+      expect(
+        tester.getSize(find.byType(CarbonListBoxSelectionCount)).height,
+        24,
+      );
       final BoxDecoration deco =
           tester
                   .widget<Container>(

@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child, {CarbonThemeData? theme}) => Directionality(
   textDirection: TextDirection.ltr,
@@ -53,6 +54,9 @@ void main() {
           height,
           reason: '$size',
         );
+        // Even at sm (18px) the label-01 line box must not be clipped — Tag
+        // pads horizontally only, unlike the count badge that regressed (#162).
+        expectTextNotClipped(tester, find.text('Tag'));
       }
       final BorderRadius radius =
           _surfaceDecoration(tester).borderRadius! as BorderRadius;
