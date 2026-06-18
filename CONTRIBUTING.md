@@ -111,11 +111,15 @@ there are no long-lived credentials — a release is just a tag.
    ```
 
 The [`Publish to pub.dev`](.github/workflows/publish.yaml) workflow triggers on
-any `vX.Y.Z` tag: it first re-runs the format/analyze/test gate, then hands off
-to pub.dev's official reusable workflow
-(`dart-lang/setup-dart/.github/workflows/publish.yml`), which dry-runs and
-publishes with the OIDC token. The tag pattern is also enforced on the pub.dev
-trusted-publisher side.
+any `vX.Y.Z` tag: it first re-runs the format/analyze/test gate, then publishes
+with the OIDC token (`dart-lang/setup-dart` sets up the credential, Flutter
+provides the SDK, and `dart pub publish --force` does the upload). The tag
+pattern is also enforced on the pub.dev trusted-publisher side.
+
+We deliberately do **not** use pub.dev's reusable publish workflow: it checks
+out with `submodules: false` and runs a strict dry-run that fails on the
+expected "the `documentation/` submodules are excluded from the package"
+warning. `--force` publishes through that warning (it is not an error).
 
 **One-time setup (required for the action to work).** Automated publishing only
 works once `carbide` is registered as a trusted publisher: on pub.dev →
