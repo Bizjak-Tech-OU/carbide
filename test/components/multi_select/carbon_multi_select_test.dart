@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -68,6 +69,16 @@ void main() {
       await tester.pumpWidget(stateful(initial: <String>{'a', 'b'}));
       expect(find.byType(CarbonListBoxSelectionCount), findsOneWidget);
       expect(find.text('2'), findsOneWidget);
+    });
+
+    testWidgets('count badge renders the number legibly (not clipped)', (
+      WidgetTester tester,
+    ) async {
+      // Regression: the badge pill clamped its content to an 8px band, clipping
+      // the count to an unreadable sliver. `find.text('2')` still passed, so
+      // only a render-height check catches it.
+      await tester.pumpWidget(stateful(initial: <String>{'a', 'b'}));
+      expectTextNotClipped(tester, find.text('2'));
     });
   });
 
