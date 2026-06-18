@@ -152,12 +152,12 @@ void main() {
         );
         final _Grid carbideGrid = await _luminanceGrid(tester, carbide);
 
-        // The hard gate: Carbide rendered something with real structure, not a
+        // The hard gate: Carbide rendered something with real contrast, not a
         // blank or single-colour box. (A clipped-to-nothing or collapsed
         // component would fail here.)
         expect(
-          carbideGrid.stdDev,
-          greaterThan(0.02),
+          carbideGrid.range,
+          greaterThan(0.1),
           reason: '$component ($themeSlug) rendered blank/flat',
         );
 
@@ -205,18 +205,14 @@ Future<ui.Image> _renderCarbide(
               initialEntries: <OverlayEntry>[
                 OverlayEntry(
                   builder: (BuildContext context) => Center(
-                    // Capture the component on the theme background (as the
-                    // Carbon reference has it) so light-theme content keeps its
-                    // contrast instead of sitting on transparent black.
+                    // Capture the component tight, on the theme background (as
+                    // the Carbon reference has it). The background keeps
+                    // light-theme content from sitting on transparent black;
+                    // the tight bounds keep small components (checkbox) from
+                    // being diluted below the non-blank threshold.
                     child: RepaintBoundary(
                       key: key,
-                      child: ColoredBox(
-                        color: theme.background,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: child,
-                        ),
-                      ),
+                      child: ColoredBox(color: theme.background, child: child),
                     ),
                   ),
                 ),
@@ -250,16 +246,10 @@ class _Grid {
   static const int n = 24;
   final List<double> cells; // n*n luminance values in 0..1.
 
-  double get mean => cells.reduce((double a, double b) => a + b) / cells.length;
-
-  double get stdDev {
-    final double m = mean;
-    double sum = 0;
-    for (final double v in cells) {
-      sum += (v - m) * (v - m);
-    }
-    return math.sqrt(sum / cells.length);
-  }
+  /// Brightest minus darkest cell. A blank/flat render is ~0; any component
+  /// with content (e.g. light text on a dark field) is well above, regardless
+  /// of how much surrounding background dilutes a global variance.
+  double get range => cells.reduce(math.max) - cells.reduce(math.min);
 }
 
 Future<_Grid> _luminanceGrid(WidgetTester tester, ui.Image image) async {
