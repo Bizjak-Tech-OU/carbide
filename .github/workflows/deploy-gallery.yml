@@ -48,7 +48,7 @@ jobs:
 
       - name: Build web (WASM)
         working-directory: example
-        run: flutter build web --wasm --base-href /carbide/
+        run: flutter build web --release --wasm --base-href /carbide/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
