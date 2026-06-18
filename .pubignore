@@ -1,0 +1,64 @@
+# Files excluded from the published pub.dev package.
+#
+# A root `.pubignore` takes precedence over the root `.gitignore` (pub stops
+# consulting the `.gitignore` in any directory that has a `.pubignore`), so this
+# file restates the relevant ignore rules and then adds publish-only exclusions.
+
+# --- Publish-only exclusions ------------------------------------------------
+
+# Upstream Carbon sources, vendored as git submodules (multiple GB of icons,
+# website content, and design kits). They are the porting reference only and
+# are never needed by consumers of the package.
+documentation/
+
+# Icon/pictogram data-generation tooling and its Python helpers. Build-time
+# only — the generated Dart lives under lib/.
+tool/
+
+# Tests, goldens, and the upstream-fidelity reference images. Not shipped.
+test/
+
+# Project docs. The README's relative links are rewritten to the repository by
+# pub.dev, so the docs stay reachable without bloating the archive (and this
+# also avoids pub's "rename docs/ to doc/" convention warning).
+docs/
+
+# Project-internal contributor/AI guidance and the strict in-repo lint config;
+# neither is useful to package consumers.
+CLAUDE.md
+analysis_options.yaml
+
+# The gallery's Dart sources (example/lib, pubspec, README) are enough for the
+# pub.dev example tab; the native build scaffolding would only bloat the archive.
+example/android/
+example/ios/
+example/web/
+
+# --- Mirrored from .gitignore (re-stated because .pubignore overrides it) ----
+
+# Editor / IDE / tooling state.
+.idea/
+.vscode/
+.cursor/
+.claude/
+.zed/
+.agent/
+*.iml
+*.ipr
+*.iws
+.metadata
+skills-lock.json
+
+# Build artifacts and caches.
+build/
+coverage/
+failures/
+.dart_tool/
+.flutter-plugins-dependencies
+**/doc/api/
+
+# Miscellaneous.
+*.log
+*.pyc
+*.swp
+.DS_Store

@@ -1,0 +1,77 @@
+name: Publish to pub.dev
+
+# Tag-triggered, hands-off publishing to pub.dev using pub.dev's automated
+# (OIDC) publishing — no long-lived credentials. The repository is registered
+# as a trusted publisher for `carbide` on pub.dev and restricted to the
+# `v[0-9]+.[0-9]+.[0-9]+` tag pattern below.
+#
+# Release flow (see CONTRIBUTING.md): bump `version` + CHANGELOG.md on master,
+# then push a matching `vX.Y.Z` tag. Use the manual "Run workflow" button for a
+# no-publish dry run that exercises the whole pipeline first.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+
+# Least privilege by default; the publish job opts into the OIDC token.
+permissions:
+  contents: read
+
+jobs:
+  # Gate: the package must pass the same format/analyze/test checks as CI before
+  # anything is published. Tag pushes don't trigger ci.yaml, so it runs here.
+  verify:
+    name: Format, analyze, test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+  publish:
+    name: Publish to pub.dev
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # Required for OIDC authentication with pub.dev.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Manual runs validate the full pipeline without publishing; only a
+      # vX.Y.Z tag push performs the real, OIDC-authenticated upload.
+      - name: Validate package (dry run)
+        if: github.event_name == 'workflow_dispatch'
+        run: dart pub publish --dry-run
+
+      - name: Publish
+        if: github.event_name == 'push'
+        run: dart pub publish --force
