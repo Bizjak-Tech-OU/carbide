@@ -6,6 +6,11 @@
 import 'package:carbide/carbide.dart';
 import 'package:flutter/widgets.dart';
 
+/// Marks the live-preview surface of a [DemoScaffold] so screenshot tooling can
+/// capture just the component (see `test/contact_sheet_test.dart`). It also
+/// isolates the preview's repaint layer, which is harmless in the app.
+const Key kDemoPreviewKey = ValueKey<String>('carbide-demo-preview');
+
 /// The standard layout for a component demo page: a heading, a live preview
 /// surface, an optional set of interactive controls, and an optional code
 /// snippet.
@@ -57,7 +62,10 @@ class DemoScaffold extends StatelessWidget {
             ),
           ],
           const SizedBox(height: CarbonSpacing.spacing07),
-          _PreviewSurface(alignment: previewAlignment, child: preview),
+          RepaintBoundary(
+            key: kDemoPreviewKey,
+            child: _PreviewSurface(alignment: previewAlignment, child: preview),
+          ),
           if (controls.isNotEmpty) ...<Widget>[
             const SizedBox(height: CarbonSpacing.spacing07),
             _SectionLabel('Controls'),
