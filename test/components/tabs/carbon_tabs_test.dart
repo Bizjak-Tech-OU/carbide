@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -153,6 +154,8 @@ void main() {
       final Border other = decorationOf(tester, 'Details').border! as Border;
       expect(other.bottom.width, 1);
       expect(other.bottom.color, theme.borderSubtle00);
+      // Tab labels sit in a fixed-height tab; keep them legible.
+      expectTextNotClipped(tester, find.text('Overview'));
     });
 
     testWidgets('contained: selected tab is filled with the layer token', (

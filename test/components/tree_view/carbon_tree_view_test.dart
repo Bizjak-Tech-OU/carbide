@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/golden.dart';
+import '../../support/legibility.dart';
 
 Widget _host(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -209,6 +210,9 @@ void main() {
               .first,
         );
         expect(box.constraints.minHeight, h);
+        // The label must stay legible inside the tight row (xs is 24px with an
+        // 18px body-compact-01 line box).
+        expectTextNotClipped(tester, find.text('README.md'));
       }
     });
   });
