@@ -120,6 +120,12 @@ class CarbonRadioButton extends StatelessWidget {
             ),
           );
 
+          // An empty label (e.g. a data-table row selector) renders just the
+          // circle, with no trailing gap/text to skew its centering.
+          if (label.isEmpty) {
+            return circle;
+          }
+
           final bool labelFirst =
               labelPosition == CarbonRadioLabelPosition.left;
           return Row(

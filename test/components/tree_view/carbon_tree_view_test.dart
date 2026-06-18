@@ -193,6 +193,24 @@ void main() {
       expect(_labelIndent(tester, 'utils'), 40);
     });
 
+    testWidgets('the label is vertically centered in the row', (
+      WidgetTester tester,
+    ) async {
+      // Regression: the row Stack defaulted to topStart, pinning the
+      // shrink-wrapped label to the top of the row instead of centering it.
+      await tester.pumpWidget(_tree());
+      final Rect row = tester.getRect(
+        find
+            .ancestor(
+              of: find.text('README.md'),
+              matching: find.byType(ConstrainedBox),
+            )
+            .first,
+      );
+      final Rect label = tester.getRect(find.text('README.md'));
+      expect(label.center.dy, moreOrLessEquals(row.center.dy, epsilon: 0.5));
+    });
+
     testWidgets('xs rows are 24px, sm rows are 32px', (
       WidgetTester tester,
     ) async {

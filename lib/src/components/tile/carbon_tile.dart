@@ -130,6 +130,11 @@ class CarbonClickableTile extends StatelessWidget {
               color: hovered && enabled ? layer.layerHover : layer.layer,
               padding: const EdgeInsets.all(CarbonTileSpec.padding),
               child: Stack(
+                // The corner icon is inset 12px from the tile edge, which
+                // places it inside the 16px padding and therefore 4px outside
+                // the Stack's content box. Don't clip it (the default
+                // `Clip.hardEdge` would cut the overflowing 4px).
+                clipBehavior: Clip.none,
                 children: <Widget>[
                   DefaultTextStyle(
                     style: CarbonTypeStyles.bodyCompact01.copyWith(color: text),
@@ -249,6 +254,9 @@ class CarbonSelectableTile extends StatelessWidget {
                 end: endPadding,
               ),
               child: Stack(
+                // The checkmark sits in the reserved end padding, outside the
+                // Stack's content box, so it must not be clipped.
+                clipBehavior: Clip.none,
                 children: <Widget>[
                   DefaultTextStyle(
                     style: CarbonTypeStyles.bodyCompact01.copyWith(

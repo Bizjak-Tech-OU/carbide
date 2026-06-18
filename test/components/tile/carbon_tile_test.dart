@@ -60,6 +60,41 @@ void main() {
       expect(tile.bottom - icon.bottom, 12);
     });
 
+    testWidgets('corner icon/checkmark Stack does not clip the overflow', (
+      WidgetTester tester,
+    ) async {
+      // Regression: the icon is inset 12px from the tile edge, which places it
+      // 4px outside the Stack's content box. With the default Clip.hardEdge the
+      // overflow was sliced off, rendering a cut-off "artifact".
+      Stack iconStack() => tester.widget<Stack>(
+        find
+            .ancestor(of: find.byType(CarbonIcon), matching: find.byType(Stack))
+            .first,
+      );
+
+      await tester.pumpWidget(
+        _host(
+          CarbonClickableTile(
+            onPressed: () {},
+            icon: CarbonIcons.arrowRight,
+            child: const Text('T'),
+          ),
+        ),
+      );
+      expect(iconStack().clipBehavior, Clip.none);
+
+      await tester.pumpWidget(
+        _host(
+          CarbonSelectableTile(
+            selected: true,
+            onChanged: (_) {},
+            child: const Text('T'),
+          ),
+        ),
+      );
+      expect(iconStack().clipBehavior, Clip.none);
+    });
+
     testWidgets('selectable checkmark: 16px at the 16px top/end insets', (
       WidgetTester tester,
     ) async {

@@ -94,6 +94,23 @@ class CarbonCheckbox extends StatelessWidget {
               ? theme.supportError
               : theme.iconPrimary;
 
+          final Widget box = _CheckboxBox(
+            checked: value,
+            indeterminate: indeterminate,
+            borderColor: fill,
+            fillColor: fill,
+            glyphColor: glyph,
+            focusColor: theme.focus,
+            focused: focused,
+          );
+
+          // An empty label (e.g. a data-table row selector) must not reserve a
+          // text line: that extra height pins the box to the top and breaks
+          // vertical centering. Render the box on its own.
+          if (label.isEmpty) {
+            return box;
+          }
+
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -102,15 +119,7 @@ class CarbonCheckbox extends StatelessWidget {
                 width: labelOffset,
                 child: Align(
                   alignment: AlignmentDirectional.topStart,
-                  child: _CheckboxBox(
-                    checked: value,
-                    indeterminate: indeterminate,
-                    borderColor: fill,
-                    fillColor: fill,
-                    glyphColor: glyph,
-                    focusColor: theme.focus,
-                    focused: focused,
-                  ),
+                  child: box,
                 ),
               ),
               Flexible(
