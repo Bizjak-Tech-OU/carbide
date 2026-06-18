@@ -33,6 +33,11 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Generated contact-sheet review artifacts (W2) — produced by
+# test/contact_sheet_test.dart and uploaded by CI, never committed.
+test/screenshots/components/
+test/screenshots/contact_sheet_*.png
+
 # Symbolication related
 app.*.symbols
 
