@@ -1,0 +1,286 @@
+// Copyright 2026 Bizjak Tech OÜ
+//
+// This file is part of Carbide and is licensed under the GNU Affero General
+// Public License v3.0 or later. See the LICENSE file in the project root.
+
+import 'package:carbide/carbide.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../../support/golden.dart';
+import '../../support/legibility.dart';
+
+/// CarbonCopyButton / the inline chip use a Popover; tests need an Overlay and
+/// a TapRegion surface.
+Widget _host(Widget child) => Directionality(
+  textDirection: TextDirection.ltr,
+  child: TapRegionSurface(
+    child: CarbonTheme(
+      data: CarbonThemeData.white,
+      child: Overlay(
+        initialEntries: <OverlayEntry>[
+          OverlayEntry(
+            builder: (BuildContext context) => Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {},
+                  ),
+                ),
+                Center(child: child),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  ),
+);
+
+void _mockClipboard(WidgetTester tester, void Function(String?) onSet) {
+  tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (MethodCall call) async {
+      if (call.method == 'Clipboard.setData') {
+        onSet((call.arguments as Map<Object?, Object?>)['text'] as String?);
+      }
+      return null;
+    },
+  );
+  addTearDown(
+    () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      null,
+    ),
+  );
+}
+
+void main() {
+  setUp(() {
+    FocusManager.instance.highlightStrategy =
+        FocusHighlightStrategy.alwaysTraditional;
+  });
+  tearDown(() {
+    FocusManager.instance.highlightStrategy = FocusHighlightStrategy.automatic;
+  });
+
+  const String code = 'flutter pub add carbide';
+
+  group('layout / spec-lock', () {
+    testWidgets('single is a 40px bar with mono code and a copy button', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(_host(const CarbonCodeSnippet(code: code)));
+      expect(tester.getSize(find.byType(CarbonCodeSnippet)).height, 40);
+      final Text text = tester.widget<Text>(find.text(code));
+      expect(text.style!.fontFamily, CarbonFontFamily.mono);
+      expect(text.style!.color, CarbonThemeData.white.textPrimary);
+      expect(find.byType(CarbonCopyButton), findsOneWidget);
+    });
+
+    testWidgets('inline is a rounded chip', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonCodeSnippet(
+            code: 'npm i',
+            type: CarbonCodeSnippetType.inline,
+          ),
+        ),
+      );
+      final DecoratedBox box = tester.widget<DecoratedBox>(
+        find
+            .ancestor(
+              of: find.text('npm i'),
+              matching: find.byType(DecoratedBox),
+            )
+            .first,
+      );
+      final BoxDecoration decoration = box.decoration as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(4));
+      expect(decoration.color, CarbonThemeData.white.layer01);
+    });
+
+    testWidgets('disabled greys the code and disables copy', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonCodeSnippet(code: code, disabled: true)),
+      );
+      final Text text = tester.widget<Text>(find.text(code));
+      expect(text.style!.color, CarbonThemeData.white.textDisabled);
+      expect(
+        tester.widget<CarbonCopyButton>(find.byType(CarbonCopyButton)).enabled,
+        isFalse,
+      );
+    });
+
+    testWidgets('hideCopyButton drops the copy button', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(const CarbonCodeSnippet(code: code, hideCopyButton: true)),
+      );
+      expect(find.byType(CarbonCopyButton), findsNothing);
+    });
+  });
+
+  group('copy', () {
+    testWidgets('single copies the code via the copy button', (
+      WidgetTester tester,
+    ) async {
+      String? copied;
+      _mockClipboard(tester, (String? value) => copied = value);
+      await tester.pumpWidget(_host(const CarbonCodeSnippet(code: code)));
+      await tester.tap(find.byType(CarbonCopyButton));
+      await tester.pump();
+      expect(copied, code);
+      await tester.pump(const Duration(milliseconds: 2100));
+    });
+
+    testWidgets('inline copies on tap and shows feedback', (
+      WidgetTester tester,
+    ) async {
+      String? copied;
+      _mockClipboard(tester, (String? value) => copied = value);
+      await tester.pumpWidget(
+        _host(
+          const CarbonCodeSnippet(
+            code: 'npm i',
+            type: CarbonCodeSnippetType.inline,
+          ),
+        ),
+      );
+      await tester.tap(find.text('npm i'));
+      await tester.pumpAndSettle();
+      expect(copied, 'npm i');
+      expect(find.text('Copied!'), findsOneWidget);
+      expectTextNotClipped(tester, find.text('Copied!'));
+      await tester.pump(const Duration(milliseconds: 2100));
+    });
+  });
+
+  group('multi-line expand', () {
+    Widget multi(int collapsed) => _host(
+      CarbonCodeSnippet(
+        code: 'a\nb\nc\nd\ne',
+        type: CarbonCodeSnippetType.multi,
+        maxCollapsedRows: collapsed,
+      ),
+    );
+
+    testWidgets('no toggle when the content fits', (WidgetTester tester) async {
+      await tester.pumpWidget(multi(10));
+      expect(find.text('Show more'), findsNothing);
+    });
+
+    testWidgets('shows the toggle when the content overflows', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(multi(2));
+      expect(find.text('Show more'), findsOneWidget);
+    });
+
+    testWidgets('toggles between show more and show less', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(multi(2));
+      await tester.tap(find.text('Show more'));
+      await tester.pumpAndSettle();
+      expect(find.text('Show less'), findsOneWidget);
+      await tester.tap(find.text('Show less'));
+      await tester.pumpAndSettle();
+      expect(find.text('Show more'), findsOneWidget);
+    });
+  });
+
+  group('semantics', () {
+    testWidgets('inline chip is a labelled button', (
+      WidgetTester tester,
+    ) async {
+      final SemanticsHandle handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _host(
+          const CarbonCodeSnippet(
+            code: 'npm i',
+            type: CarbonCodeSnippetType.inline,
+          ),
+        ),
+      );
+      expect(find.bySemanticsLabel('Copy to clipboard: npm i'), findsOneWidget);
+      handle.dispose();
+    });
+  });
+
+  group('skeleton', () {
+    testWidgets('renders for single and multi', (WidgetTester tester) async {
+      await tester.pumpWidget(_host(const CarbonCodeSnippetSkeleton()));
+      expect(find.byType(CarbonCodeSnippetSkeleton), findsOneWidget);
+      await tester.pumpWidget(
+        _host(
+          const CarbonCodeSnippetSkeleton(type: CarbonCodeSnippetType.multi),
+        ),
+      );
+      expect(find.byType(CarbonCodeSnippetSkeleton), findsOneWidget);
+    });
+  });
+
+  group('goldens', () {
+    Widget overlaid(Widget child) => Overlay(
+      initialEntries: <OverlayEntry>[
+        OverlayEntry(
+          builder: (BuildContext context) => Center(
+            child: Padding(padding: const EdgeInsets.all(8), child: child),
+          ),
+        ),
+      ],
+    );
+
+    testWidgets('single', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'code_snippet_single',
+        containsText: true,
+        size: const Size(360, 80),
+        builder: (BuildContext context) => overlaid(
+          const SizedBox(width: 320, child: CarbonCodeSnippet(code: code)),
+        ),
+      );
+    });
+
+    testWidgets('multi with expand', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'code_snippet_multi',
+        containsText: true,
+        size: const Size(360, 160),
+        builder: (BuildContext context) => overlaid(
+          const SizedBox(
+            width: 320,
+            child: CarbonCodeSnippet(
+              code: 'line one\nline two\nline three\nline four',
+              type: CarbonCodeSnippetType.multi,
+              maxCollapsedRows: 2,
+            ),
+          ),
+        ),
+      );
+    });
+
+    testWidgets('inline', (WidgetTester tester) async {
+      await expectThemeGoldens(
+        tester,
+        name: 'code_snippet_inline',
+        containsText: true,
+        size: const Size(160, 60),
+        builder: (BuildContext context) => overlaid(
+          const CarbonCodeSnippet(
+            code: 'npm i',
+            type: CarbonCodeSnippetType.inline,
+          ),
+        ),
+      );
+    });
+  });
+}

@@ -25,6 +25,11 @@ final GalleryCategory tierACategory = GalleryCategory(
       title: 'Copy button',
       builder: () => const _CopyButtonPage(),
     ),
+    GalleryEntry(
+      slug: 'code-snippet',
+      title: 'Code snippet',
+      builder: () => const _CodeSnippetPage(),
+    ),
     GalleryEntry(slug: 'tag', title: 'Tag', builder: () => const _TagPage()),
     GalleryEntry(slug: 'link', title: 'Link', builder: () => const _LinkPage()),
     GalleryEntry(slug: 'tile', title: 'Tile', builder: () => const _TilePage()),
@@ -503,6 +508,51 @@ class _CopyButtonPageState extends State<_CopyButtonPage> {
         ),
       ],
       code: "CarbonCopyButton(value: 'npm i @carbon/react');",
+    );
+  }
+}
+
+class _CodeSnippetPage extends StatefulWidget {
+  const _CodeSnippetPage();
+  @override
+  State<_CodeSnippetPage> createState() => _CodeSnippetPageState();
+}
+
+class _CodeSnippetPageState extends State<_CodeSnippetPage> {
+  CarbonCodeSnippetType _type = CarbonCodeSnippetType.single;
+
+  String get _code => switch (_type) {
+    CarbonCodeSnippetType.inline => 'carbide',
+    CarbonCodeSnippetType.single => 'flutter pub add carbide',
+    CarbonCodeSnippetType.multi =>
+      "import 'package:carbide/carbide.dart';\n\n"
+          'void main() {\n  runApp(const MyApp());\n}',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonCodeSnippet snippet = CarbonCodeSnippet(
+      code: _code,
+      type: _type,
+    );
+    return DemoScaffold(
+      title: 'Code snippet',
+      description: 'Monospaced code with a copy affordance.',
+      previewAlignment: Alignment.topLeft,
+      preview: _type == CarbonCodeSnippetType.inline
+          ? snippet
+          : SizedBox(width: 320, child: snippet),
+      controls: <Widget>[
+        choiceKnob<CarbonCodeSnippetType>(
+          label: 'Type',
+          value: _type,
+          options: CarbonCodeSnippetType.values,
+          labelOf: (CarbonCodeSnippetType type) => type.name,
+          onChanged: (CarbonCodeSnippetType type) =>
+              setState(() => _type = type),
+        ),
+      ],
+      code: "CarbonCodeSnippet(code: 'flutter pub add carbide');",
     );
   }
 }
