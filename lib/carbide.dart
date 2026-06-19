@@ -70,6 +70,7 @@ export 'src/components/radio_button/carbon_radio_button.dart';
 export 'src/components/search/carbon_search.dart';
 export 'src/components/select/carbon_select.dart';
 export 'src/components/slider/carbon_slider.dart';
+export 'src/components/skeleton/carbon_component_skeletons.dart';
 export 'src/components/skeleton/carbon_skeleton.dart';
 export 'src/components/skeleton/carbon_skeleton_shapes.dart';
 export 'src/components/skeleton/carbon_skeleton_text.dart';
