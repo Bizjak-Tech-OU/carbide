@@ -10,11 +10,15 @@ Ported token groups:
   not including) the syntax-highlighting section;
 - the button and tag component tokens (themes/src/component-tokens/{button,
   tag}/tokens.ts), folded into CarbonThemeData exactly as Carbon v11 folds
-  component tokens into the theme zone.
+  component tokens into the theme zone;
+- the AI token group (the `ai-*` tokens between `//// AI - Experimental` and
+  `// Chat tokens`): gradient stops (aura/border), popover, skeleton, and caret
+  colors. These are flat `Color`s — the gradients and shadows are composed by
+  the consuming component (AI Label) from the stop colors.
 
-Syntax-highlighting, AI-experimental, and chat tokens, the remaining
-component-token groups (notification, status, content-switcher — ported with
-their components), and the type/layout re-exports are out of scope here.
+Syntax-highlighting and chat tokens, the remaining component-token groups
+(notification, status, content-switcher — ported with their components), and
+the type/layout re-exports are out of scope here.
 
 Run from the repository root:  python3 tool/generate_carbon_themes.py
 Re-run when bumping the Carbon submodule; review the diff.
@@ -37,6 +41,7 @@ EXPORT = re.compile(r"^export const (\w+) = (.+);$", re.M)
 ALPHA_CALL = re.compile(r"^(?:adjustAlpha|rgba)\(\s*(\w+)\s*,\s*([\d.]+)\s*\)$")
 LIGHTNESS = re.compile(r"^adjustLightness\(\s*(\w+)\s*,\s*(-?[\d.]+)\s*\)$")
 RGBA_STR = re.compile(r"^'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)'$")
+HEX_LITERAL = re.compile(r"^'#([0-9a-fA-F]{6})'$")
 
 # Component-token sources folded into the theme (Carbon v11 semantics).
 COMPONENT_TOKEN_FILES = (
@@ -175,11 +180,31 @@ def core_region(theme_file: Path) -> dict[str, str]:
     return {m.group(1): m.group(2).strip() for m in EXPORT.finditer(region)}
 
 
+AI_MARKERS = ("//// AI - Experimental", "// Chat tokens")
+
+
+def ai_region(theme_file: Path) -> dict[str, str]:
+    """Parse the AI token group (aura/border stops, popover, skeleton, caret).
+
+    Spans `//// AI - Experimental` up to `// Chat tokens`, so the chat-* tokens
+    (the out-of-scope chat family) are excluded.
+    """
+    text = theme_file.read_text()
+    start, end = (text.index(marker) for marker in AI_MARKERS)
+    return {
+        m.group(1): m.group(2).strip()
+        for m in EXPORT.finditer(text[start:end])
+    }
+
+
 def num(value: str) -> str:
     return value if "." in value else f"{value}.0"
 
 
 def resolve(expr, tokens, colors, values) -> str:
+    m = HEX_LITERAL.match(expr)
+    if m:
+        return f"const Color(0xFF{m.group(1).upper()})"
     m = RGBA_STR.match(expr)
     if m:
         r, g, b, a = m.groups()
@@ -219,15 +244,21 @@ def build():
     colors = set(color_values())
     values = color_values()
     raw: dict[str, dict[str, str]] = {}
+    ai_raw: dict[str, dict[str, str]] = {}
     brightness: dict[str, str] = {}
     for field, slug in THEMES.items():
         region = core_region(THEME_DIR / f"{slug}.ts")
         brightness[field] = "light" if region.pop("colorScheme").strip("'") == "light" else "dark"
         raw[field] = region
+        ai_raw[field] = ai_region(THEME_DIR / f"{slug}.ts")
 
     order = list(raw["white"])
     for field, region in raw.items():
         assert set(region) == set(order), f"{field} token set differs"
+
+    ai_order = list(ai_raw["white"])
+    for field, region in ai_raw.items():
+        assert set(region) == set(ai_order), f"{field} AI token set differs"
 
     resolved = {
         field: {n: resolve(region[n], region, colors, values) for n in order}
@@ -240,6 +271,18 @@ def build():
     order += component_order
     for field in resolved:
         resolved[field].update(component_resolved[field])
+
+    # AI tokens last (the newest, experimental group). A few reference a core
+    # semantic token (e.g. aiAuraHoverBackground → layerHover01), so resolve
+    # against the combined core+AI space; all bottom out at palette colors or
+    # hex literals.
+    for field in resolved:
+        combined = {**raw[field], **ai_raw[field]}
+        for token in ai_order:
+            resolved[field][token] = resolve(
+                ai_raw[field][token], combined, colors, values
+            )
+    order += ai_order
     return order, brightness, resolved
 
 

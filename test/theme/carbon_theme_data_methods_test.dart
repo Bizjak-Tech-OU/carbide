@@ -89,6 +89,69 @@ void main() {
     });
   });
 
+  group('AI tokens (ai-* group)', () {
+    final List<CarbonThemeData> themes = <CarbonThemeData>[
+      CarbonThemeData.white,
+      CarbonThemeData.gray10,
+      CarbonThemeData.gray90,
+      CarbonThemeData.gray100,
+    ];
+
+    test('the aura gradient fades from a translucent start to transparent', () {
+      for (final CarbonThemeData theme in themes) {
+        expect(theme.aiAuraEnd.a, 0.0);
+        expect(theme.aiAuraHoverEnd.a, 0.0);
+        expect(theme.aiAuraStart.a, greaterThan(0.0));
+        expect(theme.aiAuraStart.a, lessThan(1.0));
+        expect(theme.aiAuraHoverStart.a, greaterThan(theme.aiAuraStart.a));
+      }
+    });
+
+    test(
+      'the popover background follows the theme surface (light vs dark)',
+      () {
+        expect(CarbonThemeData.white.aiPopoverBackground, CarbonColors.white);
+        expect(
+          CarbonThemeData.gray100.aiPopoverBackground,
+          CarbonColors.gray100,
+        );
+        expect(
+          CarbonThemeData.white.aiPopoverBackground,
+          isNot(CarbonThemeData.gray100.aiPopoverBackground),
+        );
+      },
+    );
+
+    test('border stops are solid blues; the drop shadow is translucent', () {
+      expect(CarbonThemeData.white.aiBorderStrong, CarbonColors.blue50);
+      expect(CarbonThemeData.gray100.aiBorderStrong, CarbonColors.blue40);
+      expect(CarbonThemeData.white.aiDropShadow.a, lessThan(1.0));
+    });
+
+    test('fold into copyWith, lerp, and equality like every other token', () {
+      final CarbonThemeData themed = CarbonThemeData.white.copyWith(
+        aiPopoverBackground: CarbonColors.blue60,
+      );
+      expect(themed.aiPopoverBackground, CarbonColors.blue60);
+      expect(themed.aiBorderStrong, CarbonThemeData.white.aiBorderStrong);
+      expect(themed, isNot(CarbonThemeData.white));
+
+      final CarbonThemeData mid = CarbonThemeData.lerp(
+        CarbonThemeData.white,
+        CarbonThemeData.gray100,
+        0.5,
+      );
+      expect(
+        mid.aiOverlay,
+        Color.lerp(
+          CarbonThemeData.white.aiOverlay,
+          CarbonThemeData.gray100.aiOverlay,
+          0.5,
+        ),
+      );
+    });
+  });
+
   group('equality', () {
     test('a theme equals itself and a field-identical copy', () {
       expect(CarbonThemeData.white, CarbonThemeData.white);

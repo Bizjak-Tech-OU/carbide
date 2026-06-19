@@ -223,6 +223,60 @@ void main() {
     expect(CarbonThemeData.white.tagBorderGray, CarbonColors.gray40);
     expect(CarbonThemeData.white.tagBorderCoolGray, CarbonColors.coolGray40);
     expect(CarbonThemeData.white.tagBorderWarmGray, CarbonColors.warmGray40);
+    expect(
+      CarbonThemeData.white.aiInnerShadow,
+      _alpha(CarbonColors.blue50, 0.1),
+    );
+    expect(
+      CarbonThemeData.white.aiAuraStartSm,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(CarbonThemeData.white.aiAuraStart, _alpha(CarbonColors.blue50, 0.1));
+    expect(CarbonThemeData.white.aiAuraEnd, _alpha(CarbonColors.white, 0.0));
+    expect(CarbonThemeData.white.aiBorderStrong, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.white.aiBorderStart,
+      _alpha(CarbonColors.blue30, 0.64),
+    );
+    expect(CarbonThemeData.white.aiBorderEnd, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.white.aiDropShadow,
+      _alpha(CarbonColors.blue60, 0.1),
+    );
+    expect(CarbonThemeData.white.aiAuraHoverBackground, CarbonColors.blue10);
+    expect(
+      CarbonThemeData.white.aiAuraHoverStart,
+      _alpha(CarbonColors.blue50, 0.32),
+    );
+    expect(
+      CarbonThemeData.white.aiAuraHoverEnd,
+      _alpha(CarbonColors.white, 0.0),
+    );
+    expect(CarbonThemeData.white.aiPopoverBackground, CarbonColors.white);
+    expect(
+      CarbonThemeData.white.aiPopoverShadowOuter01,
+      _alpha(CarbonColors.blue70, 0.06),
+    );
+    expect(
+      CarbonThemeData.white.aiPopoverShadowOuter02,
+      _alpha(CarbonColors.black, 0.04),
+    );
+    expect(CarbonThemeData.white.aiSkeletonBackground, CarbonColors.blue20);
+    expect(
+      CarbonThemeData.white.aiSkeletonElementBackground,
+      CarbonColors.blue50,
+    );
+    expect(CarbonThemeData.white.aiOverlay, _alpha(CarbonColors.blue100, 0.5));
+    expect(CarbonThemeData.white.aiPopoverCaretCenter, const Color(0xFFA0C3FF));
+    expect(CarbonThemeData.white.aiPopoverCaretBottom, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.white.aiPopoverCaretBottomBackgroundActions,
+      const Color(0xFFE9EFFA),
+    );
+    expect(
+      CarbonThemeData.white.aiPopoverCaretBottomBackground,
+      const Color(0xFFEAF1FF),
+    );
   });
 
   test('gray10 theme tokens match the Carbon source', () {
@@ -437,6 +491,66 @@ void main() {
     expect(CarbonThemeData.gray10.tagBorderGray, CarbonColors.gray40);
     expect(CarbonThemeData.gray10.tagBorderCoolGray, CarbonColors.coolGray40);
     expect(CarbonThemeData.gray10.tagBorderWarmGray, CarbonColors.warmGray40);
+    expect(
+      CarbonThemeData.gray10.aiInnerShadow,
+      _alpha(CarbonColors.blue50, 0.1),
+    );
+    expect(
+      CarbonThemeData.gray10.aiAuraStartSm,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(
+      CarbonThemeData.gray10.aiAuraStart,
+      _alpha(CarbonColors.blue50, 0.1),
+    );
+    expect(CarbonThemeData.gray10.aiAuraEnd, _alpha(CarbonColors.white, 0.0));
+    expect(CarbonThemeData.gray10.aiBorderStrong, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.gray10.aiBorderStart,
+      _alpha(CarbonColors.blue30, 0.64),
+    );
+    expect(CarbonThemeData.gray10.aiBorderEnd, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.gray10.aiDropShadow,
+      _alpha(CarbonColors.blue60, 0.1),
+    );
+    expect(CarbonThemeData.gray10.aiAuraHoverBackground, CarbonColors.blue10);
+    expect(
+      CarbonThemeData.gray10.aiAuraHoverStart,
+      _alpha(CarbonColors.blue50, 0.32),
+    );
+    expect(
+      CarbonThemeData.gray10.aiAuraHoverEnd,
+      _alpha(CarbonColors.white, 0.0),
+    );
+    expect(CarbonThemeData.gray10.aiPopoverBackground, CarbonColors.white);
+    expect(
+      CarbonThemeData.gray10.aiPopoverShadowOuter01,
+      _alpha(CarbonColors.blue70, 0.06),
+    );
+    expect(
+      CarbonThemeData.gray10.aiPopoverShadowOuter02,
+      _alpha(CarbonColors.black, 0.04),
+    );
+    expect(CarbonThemeData.gray10.aiSkeletonBackground, CarbonColors.blue20);
+    expect(
+      CarbonThemeData.gray10.aiSkeletonElementBackground,
+      CarbonColors.blue50,
+    );
+    expect(CarbonThemeData.gray10.aiOverlay, _alpha(CarbonColors.blue100, 0.5));
+    expect(
+      CarbonThemeData.gray10.aiPopoverCaretCenter,
+      const Color(0xFFA0C3FF),
+    );
+    expect(CarbonThemeData.gray10.aiPopoverCaretBottom, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.gray10.aiPopoverCaretBottomBackgroundActions,
+      const Color(0xFFE9EFFA),
+    );
+    expect(
+      CarbonThemeData.gray10.aiPopoverCaretBottomBackground,
+      const Color(0xFFEAF1FF),
+    );
   });
 
   test('gray90 theme tokens match the Carbon source', () {
@@ -663,6 +777,72 @@ void main() {
     expect(CarbonThemeData.gray90.tagBorderGray, CarbonColors.gray50);
     expect(CarbonThemeData.gray90.tagBorderCoolGray, CarbonColors.coolGray50);
     expect(CarbonThemeData.gray90.tagBorderWarmGray, CarbonColors.warmGray50);
+    expect(
+      CarbonThemeData.gray90.aiInnerShadow,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(
+      CarbonThemeData.gray90.aiAuraStartSm,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(
+      CarbonThemeData.gray90.aiAuraStart,
+      _alpha(CarbonColors.blue50, 0.1),
+    );
+    expect(CarbonThemeData.gray90.aiAuraEnd, _alpha(CarbonColors.black, 0.0));
+    expect(CarbonThemeData.gray90.aiBorderStrong, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.gray90.aiBorderStart,
+      _alpha(CarbonColors.blue30, 0.36),
+    );
+    expect(CarbonThemeData.gray90.aiBorderEnd, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.gray90.aiDropShadow,
+      _alpha(CarbonColors.black, 0.28),
+    );
+    expect(
+      CarbonThemeData.gray90.aiAuraHoverBackground,
+      CarbonColors.gray80Hover,
+    );
+    expect(
+      CarbonThemeData.gray90.aiAuraHoverStart,
+      _alpha(CarbonColors.blue50, 0.4),
+    );
+    expect(
+      CarbonThemeData.gray90.aiAuraHoverEnd,
+      _alpha(CarbonColors.black, 0.0),
+    );
+    expect(CarbonThemeData.gray90.aiPopoverBackground, CarbonColors.gray100);
+    expect(
+      CarbonThemeData.gray90.aiPopoverShadowOuter01,
+      _alpha(CarbonColors.black, 0.12),
+    );
+    expect(
+      CarbonThemeData.gray90.aiPopoverShadowOuter02,
+      _alpha(CarbonColors.black, 0.08),
+    );
+    expect(
+      CarbonThemeData.gray90.aiSkeletonBackground,
+      _alpha(CarbonColors.blue40, 0.5),
+    );
+    expect(
+      CarbonThemeData.gray90.aiSkeletonElementBackground,
+      _alpha(CarbonColors.blue40, 0.3),
+    );
+    expect(CarbonThemeData.gray90.aiOverlay, _alpha(CarbonColors.black, 0.5));
+    expect(
+      CarbonThemeData.gray90.aiPopoverCaretCenter,
+      const Color(0xFF4870B5),
+    );
+    expect(CarbonThemeData.gray90.aiPopoverCaretBottom, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.gray90.aiPopoverCaretBottomBackgroundActions,
+      const Color(0xFF1E283A),
+    );
+    expect(
+      CarbonThemeData.gray90.aiPopoverCaretBottomBackground,
+      const Color(0xFF202D45),
+    );
   });
 
   test('gray100 theme tokens match the Carbon source', () {
@@ -907,6 +1087,72 @@ void main() {
     expect(CarbonThemeData.gray100.tagBorderGray, CarbonColors.gray50);
     expect(CarbonThemeData.gray100.tagBorderCoolGray, CarbonColors.coolGray50);
     expect(CarbonThemeData.gray100.tagBorderWarmGray, CarbonColors.warmGray50);
+    expect(
+      CarbonThemeData.gray100.aiInnerShadow,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(
+      CarbonThemeData.gray100.aiAuraStartSm,
+      _alpha(CarbonColors.blue50, 0.16),
+    );
+    expect(
+      CarbonThemeData.gray100.aiAuraStart,
+      _alpha(CarbonColors.blue50, 0.1),
+    );
+    expect(CarbonThemeData.gray100.aiAuraEnd, _alpha(CarbonColors.black, 0.0));
+    expect(CarbonThemeData.gray100.aiBorderStrong, CarbonColors.blue40);
+    expect(
+      CarbonThemeData.gray100.aiBorderStart,
+      _alpha(CarbonColors.blue30, 0.36),
+    );
+    expect(CarbonThemeData.gray100.aiBorderEnd, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.gray100.aiDropShadow,
+      _alpha(CarbonColors.black, 0.28),
+    );
+    expect(
+      CarbonThemeData.gray100.aiAuraHoverBackground,
+      CarbonColors.gray90Hover,
+    );
+    expect(
+      CarbonThemeData.gray100.aiAuraHoverStart,
+      _alpha(CarbonColors.blue50, 0.4),
+    );
+    expect(
+      CarbonThemeData.gray100.aiAuraHoverEnd,
+      _alpha(CarbonColors.black, 0.0),
+    );
+    expect(CarbonThemeData.gray100.aiPopoverBackground, CarbonColors.gray100);
+    expect(
+      CarbonThemeData.gray100.aiPopoverShadowOuter01,
+      _alpha(CarbonColors.black, 0.12),
+    );
+    expect(
+      CarbonThemeData.gray100.aiPopoverShadowOuter02,
+      _alpha(CarbonColors.black, 0.08),
+    );
+    expect(
+      CarbonThemeData.gray100.aiSkeletonBackground,
+      _alpha(CarbonColors.blue40, 0.5),
+    );
+    expect(
+      CarbonThemeData.gray100.aiSkeletonElementBackground,
+      _alpha(CarbonColors.blue40, 0.3),
+    );
+    expect(CarbonThemeData.gray100.aiOverlay, _alpha(CarbonColors.black, 0.5));
+    expect(
+      CarbonThemeData.gray100.aiPopoverCaretCenter,
+      const Color(0xFF4870B5),
+    );
+    expect(CarbonThemeData.gray100.aiPopoverCaretBottom, CarbonColors.blue50);
+    expect(
+      CarbonThemeData.gray100.aiPopoverCaretBottomBackgroundActions,
+      const Color(0xFF1E283A),
+    );
+    expect(
+      CarbonThemeData.gray100.aiPopoverCaretBottomBackground,
+      const Color(0xFF202D45),
+    );
   });
 
   test('themes carry the expected brightness', () {
