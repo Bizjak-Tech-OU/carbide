@@ -132,6 +132,28 @@ void main() {
       expect(border.top.color, theme.borderSubtle00);
     });
 
+    testWidgets('surfaceColor / surfaceBorderColor override the surface', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        _host(
+          const CarbonPopover(
+            open: true,
+            surfaceColor: Color(0xFF112233),
+            surfaceBorderColor: Color(0xFF445566),
+            content: Text('Body'),
+            child: SizedBox(width: 100, height: 40),
+          ),
+        ),
+      );
+      final BoxDecoration box = _surfaceBox(tester);
+      // The override fills the surface and forces a 1px border in its colour.
+      expect(box.color, const Color(0xFF112233));
+      final Border border = box.border! as Border;
+      expect(border.top.width, 1);
+      expect(border.top.color, const Color(0xFF445566));
+    });
+
     testWidgets('high contrast swaps to inverse background + text', (
       WidgetTester tester,
     ) async {
