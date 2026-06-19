@@ -184,6 +184,27 @@ class CarbonThemeData {
     required this.tagBorderGray,
     required this.tagBorderCoolGray,
     required this.tagBorderWarmGray,
+    required this.aiInnerShadow,
+    required this.aiAuraStartSm,
+    required this.aiAuraStart,
+    required this.aiAuraEnd,
+    required this.aiBorderStrong,
+    required this.aiBorderStart,
+    required this.aiBorderEnd,
+    required this.aiDropShadow,
+    required this.aiAuraHoverBackground,
+    required this.aiAuraHoverStart,
+    required this.aiAuraHoverEnd,
+    required this.aiPopoverBackground,
+    required this.aiPopoverShadowOuter01,
+    required this.aiPopoverShadowOuter02,
+    required this.aiSkeletonBackground,
+    required this.aiSkeletonElementBackground,
+    required this.aiOverlay,
+    required this.aiPopoverCaretCenter,
+    required this.aiPopoverCaretBottom,
+    required this.aiPopoverCaretBottomBackgroundActions,
+    required this.aiPopoverCaretBottomBackground,
   });
 
   /// Whether this is a light or dark theme.
@@ -666,6 +687,69 @@ class CarbonThemeData {
   /// The `tagBorderWarmGray` token.
   final Color tagBorderWarmGray;
 
+  /// The `aiInnerShadow` token.
+  final Color aiInnerShadow;
+
+  /// The `aiAuraStartSm` token.
+  final Color aiAuraStartSm;
+
+  /// The `aiAuraStart` token.
+  final Color aiAuraStart;
+
+  /// The `aiAuraEnd` token.
+  final Color aiAuraEnd;
+
+  /// The `aiBorderStrong` token.
+  final Color aiBorderStrong;
+
+  /// The `aiBorderStart` token.
+  final Color aiBorderStart;
+
+  /// The `aiBorderEnd` token.
+  final Color aiBorderEnd;
+
+  /// The `aiDropShadow` token.
+  final Color aiDropShadow;
+
+  /// The `aiAuraHoverBackground` token.
+  final Color aiAuraHoverBackground;
+
+  /// The `aiAuraHoverStart` token.
+  final Color aiAuraHoverStart;
+
+  /// The `aiAuraHoverEnd` token.
+  final Color aiAuraHoverEnd;
+
+  /// The `aiPopoverBackground` token.
+  final Color aiPopoverBackground;
+
+  /// The `aiPopoverShadowOuter01` token.
+  final Color aiPopoverShadowOuter01;
+
+  /// The `aiPopoverShadowOuter02` token.
+  final Color aiPopoverShadowOuter02;
+
+  /// The `aiSkeletonBackground` token.
+  final Color aiSkeletonBackground;
+
+  /// The `aiSkeletonElementBackground` token.
+  final Color aiSkeletonElementBackground;
+
+  /// The `aiOverlay` token.
+  final Color aiOverlay;
+
+  /// The `aiPopoverCaretCenter` token.
+  final Color aiPopoverCaretCenter;
+
+  /// The `aiPopoverCaretBottom` token.
+  final Color aiPopoverCaretBottom;
+
+  /// The `aiPopoverCaretBottomBackgroundActions` token.
+  final Color aiPopoverCaretBottomBackgroundActions;
+
+  /// The `aiPopoverCaretBottomBackground` token.
+  final Color aiPopoverCaretBottomBackground;
+
   /// The White theme.
   static final CarbonThemeData white = CarbonThemeData(
     brightness: Brightness.light,
@@ -828,6 +912,27 @@ class CarbonThemeData {
     tagBorderGray: CarbonColors.gray40,
     tagBorderCoolGray: CarbonColors.coolGray40,
     tagBorderWarmGray: CarbonColors.warmGray40,
+    aiInnerShadow: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraStartSm: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStart: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraEnd: _alpha(CarbonColors.white, 0.0),
+    aiBorderStrong: CarbonColors.blue50,
+    aiBorderStart: _alpha(CarbonColors.blue30, 0.64),
+    aiBorderEnd: CarbonColors.blue40,
+    aiDropShadow: _alpha(CarbonColors.blue60, 0.1),
+    aiAuraHoverBackground: CarbonColors.blue10,
+    aiAuraHoverStart: _alpha(CarbonColors.blue50, 0.32),
+    aiAuraHoverEnd: _alpha(CarbonColors.white, 0.0),
+    aiPopoverBackground: CarbonColors.white,
+    aiPopoverShadowOuter01: _alpha(CarbonColors.blue70, 0.06),
+    aiPopoverShadowOuter02: _alpha(CarbonColors.black, 0.04),
+    aiSkeletonBackground: CarbonColors.blue20,
+    aiSkeletonElementBackground: CarbonColors.blue50,
+    aiOverlay: _alpha(CarbonColors.blue100, 0.5),
+    aiPopoverCaretCenter: const Color(0xFFA0C3FF),
+    aiPopoverCaretBottom: CarbonColors.blue40,
+    aiPopoverCaretBottomBackgroundActions: const Color(0xFFE9EFFA),
+    aiPopoverCaretBottomBackground: const Color(0xFFEAF1FF),
   );
 
   /// The Gray 10 theme.
@@ -992,6 +1097,27 @@ class CarbonThemeData {
     tagBorderGray: CarbonColors.gray40,
     tagBorderCoolGray: CarbonColors.coolGray40,
     tagBorderWarmGray: CarbonColors.warmGray40,
+    aiInnerShadow: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraStartSm: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStart: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraEnd: _alpha(CarbonColors.white, 0.0),
+    aiBorderStrong: CarbonColors.blue50,
+    aiBorderStart: _alpha(CarbonColors.blue30, 0.64),
+    aiBorderEnd: CarbonColors.blue40,
+    aiDropShadow: _alpha(CarbonColors.blue60, 0.1),
+    aiAuraHoverBackground: CarbonColors.blue10,
+    aiAuraHoverStart: _alpha(CarbonColors.blue50, 0.32),
+    aiAuraHoverEnd: _alpha(CarbonColors.white, 0.0),
+    aiPopoverBackground: CarbonColors.white,
+    aiPopoverShadowOuter01: _alpha(CarbonColors.blue70, 0.06),
+    aiPopoverShadowOuter02: _alpha(CarbonColors.black, 0.04),
+    aiSkeletonBackground: CarbonColors.blue20,
+    aiSkeletonElementBackground: CarbonColors.blue50,
+    aiOverlay: _alpha(CarbonColors.blue100, 0.5),
+    aiPopoverCaretCenter: const Color(0xFFA0C3FF),
+    aiPopoverCaretBottom: CarbonColors.blue40,
+    aiPopoverCaretBottomBackgroundActions: const Color(0xFFE9EFFA),
+    aiPopoverCaretBottomBackground: const Color(0xFFEAF1FF),
   );
 
   /// The Gray 90 theme.
@@ -1156,6 +1282,27 @@ class CarbonThemeData {
     tagBorderGray: CarbonColors.gray50,
     tagBorderCoolGray: CarbonColors.coolGray50,
     tagBorderWarmGray: CarbonColors.warmGray50,
+    aiInnerShadow: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStartSm: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStart: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraEnd: _alpha(CarbonColors.black, 0.0),
+    aiBorderStrong: CarbonColors.blue40,
+    aiBorderStart: _alpha(CarbonColors.blue30, 0.36),
+    aiBorderEnd: CarbonColors.blue50,
+    aiDropShadow: _alpha(CarbonColors.black, 0.28),
+    aiAuraHoverBackground: CarbonColors.gray80Hover,
+    aiAuraHoverStart: _alpha(CarbonColors.blue50, 0.4),
+    aiAuraHoverEnd: _alpha(CarbonColors.black, 0.0),
+    aiPopoverBackground: CarbonColors.gray100,
+    aiPopoverShadowOuter01: _alpha(CarbonColors.black, 0.12),
+    aiPopoverShadowOuter02: _alpha(CarbonColors.black, 0.08),
+    aiSkeletonBackground: _alpha(CarbonColors.blue40, 0.5),
+    aiSkeletonElementBackground: _alpha(CarbonColors.blue40, 0.3),
+    aiOverlay: _alpha(CarbonColors.black, 0.5),
+    aiPopoverCaretCenter: const Color(0xFF4870B5),
+    aiPopoverCaretBottom: CarbonColors.blue50,
+    aiPopoverCaretBottomBackgroundActions: const Color(0xFF1E283A),
+    aiPopoverCaretBottomBackground: const Color(0xFF202D45),
   );
 
   /// The Gray 100 theme.
@@ -1320,6 +1467,27 @@ class CarbonThemeData {
     tagBorderGray: CarbonColors.gray50,
     tagBorderCoolGray: CarbonColors.coolGray50,
     tagBorderWarmGray: CarbonColors.warmGray50,
+    aiInnerShadow: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStartSm: _alpha(CarbonColors.blue50, 0.16),
+    aiAuraStart: _alpha(CarbonColors.blue50, 0.1),
+    aiAuraEnd: _alpha(CarbonColors.black, 0.0),
+    aiBorderStrong: CarbonColors.blue40,
+    aiBorderStart: _alpha(CarbonColors.blue30, 0.36),
+    aiBorderEnd: CarbonColors.blue50,
+    aiDropShadow: _alpha(CarbonColors.black, 0.28),
+    aiAuraHoverBackground: CarbonColors.gray90Hover,
+    aiAuraHoverStart: _alpha(CarbonColors.blue50, 0.4),
+    aiAuraHoverEnd: _alpha(CarbonColors.black, 0.0),
+    aiPopoverBackground: CarbonColors.gray100,
+    aiPopoverShadowOuter01: _alpha(CarbonColors.black, 0.12),
+    aiPopoverShadowOuter02: _alpha(CarbonColors.black, 0.08),
+    aiSkeletonBackground: _alpha(CarbonColors.blue40, 0.5),
+    aiSkeletonElementBackground: _alpha(CarbonColors.blue40, 0.3),
+    aiOverlay: _alpha(CarbonColors.black, 0.5),
+    aiPopoverCaretCenter: const Color(0xFF4870B5),
+    aiPopoverCaretBottom: CarbonColors.blue50,
+    aiPopoverCaretBottomBackgroundActions: const Color(0xFF1E283A),
+    aiPopoverCaretBottomBackground: const Color(0xFF202D45),
   );
 
   /// A copy of this theme with the given tokens replaced.
@@ -1484,6 +1652,27 @@ class CarbonThemeData {
     Color? tagBorderGray,
     Color? tagBorderCoolGray,
     Color? tagBorderWarmGray,
+    Color? aiInnerShadow,
+    Color? aiAuraStartSm,
+    Color? aiAuraStart,
+    Color? aiAuraEnd,
+    Color? aiBorderStrong,
+    Color? aiBorderStart,
+    Color? aiBorderEnd,
+    Color? aiDropShadow,
+    Color? aiAuraHoverBackground,
+    Color? aiAuraHoverStart,
+    Color? aiAuraHoverEnd,
+    Color? aiPopoverBackground,
+    Color? aiPopoverShadowOuter01,
+    Color? aiPopoverShadowOuter02,
+    Color? aiSkeletonBackground,
+    Color? aiSkeletonElementBackground,
+    Color? aiOverlay,
+    Color? aiPopoverCaretCenter,
+    Color? aiPopoverCaretBottom,
+    Color? aiPopoverCaretBottomBackgroundActions,
+    Color? aiPopoverCaretBottomBackground,
   }) {
     return CarbonThemeData(
       brightness: brightness ?? this.brightness,
@@ -1659,6 +1848,34 @@ class CarbonThemeData {
       tagBorderGray: tagBorderGray ?? this.tagBorderGray,
       tagBorderCoolGray: tagBorderCoolGray ?? this.tagBorderCoolGray,
       tagBorderWarmGray: tagBorderWarmGray ?? this.tagBorderWarmGray,
+      aiInnerShadow: aiInnerShadow ?? this.aiInnerShadow,
+      aiAuraStartSm: aiAuraStartSm ?? this.aiAuraStartSm,
+      aiAuraStart: aiAuraStart ?? this.aiAuraStart,
+      aiAuraEnd: aiAuraEnd ?? this.aiAuraEnd,
+      aiBorderStrong: aiBorderStrong ?? this.aiBorderStrong,
+      aiBorderStart: aiBorderStart ?? this.aiBorderStart,
+      aiBorderEnd: aiBorderEnd ?? this.aiBorderEnd,
+      aiDropShadow: aiDropShadow ?? this.aiDropShadow,
+      aiAuraHoverBackground:
+          aiAuraHoverBackground ?? this.aiAuraHoverBackground,
+      aiAuraHoverStart: aiAuraHoverStart ?? this.aiAuraHoverStart,
+      aiAuraHoverEnd: aiAuraHoverEnd ?? this.aiAuraHoverEnd,
+      aiPopoverBackground: aiPopoverBackground ?? this.aiPopoverBackground,
+      aiPopoverShadowOuter01:
+          aiPopoverShadowOuter01 ?? this.aiPopoverShadowOuter01,
+      aiPopoverShadowOuter02:
+          aiPopoverShadowOuter02 ?? this.aiPopoverShadowOuter02,
+      aiSkeletonBackground: aiSkeletonBackground ?? this.aiSkeletonBackground,
+      aiSkeletonElementBackground:
+          aiSkeletonElementBackground ?? this.aiSkeletonElementBackground,
+      aiOverlay: aiOverlay ?? this.aiOverlay,
+      aiPopoverCaretCenter: aiPopoverCaretCenter ?? this.aiPopoverCaretCenter,
+      aiPopoverCaretBottom: aiPopoverCaretBottom ?? this.aiPopoverCaretBottom,
+      aiPopoverCaretBottomBackgroundActions:
+          aiPopoverCaretBottomBackgroundActions ??
+          this.aiPopoverCaretBottomBackgroundActions,
+      aiPopoverCaretBottomBackground:
+          aiPopoverCaretBottomBackground ?? this.aiPopoverCaretBottomBackground,
     );
   }
 
@@ -2047,6 +2264,67 @@ class CarbonThemeData {
         b.tagBorderWarmGray,
         t,
       )!,
+      aiInnerShadow: Color.lerp(a.aiInnerShadow, b.aiInnerShadow, t)!,
+      aiAuraStartSm: Color.lerp(a.aiAuraStartSm, b.aiAuraStartSm, t)!,
+      aiAuraStart: Color.lerp(a.aiAuraStart, b.aiAuraStart, t)!,
+      aiAuraEnd: Color.lerp(a.aiAuraEnd, b.aiAuraEnd, t)!,
+      aiBorderStrong: Color.lerp(a.aiBorderStrong, b.aiBorderStrong, t)!,
+      aiBorderStart: Color.lerp(a.aiBorderStart, b.aiBorderStart, t)!,
+      aiBorderEnd: Color.lerp(a.aiBorderEnd, b.aiBorderEnd, t)!,
+      aiDropShadow: Color.lerp(a.aiDropShadow, b.aiDropShadow, t)!,
+      aiAuraHoverBackground: Color.lerp(
+        a.aiAuraHoverBackground,
+        b.aiAuraHoverBackground,
+        t,
+      )!,
+      aiAuraHoverStart: Color.lerp(a.aiAuraHoverStart, b.aiAuraHoverStart, t)!,
+      aiAuraHoverEnd: Color.lerp(a.aiAuraHoverEnd, b.aiAuraHoverEnd, t)!,
+      aiPopoverBackground: Color.lerp(
+        a.aiPopoverBackground,
+        b.aiPopoverBackground,
+        t,
+      )!,
+      aiPopoverShadowOuter01: Color.lerp(
+        a.aiPopoverShadowOuter01,
+        b.aiPopoverShadowOuter01,
+        t,
+      )!,
+      aiPopoverShadowOuter02: Color.lerp(
+        a.aiPopoverShadowOuter02,
+        b.aiPopoverShadowOuter02,
+        t,
+      )!,
+      aiSkeletonBackground: Color.lerp(
+        a.aiSkeletonBackground,
+        b.aiSkeletonBackground,
+        t,
+      )!,
+      aiSkeletonElementBackground: Color.lerp(
+        a.aiSkeletonElementBackground,
+        b.aiSkeletonElementBackground,
+        t,
+      )!,
+      aiOverlay: Color.lerp(a.aiOverlay, b.aiOverlay, t)!,
+      aiPopoverCaretCenter: Color.lerp(
+        a.aiPopoverCaretCenter,
+        b.aiPopoverCaretCenter,
+        t,
+      )!,
+      aiPopoverCaretBottom: Color.lerp(
+        a.aiPopoverCaretBottom,
+        b.aiPopoverCaretBottom,
+        t,
+      )!,
+      aiPopoverCaretBottomBackgroundActions: Color.lerp(
+        a.aiPopoverCaretBottomBackgroundActions,
+        b.aiPopoverCaretBottomBackgroundActions,
+        t,
+      )!,
+      aiPopoverCaretBottomBackground: Color.lerp(
+        a.aiPopoverCaretBottomBackground,
+        b.aiPopoverCaretBottomBackground,
+        t,
+      )!,
     );
   }
 
@@ -2215,7 +2493,29 @@ class CarbonThemeData {
         other.tagBorderPurple == tagBorderPurple &&
         other.tagBorderGray == tagBorderGray &&
         other.tagBorderCoolGray == tagBorderCoolGray &&
-        other.tagBorderWarmGray == tagBorderWarmGray;
+        other.tagBorderWarmGray == tagBorderWarmGray &&
+        other.aiInnerShadow == aiInnerShadow &&
+        other.aiAuraStartSm == aiAuraStartSm &&
+        other.aiAuraStart == aiAuraStart &&
+        other.aiAuraEnd == aiAuraEnd &&
+        other.aiBorderStrong == aiBorderStrong &&
+        other.aiBorderStart == aiBorderStart &&
+        other.aiBorderEnd == aiBorderEnd &&
+        other.aiDropShadow == aiDropShadow &&
+        other.aiAuraHoverBackground == aiAuraHoverBackground &&
+        other.aiAuraHoverStart == aiAuraHoverStart &&
+        other.aiAuraHoverEnd == aiAuraHoverEnd &&
+        other.aiPopoverBackground == aiPopoverBackground &&
+        other.aiPopoverShadowOuter01 == aiPopoverShadowOuter01 &&
+        other.aiPopoverShadowOuter02 == aiPopoverShadowOuter02 &&
+        other.aiSkeletonBackground == aiSkeletonBackground &&
+        other.aiSkeletonElementBackground == aiSkeletonElementBackground &&
+        other.aiOverlay == aiOverlay &&
+        other.aiPopoverCaretCenter == aiPopoverCaretCenter &&
+        other.aiPopoverCaretBottom == aiPopoverCaretBottom &&
+        other.aiPopoverCaretBottomBackgroundActions ==
+            aiPopoverCaretBottomBackgroundActions &&
+        other.aiPopoverCaretBottomBackground == aiPopoverCaretBottomBackground;
   }
 
   @override
@@ -2380,6 +2680,27 @@ class CarbonThemeData {
     tagBorderGray,
     tagBorderCoolGray,
     tagBorderWarmGray,
+    aiInnerShadow,
+    aiAuraStartSm,
+    aiAuraStart,
+    aiAuraEnd,
+    aiBorderStrong,
+    aiBorderStart,
+    aiBorderEnd,
+    aiDropShadow,
+    aiAuraHoverBackground,
+    aiAuraHoverStart,
+    aiAuraHoverEnd,
+    aiPopoverBackground,
+    aiPopoverShadowOuter01,
+    aiPopoverShadowOuter02,
+    aiSkeletonBackground,
+    aiSkeletonElementBackground,
+    aiOverlay,
+    aiPopoverCaretCenter,
+    aiPopoverCaretBottom,
+    aiPopoverCaretBottomBackgroundActions,
+    aiPopoverCaretBottomBackground,
   ]);
 }
 
