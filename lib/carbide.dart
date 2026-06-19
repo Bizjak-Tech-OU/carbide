@@ -48,6 +48,7 @@ export 'src/components/form/carbon_form.dart';
 export 'src/components/grid/carbon_grid.dart';
 export 'src/components/heading/carbon_heading.dart';
 export 'src/components/icon_button/carbon_icon_button.dart';
+export 'src/components/indicator/carbon_indicators.dart';
 export 'src/components/link/carbon_link.dart';
 export 'src/components/data_table/carbon_data_table.dart';
 export 'src/components/data_table/carbon_table_toolbar.dart';
