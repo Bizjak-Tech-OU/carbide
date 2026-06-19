@@ -20,6 +20,11 @@ final GalleryCategory tierACategory = GalleryCategory(
       title: 'Button',
       builder: () => const _ButtonPage(),
     ),
+    GalleryEntry(
+      slug: 'copy-button',
+      title: 'Copy button',
+      builder: () => const _CopyButtonPage(),
+    ),
     GalleryEntry(slug: 'tag', title: 'Tag', builder: () => const _TagPage()),
     GalleryEntry(slug: 'link', title: 'Link', builder: () => const _LinkPage()),
     GalleryEntry(slug: 'tile', title: 'Tile', builder: () => const _TilePage()),
@@ -457,6 +462,47 @@ class _HeadingPage extends StatelessWidget {
         ),
       ),
       code: 'CarbonSection(child: CarbonHeading(\'Title\'));',
+    );
+  }
+}
+
+class _CopyButtonPage extends StatefulWidget {
+  const _CopyButtonPage();
+  @override
+  State<_CopyButtonPage> createState() => _CopyButtonPageState();
+}
+
+class _CopyButtonPageState extends State<_CopyButtonPage> {
+  CarbonCopySize _size = CarbonCopySize.md;
+  bool _enabled = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Copy button',
+      description:
+          'An icon button that copies to the clipboard and shows a brief '
+          '"Copied!" confirmation.',
+      preview: CarbonCopyButton(
+        value: 'npm i @carbon/react',
+        size: _size,
+        enabled: _enabled,
+      ),
+      controls: <Widget>[
+        choiceKnob<CarbonCopySize>(
+          label: 'Size',
+          value: _size,
+          options: CarbonCopySize.values,
+          labelOf: (CarbonCopySize size) => size.name,
+          onChanged: (CarbonCopySize size) => setState(() => _size = size),
+        ),
+        boolKnob(
+          label: 'Enabled',
+          value: _enabled,
+          onChanged: (bool value) => setState(() => _enabled = value),
+        ),
+      ],
+      code: "CarbonCopyButton(value: 'npm i @carbon/react');",
     );
   }
 }
