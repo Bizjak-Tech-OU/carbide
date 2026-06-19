@@ -3,10 +3,25 @@
 // This file is part of the Carbide gallery and is licensed under the GNU
 // Affero General Public License v3.0 or later.
 
+import 'dart:async';
+
 import 'package:carbide/carbide.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../gallery_controller.dart';
+
+/// The Carbide source repository.
+final Uri _repositoryUrl = Uri.parse(
+  'https://github.com/Bizjak-Tech-OU/carbide',
+);
+
+/// Opens the Carbide repository in the platform's browser.
+Future<void> _openRepository() async {
+  if (await canLaunchUrl(_repositoryUrl)) {
+    await launchUrl(_repositoryUrl, mode: LaunchMode.externalApplication);
+  }
+}
 
 /// The landing page: what Carbide is, the active theme, and quick links.
 class OverviewPage extends StatelessWidget {
@@ -47,7 +62,7 @@ class OverviewPage extends StatelessWidget {
                 label: 'Source on GitHub',
                 kind: CarbonButtonKind.tertiary,
                 icon: CarbonIcons.logoGithub,
-                onPressed: () {},
+                onPressed: () => unawaited(_openRepository()),
               ),
               CarbonButton(
                 label: 'Switch theme',
