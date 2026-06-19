@@ -30,6 +30,27 @@ final GalleryCategory tierACategory = GalleryCategory(
       title: 'Code snippet',
       builder: () => const _CodeSnippetPage(),
     ),
+    GalleryEntry(
+      slug: 'icon-button',
+      title: 'Icon button',
+      builder: () => const _IconButtonPage(),
+    ),
+    GalleryEntry(
+      slug: 'indicators',
+      title: 'Indicators',
+      builder: () => const _IndicatorsPage(),
+    ),
+    GalleryEntry(
+      slug: 'aspect-ratio',
+      title: 'Aspect ratio',
+      builder: () => const _AspectRatioPage(),
+    ),
+    GalleryEntry(slug: 'grid', title: 'Grid', builder: () => const _GridPage()),
+    GalleryEntry(
+      slug: 'skeletons',
+      title: 'Skeletons',
+      builder: () => const _SkeletonsPage(),
+    ),
     GalleryEntry(slug: 'tag', title: 'Tag', builder: () => const _TagPage()),
     GalleryEntry(slug: 'link', title: 'Link', builder: () => const _LinkPage()),
     GalleryEntry(slug: 'tile', title: 'Tile', builder: () => const _TilePage()),
@@ -553,6 +574,185 @@ class _CodeSnippetPageState extends State<_CodeSnippetPage> {
         ),
       ],
       code: "CarbonCodeSnippet(code: 'flutter pub add carbide');",
+    );
+  }
+}
+
+class _IconButtonPage extends StatefulWidget {
+  const _IconButtonPage();
+  @override
+  State<_IconButtonPage> createState() => _IconButtonPageState();
+}
+
+class _IconButtonPageState extends State<_IconButtonPage> {
+  CarbonButtonKind _kind = CarbonButtonKind.primary;
+
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Icon button',
+      description: 'An icon-only button that shows its label in a tooltip.',
+      preview: CarbonIconButton(
+        icon: CarbonIcons.add,
+        label: 'Add item',
+        kind: _kind,
+        onPressed: () {},
+      ),
+      controls: <Widget>[
+        choiceKnob<CarbonButtonKind>(
+          label: 'Kind',
+          value: _kind,
+          options: const <CarbonButtonKind>[
+            CarbonButtonKind.primary,
+            CarbonButtonKind.secondary,
+            CarbonButtonKind.tertiary,
+            CarbonButtonKind.ghost,
+          ],
+          labelOf: (CarbonButtonKind k) => k.name,
+          onChanged: (CarbonButtonKind k) => setState(() => _kind = k),
+        ),
+      ],
+      code: "CarbonIconButton(icon: CarbonIcons.add, label: 'Add item');",
+    );
+  }
+}
+
+class _IndicatorsPage extends StatelessWidget {
+  const _IndicatorsPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Indicators',
+      description: 'Badge, icon, and colour-blind-safe shape status markers.',
+      previewAlignment: Alignment.topLeft,
+      preview: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: const <Widget>[
+          Row(
+            children: <Widget>[
+              CarbonBadgeIndicator(),
+              SizedBox(width: 16),
+              CarbonBadgeIndicator(count: 8),
+              SizedBox(width: 16),
+              CarbonBadgeIndicator(count: 4000),
+            ],
+          ),
+          SizedBox(height: 16),
+          CarbonIconIndicator(
+            kind: CarbonIconIndicatorKind.failed,
+            label: 'Failed',
+          ),
+          SizedBox(height: 8),
+          CarbonIconIndicator(
+            kind: CarbonIconIndicatorKind.succeeded,
+            label: 'Succeeded',
+          ),
+          SizedBox(height: 16),
+          CarbonShapeIndicator(
+            kind: CarbonShapeIndicatorKind.critical,
+            label: 'Critical',
+          ),
+          SizedBox(height: 8),
+          CarbonShapeIndicator(
+            kind: CarbonShapeIndicatorKind.stable,
+            label: 'Stable',
+          ),
+        ],
+      ),
+      code: "CarbonIconIndicator(kind: …, label: 'Failed');",
+    );
+  }
+}
+
+class _AspectRatioPage extends StatefulWidget {
+  const _AspectRatioPage();
+  @override
+  State<_AspectRatioPage> createState() => _AspectRatioPageState();
+}
+
+class _AspectRatioPageState extends State<_AspectRatioPage> {
+  CarbonAspectRatioValue _ratio = CarbonAspectRatioValue.r16x9;
+
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    return DemoScaffold(
+      title: 'Aspect ratio',
+      description: 'Constrains content to a fixed ratio.',
+      preview: SizedBox(
+        width: 240,
+        child: CarbonAspectRatio(
+          ratio: _ratio,
+          child: ColoredBox(color: t.layerAccent01),
+        ),
+      ),
+      controls: <Widget>[
+        choiceKnob<CarbonAspectRatioValue>(
+          label: 'Ratio',
+          value: _ratio,
+          options: CarbonAspectRatioValue.values,
+          labelOf: (CarbonAspectRatioValue r) => r.label,
+          onChanged: (CarbonAspectRatioValue r) => setState(() => _ratio = r),
+        ),
+      ],
+      code: 'CarbonAspectRatio(ratio: CarbonAspectRatioValue.r16x9, child: …);',
+    );
+  }
+}
+
+class _GridPage extends StatelessWidget {
+  const _GridPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    return DemoScaffold(
+      title: 'Grid',
+      description: 'A responsive 16-column layout (8 at md, 4 at sm).',
+      previewAlignment: Alignment.topLeft,
+      preview: CarbonGrid(
+        rowSpacing: 8,
+        children: <Widget>[
+          for (int i = 0; i < 4; i++)
+            CarbonColumn(
+              sm: 2,
+              md: 4,
+              lg: 4,
+              child: SizedBox(
+                height: 48,
+                child: ColoredBox(color: t.layerAccent01),
+              ),
+            ),
+        ],
+      ),
+      code: 'CarbonGrid(children: <Widget>[CarbonColumn(lg: 4, child: …)]);',
+    );
+  }
+}
+
+class _SkeletonsPage extends StatelessWidget {
+  const _SkeletonsPage();
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Skeletons',
+      description: 'Loading placeholders that mimic a component footprint.',
+      previewAlignment: Alignment.topLeft,
+      preview: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: const <Widget>[
+          SizedBox(width: 240, child: CarbonTextInputSkeleton()),
+          SizedBox(height: 24),
+          CarbonCheckboxSkeleton(),
+          SizedBox(height: 24),
+          SizedBox(
+            width: 280,
+            child: CarbonDataTableSkeleton(rowCount: 3, columnCount: 3),
+          ),
+        ],
+      ),
+      code: 'CarbonTextInputSkeleton();',
     );
   }
 }

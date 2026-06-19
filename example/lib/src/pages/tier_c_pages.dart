@@ -21,6 +21,21 @@ final GalleryCategory tierCCategory = GalleryCategory(
       builder: () => const _AILabelPage(),
     ),
     GalleryEntry(
+      slug: 'contained-list',
+      title: 'Contained list',
+      builder: () => const _ContainedListPage(),
+    ),
+    GalleryEntry(
+      slug: 'context-menu',
+      title: 'Context menu',
+      builder: () => const _ContextMenuPage(),
+    ),
+    GalleryEntry(
+      slug: 'pagination-nav',
+      title: 'Pagination nav',
+      builder: () => const _PaginationNavPage(),
+    ),
+    GalleryEntry(
       slug: 'dropdown',
       title: 'Dropdown',
       builder: () => const _DropdownPage(),
@@ -594,6 +609,123 @@ class _AILabelPageState extends State<_AILabelPage> {
         ),
       ],
       code: "CarbonAILabel(content: Text('…'));",
+    );
+  }
+}
+
+class _ContainedListPage extends StatefulWidget {
+  const _ContainedListPage();
+  @override
+  State<_ContainedListPage> createState() => _ContainedListPageState();
+}
+
+class _ContainedListPageState extends State<_ContainedListPage> {
+  CarbonContainedListSize _size = CarbonContainedListSize.md;
+
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Contained list',
+      description: 'A titled list of rows; items can be clickable.',
+      previewAlignment: Alignment.topCenter,
+      preview: SizedBox(
+        width: 320,
+        child: CarbonContainedList(
+          label: const Text('Recent files'),
+          size: _size,
+          children: <Widget>[
+            const CarbonContainedListItem(
+              icon: CarbonIcons.document,
+              child: Text('report.pdf'),
+            ),
+            CarbonContainedListItem(
+              icon: CarbonIcons.document,
+              onPressed: () {},
+              child: const Text('notes.txt'),
+            ),
+            const CarbonContainedListItem(
+              icon: CarbonIcons.document,
+              child: Text('archive.zip'),
+            ),
+          ],
+        ),
+      ),
+      controls: <Widget>[
+        choiceKnob<CarbonContainedListSize>(
+          label: 'Size',
+          value: _size,
+          options: CarbonContainedListSize.values,
+          labelOf: (CarbonContainedListSize s) => s.name,
+          onChanged: (CarbonContainedListSize s) => setState(() => _size = s),
+        ),
+      ],
+      code: "CarbonContainedList(label: Text('…'), children: <…>[…]);",
+    );
+  }
+}
+
+class _ContextMenuPage extends StatelessWidget {
+  const _ContextMenuPage();
+  @override
+  Widget build(BuildContext context) {
+    final CarbonThemeData t = CarbonTheme.of(context);
+    return DemoScaffold(
+      title: 'Context menu',
+      description: 'Right-click (or long-press) the area to open a menu.',
+      preview: CarbonContextMenu(
+        items: <Widget>[
+          CarbonMenuItem(label: 'Cut', icon: CarbonIcons.cut, onPressed: () {}),
+          CarbonMenuItem(
+            label: 'Copy',
+            icon: CarbonIcons.copy,
+            onPressed: () {},
+          ),
+          CarbonMenuItem(
+            label: 'Paste',
+            icon: CarbonIcons.paste,
+            onPressed: () {},
+          ),
+        ],
+        child: Container(
+          width: 280,
+          height: 120,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: t.layer01,
+            border: Border.all(color: t.borderSubtle00),
+          ),
+          child: Text(
+            'Right-click here',
+            style: CarbonTypeStyles.body01.copyWith(color: t.textSecondary),
+          ),
+        ),
+      ),
+      code: 'CarbonContextMenu(items: <…>[…], child: …);',
+    );
+  }
+}
+
+class _PaginationNavPage extends StatefulWidget {
+  const _PaginationNavPage();
+  @override
+  State<_PaginationNavPage> createState() => _PaginationNavPageState();
+}
+
+class _PaginationNavPageState extends State<_PaginationNavPage> {
+  int _page = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return DemoScaffold(
+      title: 'Pagination nav',
+      description: 'Page-number navigation with overflow truncation.',
+      preview: CarbonPaginationNav(
+        totalItems: 12,
+        page: _page,
+        itemsShown: 7,
+        onChange: (int p) => setState(() => _page = p),
+      ),
+      code: 'CarbonPaginationNav(totalItems: 12, page: 0, onChange: …);',
     );
   }
 }
