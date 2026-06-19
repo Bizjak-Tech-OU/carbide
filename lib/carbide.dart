@@ -39,6 +39,7 @@ export 'src/components/button/carbon_button_set.dart';
 export 'src/components/checkbox/carbon_checkbox.dart';
 export 'src/components/code_snippet/carbon_code_snippet.dart';
 export 'src/components/combo_box/carbon_combo_box.dart';
+export 'src/components/contained_list/carbon_contained_list.dart';
 export 'src/components/content_switcher/carbon_content_switcher.dart';
 export 'src/components/copy_button/carbon_copy_button.dart';
 export 'src/components/form/carbon_form.dart';
