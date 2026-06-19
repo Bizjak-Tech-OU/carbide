@@ -127,6 +127,8 @@ class CarbonPopover extends StatefulWidget {
     this.autoAlign = false,
     this.onRequestClose,
     this.tapRegionGroupId,
+    this.surfaceColor,
+    this.surfaceBorderColor,
     super.key,
   });
 
@@ -166,6 +168,15 @@ class CarbonPopover extends StatefulWidget {
   /// An optional `TapRegion` group the surface joins, so taps on a trigger in
   /// the same group are not treated as outside taps.
   final Object? tapRegionGroupId;
+
+  /// Overrides the surface (and caret) fill. Defaults to the contextual `layer`
+  /// token, or `backgroundInverse` when [highContrast]. Used for themed
+  /// callouts such as the AI Label popover.
+  final Color? surfaceColor;
+
+  /// Overrides the surface (and caret) border, forcing the border on. Defaults
+  /// to the contextual `borderSubtle` token when [border] is set.
+  final Color? surfaceBorderColor;
 
   @override
   State<CarbonPopover> createState() => _CarbonPopoverState();
@@ -288,12 +299,13 @@ class _CarbonPopoverState extends State<CarbonPopover> {
     final CarbonLayerTokens layer = CarbonLayer.of(context);
     final TextDirection dir = Directionality.of(context);
 
-    final Color background = widget.highContrast
-        ? theme.backgroundInverse
-        : layer.layer;
+    final Color background =
+        widget.surfaceColor ??
+        (widget.highContrast ? theme.backgroundInverse : layer.layer);
     final Color textColor = widget.highContrast
         ? theme.textInverse
         : theme.textPrimary;
+    final bool hasBorder = widget.border || widget.surfaceBorderColor != null;
 
     final _Anchors anchors = _anchorsFor(_resolved, dir, _gap);
 
@@ -302,10 +314,10 @@ class _CarbonPopoverState extends State<CarbonPopover> {
       child: _Surface(
         align: _resolved,
         caret: widget.caret,
-        border: widget.border,
+        border: hasBorder,
         dropShadow: widget.dropShadow,
         background: background,
-        borderColor: layer.borderSubtle,
+        borderColor: widget.surfaceBorderColor ?? layer.borderSubtle,
         triggerSize: _triggerSize,
         textDirection: dir,
         child: widget.content,
