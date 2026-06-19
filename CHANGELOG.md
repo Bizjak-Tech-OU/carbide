@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.1.0
+
+Component parity release — closes the remaining gaps against IBM's official
+component list, and adds the 2x Grid and the indicator family.
+
+### New components
+
+- **Copy** & **Copy button** — copy-to-clipboard buttons with a transient
+  feedback bubble.
+- **AI Label** — the AI explainability marker (sizes, inline, and revert
+  modes) with an AI-tinted callout; adds the `ai-*` theme token group.
+- **Code snippet** — inline, single-line, and multi-line (show more / show
+  less) variants, plus a skeleton.
+- **Contained list** — a titled list whose items can carry a leading icon, a
+  trailing action, and an `onPressed` that makes the row a layer-contextual
+  clickable button.
+- **Icon button** — an icon-only button that shows its label in a tooltip.
+- **Context menu** — a right-click / long-press menu positioned at the pointer
+  and clamped to the viewport.
+- **Pagination nav** — page-number navigation with overflow truncation.
+- **Aspect ratio** — Carbon's nine fixed ratios.
+- **2x Grid** — a responsive 16-column (8 at md, 4 at sm) layout
+  (`CarbonGrid` + `CarbonColumn`) with per-breakpoint spans and offsets.
+- **Indicators** — badge, icon, and color-blind-safe shape status indicators.
+- **Component skeletons** — loading placeholders for the form, selection, and
+  structural components.
+
+### Other
+
+- `CarbonPopover` gains `surfaceColor` / `surfaceBorderColor` overrides for
+  themed callouts (used by AI Label).
+- The example gallery showcases every new component.
+
+Every component ships with spec-lock, state-matrix, semantics, and four-theme
+golden tests.
+
 ## 0.0.2
 
 Maintenance release — no API or component changes.
